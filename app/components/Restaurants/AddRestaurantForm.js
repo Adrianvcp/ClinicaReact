@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Text, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  Platform,
+  TextInput
+} from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 import { set, color } from "react-native-reanimated";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 function AddRestaurantForm(props) {
   const { navigation } = props;
 
@@ -42,95 +49,97 @@ function AddRestaurantForm(props) {
 
   return (
     <ScrollView style={styles.viewBody}>
-      <Image
-        source={require("../../../assets/img/foto.jpg")}
-        style={styles.logo}
-        reziseMode="contain"
-      />
-
-      <Text style={styles.title}>Encuentra tu cita!</Text>
-      <Text style={styles.description}>
-        Nuestro buscador detallado te facilitará la forma de buscar una cita
-        médica
-      </Text>
-
-      <View style={styles.formContainer}>
-        <Input
-          leftIcon={{
-            type: "material-community",
-            name: "heart-pulse",
-            color: "gray",
-            size: 20
-          }}
-          placeholder="Especialidad"
-          containerStyle={styles.inputForm}
-          label="Seleccione la especialidad"
-          //onChange={e => setEmail(e.nativeEvent.text)}
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
+        <Image
+          source={require("../../../assets/img/foto.jpg")}
+          style={styles.logo}
+          reziseMode="contain"
         />
 
-        <View style={styles.searchSection}>
-          <Input
-            placeholder="Ejemplo: 11/11/1996"
-            containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "calendar-search",
-              color: "gray"
-            }}
-            onPress={showDatepicker}
-            label="Fecha de Cita"
-          />
-        </View>
+        <Text style={styles.title}>Encuentra tu cita!</Text>
+        <Text style={styles.description}>
+          Nuestro buscador detallado te facilitará la forma de buscar una cita
+          médica
+        </Text>
 
-        <View style={styles.searchSection}>
+        <View style={styles.formContainer}>
           <Input
-            placeholder="Ejemplo: San Miguel"
-            containerStyle={styles.inputForm}
             leftIcon={{
               type: "material-community",
-              name: "google-maps",
+              name: "heart-pulse",
               color: "gray",
               size: 20
             }}
-            label="Fecha de Cita"
-          />
-        </View>
-
-        <View style={styles.searchSection}>
-          <Input
-            placeholder="Seguro"
+            placeholder="Especialidad"
             containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "ballot",
-              color: "gray",
-              size: 20
-            }}
-            label="Seleccione seguro"
+            label="Seleccione la especialidad"
+            //onChange={e => setEmail(e.nativeEvent.text)}
           />
-        </View>
 
-        <View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              timeZoneOffsetInMinutes={0}
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
+          <View style={styles.searchSection}>
+            <Input
+              placeholder="Ejemplo: 11/11/1996"
+              onTouchStart={showDatepicker}
+              containerStyle={styles.inputForm}
+              leftIcon={{
+                type: "material-community",
+                name: "calendar-search",
+                color: "gray"
+              }}
+              onPress={showDatepicker}
+              label="Fecha de Cita"
             />
-          )}
-        </View>
+          </View>
 
-        <Button
-          containerStyle={styles.btnContainerLogin}
-          buttonStyle={styles.btnCitas}
-          title="Buscar cita "
-          onPress={() => navigation.navigate("AppointmentList")}
-        />
-      </View>
+          <View style={styles.searchSection}>
+            <Input
+              placeholder="Ejemplo: San Miguel"
+              containerStyle={styles.inputForm}
+              leftIcon={{
+                type: "material-community",
+                name: "google-maps",
+                color: "gray",
+                size: 20
+              }}
+              label="Fecha de Cita"
+            />
+          </View>
+
+          <View style={styles.searchSection}>
+            <Input
+              placeholder="Seguro"
+              containerStyle={styles.inputForm}
+              leftIcon={{
+                type: "material-community",
+                name: "ballot",
+                color: "gray",
+                size: 20
+              }}
+              label="Seleccione seguro"
+            />
+          </View>
+
+          <View>
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                timeZoneOffsetInMinutes={0}
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
+          <Button
+            containerStyle={styles.btnContainerLogin}
+            buttonStyle={styles.btnCitas}
+            title="Buscar cita "
+            onPress={() => navigation.navigate("AppointmentList")}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </ScrollView>
   );
 }
@@ -164,7 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 5,
+    marginTop: 15,
     backgroundColor: "#fff",
     marginRight: 40,
     marginLeft: 40
@@ -175,6 +184,7 @@ const styles = StyleSheet.create({
   },
   btnContainerLogin: {
     marginTop: 30,
+    marginBottom: 20,
     width: "95%"
   },
   btnCitas: {
