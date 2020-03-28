@@ -5,7 +5,7 @@ import {
   ScrollView,
   Text,
   Platform,
-  TextInput
+  KeyboardAvoidingView
 } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 import { set, color } from "react-native-reanimated";
@@ -48,98 +48,96 @@ function AddRestaurantForm(props) {
   };
 
   return (
-    <ScrollView style={styles.viewBody}>
-      <KeyboardAwareScrollView style={{ flex: 1 }}>
-        <Image
-          source={require("../../../assets/img/foto.jpg")}
-          style={styles.logo}
-          reziseMode="contain"
+    <ScrollView>
+      <Image
+        source={require("../../../assets/img/foto.jpg")}
+        style={styles.logo}
+        reziseMode="contain"
+      />
+
+      <Text style={styles.title}>Encuentra tu cita!</Text>
+      <Text style={styles.description}>
+        Nuestro buscador detallado te facilitará la forma de buscar una cita
+        médica
+      </Text>
+
+      <View style={styles.formContainer}>
+        <Input
+          leftIcon={{
+            type: "material-community",
+            name: "heart-pulse",
+            color: "gray",
+            size: 20
+          }}
+          placeholder="Especialidad"
+          containerStyle={styles.inputForm}
+          label="Seleccione la especialidad"
+          //onChange={e => setEmail(e.nativeEvent.text)}
         />
 
-        <Text style={styles.title}>Encuentra tu cita!</Text>
-        <Text style={styles.description}>
-          Nuestro buscador detallado te facilitará la forma de buscar una cita
-          médica
-        </Text>
-
-        <View style={styles.formContainer}>
+        <View style={styles.searchSection}>
           <Input
+            placeholder="Ejemplo: 11/11/1996"
+            onTouchStart={showDatepicker}
+            containerStyle={styles.inputForm}
             leftIcon={{
               type: "material-community",
-              name: "heart-pulse",
+              name: "calendar-search",
+              color: "gray"
+            }}
+            onPress={showDatepicker}
+            label="Fecha de Cita"
+          />
+        </View>
+
+        <View style={styles.searchSection}>
+          <Input
+            placeholder="Ejemplo: San Miguel"
+            containerStyle={styles.inputForm}
+            leftIcon={{
+              type: "material-community",
+              name: "google-maps",
               color: "gray",
               size: 20
             }}
-            placeholder="Especialidad"
-            containerStyle={styles.inputForm}
-            label="Seleccione la especialidad"
-            //onChange={e => setEmail(e.nativeEvent.text)}
-          />
-
-          <View style={styles.searchSection}>
-            <Input
-              placeholder="Ejemplo: 11/11/1996"
-              onTouchStart={showDatepicker}
-              containerStyle={styles.inputForm}
-              leftIcon={{
-                type: "material-community",
-                name: "calendar-search",
-                color: "gray"
-              }}
-              onPress={showDatepicker}
-              label="Fecha de Cita"
-            />
-          </View>
-
-          <View style={styles.searchSection}>
-            <Input
-              placeholder="Ejemplo: San Miguel"
-              containerStyle={styles.inputForm}
-              leftIcon={{
-                type: "material-community",
-                name: "google-maps",
-                color: "gray",
-                size: 20
-              }}
-              label="Fecha de Cita"
-            />
-          </View>
-
-          <View style={styles.searchSection}>
-            <Input
-              placeholder="Seguro"
-              containerStyle={styles.inputForm}
-              leftIcon={{
-                type: "material-community",
-                name: "ballot",
-                color: "gray",
-                size: 20
-              }}
-              label="Seleccione seguro"
-            />
-          </View>
-
-          <View>
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-              />
-            )}
-          </View>
-          <Button
-            containerStyle={styles.btnContainerLogin}
-            buttonStyle={styles.btnCitas}
-            title="Buscar cita "
-            onPress={() => navigation.navigate("AppointmentList")}
+            label="Fecha de Cita"
           />
         </View>
-      </KeyboardAwareScrollView>
+
+        <View style={styles.searchSection}>
+          <Input
+            placeholder="Seguro"
+            containerStyle={styles.inputForm}
+            leftIcon={{
+              type: "material-community",
+              name: "ballot",
+              color: "gray",
+              size: 20
+            }}
+            label="Seleccione seguro"
+          />
+        </View>
+
+        <View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              timeZoneOffsetInMinutes={0}
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+        </View>
+        <Button
+          containerStyle={styles.btnContainerLogin}
+          buttonStyle={styles.btnCitas}
+          title="Buscar cita "
+          onPress={() => navigation.navigate("AppointmentList")}
+        />
+      </View>
     </ScrollView>
   );
 }

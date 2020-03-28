@@ -1,13 +1,16 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { withNavigation } from "react-navigation";
+import ListRestaurant from "../../components/Restaurants/ListRestaurants";
 
-export default function AppointmentList(props) {
-  const { navigation } = props;
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
-  return (
-    <View>
-      <Text>Estamos en el buscador</Text>
-    </View>
-  );
+export default class Requests extends React.Component {
+  state = {
+    nameList: [],
+    posts: {},
+    loading: true
+  };
+
+  render() {
+    return <ListRestaurant></ListRestaurant>;
+  }
 }
