@@ -20,7 +20,7 @@
         "ios": {
             "supportsTablet": true,
             "config": {
-                "googleMapsApiKey": "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs"
+                "googleMapsApiKey": ""
             },
             "infoPlist": {
                 "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
@@ -34,7 +34,7 @@
                 "ACCESS_FINE_LOCATION"
             ],
             "config": {
-                "googleMaps": { "apiKey": "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs" }
+                "googleMaps": { "apiKey": "" }
             },
             "infoPlist": {
                 "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
