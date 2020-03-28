@@ -4956,6 +4956,11 @@ react-native-gesture-handler@^1.5.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-ionicons@^5.0.0-beta:
+  version "5.0.0-beta"
+  resolved "https://registry.yarnpkg.com/react-native-ionicons/-/react-native-ionicons-5.0.0-beta.tgz#43960d6871ece69913f0318b636dec386815f068"
+  integrity sha512-ddF0jlYWlHSwvb1MWajYUJ3V+IVKG6ojTJsYWZzJSc4+SjisUAETQYrNoDyjbaTsEuhzh3AR6ABDuUTwNfeIOQ==
+
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
@@ -4988,6 +4993,13 @@ react-native-modal-datetime-picker@^8.5.1:
   integrity sha512-ZV3dCKDXLRcyRiUWmmQCeuRulY5fr0RVO2rS0Tt+dUA+1gg8ral+NG4LoqPsrVPJgrf3RKWSmU+O0fZXyw2Vow==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-picker-select@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-picker-select/-/react-native-picker-select-6.6.0.tgz#a424e2a68dae228c492684a41745c0194cee01f0"
+  integrity sha512-dC+tJc4iv7gjOxXuc2R59rrAAZ/qg8k6HU2xRC65s1uhqflViUPBG1uaHqE/E2D62vntt9+u1qRGbkcYkqOx8g==
+  dependencies:
+    lodash.isequal "^4.5.0"
 
 react-native-ratings@^6.3.0:
   version "6.5.0"

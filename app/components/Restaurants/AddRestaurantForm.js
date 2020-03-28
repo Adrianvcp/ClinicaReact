@@ -12,6 +12,10 @@ import { set, color } from "react-native-reanimated";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import map from "../../screens/map";
+import SelectInfo from "../ReservaCita/SelectInfo";
+import RNPickerSelect from "react-native-picker-select";
+
 function AddRestaurantForm(props) {
   const { navigation } = props;
 
@@ -85,9 +89,31 @@ function AddRestaurantForm(props) {
               name: "calendar-search",
               color: "gray"
             }}
-            onPress={showDatepicker}
             label="Fecha de Cita"
           />
+        </View>
+        <Text style={{ textAlign: "left" }}>Seleccione la especialidad</Text>
+        <RNPickerSelect
+          onValueChange={value => console.log(value)}
+          style={styles.veamos}
+          items={[
+            { label: "Football", value: "football" },
+            { label: "Baseball", value: "baseball" },
+            { label: "Hockey", value: "hockey" }
+          ]}
+        ></RNPickerSelect>
+        <View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              timeZoneOffsetInMinutes={0}
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
         </View>
 
         <View style={styles.searchSection}>
@@ -98,9 +124,11 @@ function AddRestaurantForm(props) {
               type: "material-community",
               name: "google-maps",
               color: "gray",
-              size: 20
+              size: 20,
+              Touch: { showDatepicker }
             }}
-            label="Fecha de Cita"
+            label="Lugar de Cita"
+            onTouchStart={() => navigation.navigate("map")}
           />
         </View>
 
@@ -118,19 +146,6 @@ function AddRestaurantForm(props) {
           />
         </View>
 
-        <View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              timeZoneOffsetInMinutes={0}
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
         <Button
           containerStyle={styles.btnContainerLogin}
           buttonStyle={styles.btnCitas}
@@ -206,5 +221,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     backgroundColor: "#fff",
     color: "#424242"
-  }
+  },
+  veamos: { backgroundColor: "black" }
 });
