@@ -21,11 +21,11 @@ export default function nuevaCita(props) {
         style={styles.logo}
         reziseMode="contain"
       />
-
-      <Text style={styles.title}>Reserva tu cita!</Text>
+      <Text style={styles.title}> Reserva tu cita! </Text>
       <Text style={styles.description}>
         Encuentra tu cita médica de acuerdo a tus tiempos y tu ubicación
       </Text>
+      <View style={styles.lineStyle} />
       {user && <AddAppointmentButton navigation={navigation} />}
     </View>
   );
@@ -63,6 +63,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
+    textAlign: "left"
+  },
+  lineStyle: {
+    borderWidth: 0.5,
+    borderColor: "#E1E6ED",
+    margin: 10
   }
 });

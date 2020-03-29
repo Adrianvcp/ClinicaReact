@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Text,
-  Platform,
-  KeyboardAvoidingView
-} from "react-native";
+import { StyleSheet, View, ScrollView, Text, Platform } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
-import { set, color } from "react-native-reanimated";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import map from "../../screens/map";
 import SelectInfo from "../ReservaCita/SelectInfo";
-import RNPickerSelect from "react-native-picker-select";
+import map from "../../screens/map";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
-
+  const data = [
+    { label: "Football", value: "football" },
+    { label: "Baseball", value: "baseball" },
+    { label: "Hockey", value: "hockey" }
+  ];
+  const seguroData = [
+    { label: "Pacifico Seguro", value: "Pacifico Seguro" },
+    { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
+    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" }
+  ];
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -60,25 +59,20 @@ function AddRestaurantForm(props) {
       />
 
       <Text style={styles.title}>Encuentra tu cita!</Text>
+
       <Text style={styles.description}>
         Nuestro buscador detallado te facilitará la forma de buscar una cita
         médica
       </Text>
 
-      <View style={styles.formContainer}>
-        <Input
-          leftIcon={{
-            type: "material-community",
-            name: "heart-pulse",
-            color: "gray",
-            size: 20
-          }}
-          placeholder="Especialidad"
-          containerStyle={styles.inputForm}
-          label="Seleccione la especialidad"
-          //onChange={e => setEmail(e.nativeEvent.text)}
+      <View style={styles.estructura}>
+        {/* LISTA ESPECIALIDAD */}
+        <SelectInfo
+          titulo="Seleccione la especialidad"
+          nameIcon="heart-pulse"
+          itemsList={data}
         />
-
+        {/* SELECCIONAR FECHA */}
         <View style={styles.searchSection}>
           <Input
             placeholder="Ejemplo: 11/11/1996"
@@ -92,16 +86,23 @@ function AddRestaurantForm(props) {
             label="Fecha de Cita"
           />
         </View>
-        <Text style={{ textAlign: "left" }}>Seleccione la especialidad</Text>
-        <RNPickerSelect
-          onValueChange={value => console.log(value)}
-          style={styles.veamos}
-          items={[
-            { label: "Football", value: "football" },
-            { label: "Baseball", value: "baseball" },
-            { label: "Hockey", value: "hockey" }
-          ]}
-        ></RNPickerSelect>
+
+        {/* UBICACION */}
+        <View style={styles.searchSection}>
+          <Input
+            placeholder="Ejemplo: San Miguel"
+            containerStyle={styles.inputForm}
+            leftIcon={{
+              type: "material-community",
+              name: "google-maps",
+              color: "gray",
+              size: 20
+            }}
+            label="Lugar de Cita"
+            onTouchStart={() => navigation.navigate("map")}
+          />
+        </View>
+
         <View>
           {show && (
             <DateTimePicker
@@ -116,35 +117,11 @@ function AddRestaurantForm(props) {
           )}
         </View>
 
-        <View style={styles.searchSection}>
-          <Input
-            placeholder="Ejemplo: San Miguel"
-            containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "google-maps",
-              color: "gray",
-              size: 20,
-              Touch: { showDatepicker }
-            }}
-            label="Lugar de Cita"
-            onTouchStart={() => navigation.navigate("map")}
-          />
-        </View>
-
-        <View style={styles.searchSection}>
-          <Input
-            placeholder="Seguro"
-            containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "ballot",
-              color: "gray",
-              size: 20
-            }}
-            label="Seleccione seguro"
-          />
-        </View>
+        <SelectInfo
+          titulo="Seleccione el seguro"
+          nameIcon="ballot"
+          itemsList={seguroData}
+        />
 
         <Button
           containerStyle={styles.btnContainerLogin}
@@ -160,6 +137,25 @@ function AddRestaurantForm(props) {
 export default withNavigation(AddRestaurantForm);
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginBottom: 10,
+    marginTop: -11
+  },
+  collegeContainer: {
+    flex: 1
+  },
+  Titulo: {
+    fontSize: 16,
+    color: "#86939E",
+    margin: 8,
+    fontWeight: "bold"
+  },
+  collegeIconColumn: {
+    flex: 2,
+    justifyContent: "center"
+  },
   viewBody: {
     backgroundColor: "#fff"
   },
@@ -189,19 +185,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#fff",
     marginRight: 40,
-    marginLeft: 40
+    marginLeft: 40,
+    textAlign: "left"
   },
   inputForm: {
     width: "100%",
     marginTop: 20
   },
   btnContainerLogin: {
-    marginTop: 30,
-    marginBottom: 20,
-    width: "95%"
+    padding: 10,
+    width: "100%"
   },
   btnCitas: {
-    backgroundColor: "#1e90ff"
+    backgroundColor: "#47525E"
   },
   searchSection: {
     flex: 1,
@@ -222,5 +218,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     color: "#424242"
   },
-  veamos: { backgroundColor: "black" }
+  veamos: { marginTop: -14 },
+  estructura: {
+    flex: 1,
+    marginTop: 15,
+    backgroundColor: "#fff",
+    marginRight: 40,
+    marginLeft: 40,
+    textAlign: "left"
+  },
+  lineStyle: {
+    borderWidth: 0.5,
+    borderColor: "black",
+    margin: 10,
+    marginTop: -14
+  },
+  collegeColumn: {
+    flex: 8,
+    flexDirection: "column",
+    justifyContent: "center",
+    textAlign: "left"
+  }
 });

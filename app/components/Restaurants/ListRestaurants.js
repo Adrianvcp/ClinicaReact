@@ -1,125 +1,93 @@
-import React, { Component } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-let { width, height } = Dimensions.get("window");
+import React, { useEffect } from "react";
+import { StyleSheet, View, Text, FlatList } from "react-native";
+import { Image } from "react-native-elements";
+import { ActivityIndicator } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useState } from "react";
 
-const LATITUDE = 0.0;
-const LONGITUDE = 0.0;
-const LATITUDE_DELTA = 0.04;
-const LONGITUDE_DELTA = 0.05;
+export default function ListRestaurants(props) {
+  const { restaurants, navigation } = props;
 
-class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      width: width,
-      marginBottom: 1,
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      }
-    };
-  }
-  findMe = async () => {
-    this.watchID = await navigator.geolocation.watchPosition(({ coords }) => {
-      const { latitude, longitude } = coords;
-      this.setState({
-        region: {
-          latitude,
-          longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA
-        }
-      });
-    });
-
-    await navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          }
-        });
-      },
-      error => console.log(JSON.stringify(error)),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  };
-
-  componentDidMount() {
-    this.findMe();
-  }
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchId);
-  }
-  render() {
-    const { region } = this.state;
-    return (
-      <View style={styles.container}>
-        <MapView
-          style={[styles.map, { width: this.state.width }]}
-          style={StyleSheet.absoluteFill}
-          onMapReady={() => console.log(this.state.region)}
-          showsUserLocation
-          followsUserLocation={true}
-          region={region}
-          showsMyLocationButton={true}
-          // style={StyleSheet.absoluteFill}
-          textStyle={{ color: "#bc8b00" }}
-          containerStyle={{ backgroundColor: "white", borderColor: "#BC8B00" }}
-        >
-          <Marker
-            draggable
-            coordinate={this.state.region}
-            title="You are here"
-            // description="You are here"
-            pinColor="blue"
-            //onDragEnd={this.onUserPinDragEnd.bind(this)}
+  return (
+    <View>
+      {restaurants ? (
+        <View>
+          <Text>Hola</Text>
+          <FlatList
+            data={restaurants}
+            renderItem={restaurant => (
+              <Restaurant restaurant={restaurant} navigation={navigation} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            onEndReachedThreshold={0}
           />
-        </MapView>
-        {/* <Text>{this.state.region.latitude}</Text> */}
-      </View>
-    );
-  }
+        </View>
+      ) : (
+        <View>
+          <ActivityIndicator size="large" />
+          <Text>Cargando resturants</Text>
+        </View>
+      )}
+    </View>
+  );
 }
-Map.navigationOptions = {
-  title: "Location",
-  headerStyle: {
-    backgroundColor: "#ff6666"
-  },
-  headerTintColor: "#fff",
-  headerTitleStyle: {
-    fontWeight: "bold",
-    fontSize: 20
-  }
-};
+
+function Restaurant(props) {
+  const { restaurant, navigation } = props;
+
+  const { path, nombreDoctor, hora, url, name_clinic } = restaurant.item;
+  const [imageRestaurant, setImageRestaurant] = useState(null);
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate("cita", { restaurant })}
+    >
+      <View style={styles.viewRestaurant}>
+        <View style={styles.viewRestaurantImage}>
+          <Image
+            resizeMode="cover"
+            source={{ uri: url }}
+            style={styles.imageRestaurant}
+            PlaceholderContent={<ActivityIndicator color="fff" />}
+          />
+        </View>
+        <View>
+          <Text style={styles.restaurantName}>{hora} hrs - 13 Abril</Text>
+          <Text style={styles.restaurantAddress}>{nombreDoctor}</Text>
+          <Text style={styles.restaurantAddress}>{path}</Text>
+          <Text style={styles.restaurantAddress}>{name_clinic} </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 30,
-    flex: 1,
+  loadingRestaurants: {
+    marginTop: 20,
     alignItems: "center"
   },
-  map: {
-    position: "absolute",
-    zIndex: -1,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
+  viewRestaurant: {
+    flexDirection: "row",
+    margin: 10
+  },
+  viewRestaurantImage: {
+    marginRight: 15
+  },
+  imageRestaurant: {
+    width: 80,
+    height: 80
+  },
+  restaurantName: {
+    fontWeight: "bold"
+  },
+  restaurantAddress: {
+    paddingTop: 2,
+    color: "grey"
+  },
+  restaurantDescription: {
+    paddingTop: 2,
+    color: "grey",
+    width: 300
   }
 });
-
-export default Map;
