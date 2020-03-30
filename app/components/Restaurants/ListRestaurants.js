@@ -7,12 +7,16 @@ import { useState } from "react";
 
 export default function ListRestaurants(props) {
   const { restaurants, navigation } = props;
-
+  console.log(navigation);
   return (
     <View>
       {restaurants ? (
         <View>
-          <Text>Hola</Text>
+          <Text
+            style={{ margin: 10, marginLeft: 15, color: "grey", fontSize: 20 }}
+          >
+            {navigation.state.params.esp}
+          </Text>
           <FlatList
             data={restaurants}
             renderItem={restaurant => (
@@ -75,8 +79,13 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   imageRestaurant: {
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
+    alignItems: "center",
+    justifyContent: "center",
     width: 80,
-    height: 80
+    height: 80,
+    borderRadius: 5
   },
   restaurantName: {
     fontWeight: "bold"

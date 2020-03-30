@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Text, Platform } from "react-native";
-import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  Platform,
+  Keyboard
+} from "react-native";
+import { Icon, Image, Input, Button } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
 import SelectInfo from "../ReservaCita/SelectInfo";
-import map from "../../screens/map";
+import RNPickerSelect from "react-native-picker-select";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
+
+  /* VAR - DATA(JSONFAKE) */
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
@@ -18,10 +27,16 @@ function AddRestaurantForm(props) {
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
     { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" }
   ];
+
+  /* VAR - FECHA */
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
+  const [esp, setesp] = useState("");
+  const [seguro, setseguro] = useState("");
 
+  /* METODOS CALENDARIO - FECHA */
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
@@ -34,20 +49,12 @@ function AddRestaurantForm(props) {
   };
 
   const showDatepicker = () => {
+    Keyboard.dismiss();
     showMode("date");
-  };
-
-  const showTimepicker = () => {
-    showMode("time");
   };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = date => {
-    console.warn("A date has been picked: ", date);
-    hideDatePicker();
   };
 
   return (
@@ -67,22 +74,47 @@ function AddRestaurantForm(props) {
 
       <View style={styles.estructura}>
         {/* LISTA ESPECIALIDAD */}
-        <SelectInfo
-          titulo="Seleccione la especialidad"
-          nameIcon="heart-pulse"
-          itemsList={data}
-        />
+        <Text style={styles.Titulo}>Seleccione la especialidad</Text>
+        <View style={[styles.container, styles.collegeContainer]}>
+          <View style={styles.collegeIconColumn}>
+            <Icon
+              name="heart-pulse"
+              type="material-community"
+              underlayColor="transparent"
+              iconStyle={styles.collegeIcon}
+              color="gray"
+              size={20}
+            />
+          </View>
+          <View style={styles.collegeColumn}>
+            <RNPickerSelect
+              placeholder={{
+                label: "Seleccionar",
+                value: null
+              }}
+              style={styles.veamos}
+              items={data}
+              onValueChange={value => setesp(value)}
+            />
+          </View>
+        </View>
+        <View style={styles.lineStyle} />
+
         {/* SELECCIONAR FECHA */}
         <View style={styles.searchSection}>
           <Input
-            placeholder="Ejemplo: 11/11/1996"
-            onTouchStart={showDatepicker}
+            placeholder={"11/11/1996"}
+            onTouchEnd={showDatepicker}
+            style={{ color: "red" }}
             containerStyle={styles.inputForm}
             leftIcon={{
               type: "material-community",
               name: "calendar-search",
-              color: "gray"
+              color: "gray",
+              size: 20
             }}
+            timeZoneOffsetInMinutes={0}
+            value={date.toLocaleDateString()}
             label="Fecha de Cita"
           />
         </View>
@@ -90,7 +122,7 @@ function AddRestaurantForm(props) {
         {/* UBICACION */}
         <View style={styles.searchSection}>
           <Input
-            placeholder="Ejemplo: San Miguel"
+            placeholder="Seleciona direccion"
             containerStyle={styles.inputForm}
             leftIcon={{
               type: "material-community",
@@ -99,10 +131,11 @@ function AddRestaurantForm(props) {
               size: 20
             }}
             label="Lugar de Cita"
-            onTouchStart={() => navigation.navigate("map")}
+            onTouchEnd={() => navigation.navigate("map")}
           />
         </View>
 
+        {/* CALENDARIO */}
         <View>
           {show && (
             <DateTimePicker
@@ -117,17 +150,40 @@ function AddRestaurantForm(props) {
           )}
         </View>
 
-        <SelectInfo
-          titulo="Seleccione el seguro"
-          nameIcon="ballot"
-          itemsList={seguroData}
-        />
+        {/* SEGURO */}
+        <Text style={styles.Titulo}>Seleccione el seguro</Text>
+        <View style={[styles.container, styles.collegeContainer]}>
+          <View style={styles.collegeIconColumn}>
+            <Icon
+              name="ballot"
+              type="material-community"
+              underlayColor="transparent"
+              iconStyle={styles.collegeIcon}
+              color="gray"
+              size={20}
+            />
+          </View>
+          <View style={styles.collegeColumn}>
+            <RNPickerSelect
+              placeholder={{
+                label: "Seleccionar",
+                value: null
+              }}
+              style={styles.veamos}
+              items={seguroData}
+              onValueChange={value => setseguro(value)}
+            />
+          </View>
+        </View>
+        <View style={styles.lineStyle} />
 
         <Button
           containerStyle={styles.btnContainerLogin}
           buttonStyle={styles.btnCitas}
           title="Buscar cita "
-          onPress={() => navigation.navigate("AppointmentList")}
+          onPress={() =>
+            navigation.navigate("AppointmentList", { seguro, esp })
+          }
         />
       </View>
     </ScrollView>
@@ -193,7 +249,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   btnContainerLogin: {
-    padding: 10,
+    padding: 30,
     width: "100%"
   },
   btnCitas: {

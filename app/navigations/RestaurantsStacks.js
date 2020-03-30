@@ -4,6 +4,8 @@ import AddAppointmentScreen from "../screens/Restaurants/AddAppointment";
 import AppointmentListScreen from "../screens/Restaurants/AppointmentList";
 import Ubicacion from "../screens/Restaurants/Ubicacion";
 import CitaSeleccionada from "../screens/Restaurants/CitaSeleccionada";
+import CitaConfirmadaDatos from "../screens/Restaurants/CitaConfirmadaDatos";
+
 //le aumento mi headers
 import Header from "../navigations/Header";
 import React from "react";
@@ -52,7 +54,24 @@ export const AppointmentScreenStacks = createStackNavigator({
     }
   },
   cita: {
-    screen: CitaSeleccionada
+    screen: CitaSeleccionada,
+    navigationOptions: ({ navigation, alert }) => {
+      return {
+        headerTitle: () => (
+          <Header navigation={navigation} title="Reservar cita" icon="check" />
+        )
+      };
+    }
+  },
+  informacioncitaconfirmada: {
+    screen: CitaConfirmadaDatos,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTitle: () => (
+          <Header navigation={navigation} title="Reservar cita" />
+        )
+      };
+    }
   }
 });
 

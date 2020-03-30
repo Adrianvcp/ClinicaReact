@@ -13,7 +13,7 @@ const NavigationStacks = createBottomTabNavigator(
     Restaurants: {
       screen: RestaurantScreenStacks,
       navigationOptions: () => ({
-        tabBarLabel: "Reserva tu cita",
+        tabBarLabel: "Reserva tu citas",
         tabBarIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
