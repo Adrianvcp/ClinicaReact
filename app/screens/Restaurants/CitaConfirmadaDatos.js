@@ -8,6 +8,7 @@ import Dialog, {
 
 export default function CitaConfirmadaDatos(props) {
   const [checkedvar, setchecked] = useState(false);
+  const [visibledialog, setvisdialog] = useState(true);
   const data = props.navigation.state.params.navigation.state.params.restaurant;
   console.log("por aqui");
   console.log(checkedvar);
@@ -123,7 +124,10 @@ export default function CitaConfirmadaDatos(props) {
       </View>
 
       <Dialog
-        visible={true}
+        visible={visibledialog}
+        onTouchOutside={() => {
+          setvisdialog(!visibledialog);
+        }}
         dialogAnimation={
           new SlideAnimation({
             slideFrom: "bottom"

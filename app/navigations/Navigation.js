@@ -52,6 +52,9 @@ const NavigationStacks = createBottomTabNavigator(
           />
         )
       })
+    },
+    hasdhasd: {
+      screen: AccountScreenStack
     }
   },
   {
