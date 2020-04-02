@@ -6,7 +6,7 @@ import AddRestaurantForm from "../../components/Restaurants/AddRestaurantForm";
 
 export default function AddRestaurant() {
   return (
-    <View>
+    <View style={{ backgroundColor: "white" }}>
       <AddRestaurantForm />
     </View>
   );

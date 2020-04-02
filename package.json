@@ -20,6 +20,7 @@
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-action-button": "^2.8.5",
+    "react-native-clean-form": "^0.5.0",
     "react-native-easy-toast": "^1.2.0",
     "react-native-elements": "^1.2.7",
     "react-native-expo-fancy-alerts": "^2.0.0",

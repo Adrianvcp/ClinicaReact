@@ -7,11 +7,23 @@ import {
   Platform,
   Keyboard
 } from "react-native";
-import { Icon, Image, Input, Button } from "react-native-elements";
+
+import { Icon, Image } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
 import SelectInfo from "../ReservaCita/SelectInfo";
 import RNPickerSelect from "react-native-picker-select";
+import {
+  Input,
+  Label,
+  Switch,
+  FormGroup,
+  Fieldset,
+  FieldsContainer,
+  ActionsContainer,
+  Select,
+  Button
+} from "react-native-clean-form";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
@@ -35,7 +47,8 @@ function AddRestaurantForm(props) {
   /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
   const [esp, setesp] = useState("");
   const [seguro, setseguro] = useState("");
-
+  console.log("dasdasdasd");
+  console.log(esp);
   /* METODOS CALENDARIO - FECHA */
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -57,6 +70,12 @@ function AddRestaurantForm(props) {
     setDatePickerVisibility(false);
   };
 
+  const countryOptions = [
+    { label: "Denmark", value: "Denmark" },
+    { label: "Germany", value: "Germany" },
+    { label: "United State", value: "United State" }
+  ];
+
   return (
     <ScrollView>
       <Image
@@ -74,66 +93,42 @@ function AddRestaurantForm(props) {
 
       <View style={styles.estructura}>
         {/* LISTA ESPECIALIDAD */}
-        <Text style={styles.Titulo}>Seleccione la especialidad</Text>
-        <View style={[styles.container, styles.collegeContainer]}>
-          <View style={styles.collegeIconColumn}>
-            <Icon
-              name="heart-pulse"
-              type="material-community"
-              underlayColor="transparent"
-              iconStyle={styles.collegeIcon}
-              color="gray"
-              size={20}
+        <Fieldset label="Especialidad" last>
+          <FormGroup>
+            <Label>Especialidad</Label>
+            <Select
+              name="esp"
+              label="esp"
+              options={countryOptions}
+              placeholder="Sin seleccion"
+              value={esp}
+              onValueChange={a => setesp(a)}
             />
-          </View>
-          <View style={styles.collegeColumn}>
-            <RNPickerSelect
-              placeholder={{
-                label: "Seleccionar",
-                value: null
-              }}
-              style={styles.veamos}
-              items={data}
-              onValueChange={value => setesp(value)}
-            />
-          </View>
-        </View>
-        <View style={styles.lineStyle} />
+          </FormGroup>
+        </Fieldset>
 
         {/* SELECCIONAR FECHA */}
-        <View style={styles.searchSection}>
-          <Input
-            placeholder={"11/11/1996"}
-            onTouchEnd={showDatepicker}
-            style={{ color: "red" }}
-            containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "calendar-search",
-              color: "gray",
-              size: 20
-            }}
-            timeZoneOffsetInMinutes={0}
-            value={date.toLocaleDateString()}
-            label="Fecha de Cita"
-          />
-        </View>
+        <Fieldset label="Seleccionar Fecha" last>
+          <FormGroup>
+            <Label>Fecha</Label>
+            <Input
+              placeholder="11/11/1996"
+              onTouchEnd={showDatepicker}
+              value={date.toLocaleDateString()}
+            />
+          </FormGroup>
+        </Fieldset>
 
         {/* UBICACION */}
-        <View style={styles.searchSection}>
-          <Input
-            placeholder="Seleciona direccion"
-            containerStyle={styles.inputForm}
-            leftIcon={{
-              type: "material-community",
-              name: "google-maps",
-              color: "gray",
-              size: 20
-            }}
-            label="Lugar de Cita"
-            onTouchEnd={() => navigation.navigate("map")}
-          />
-        </View>
+        <Fieldset label="Lugar" last>
+          <FormGroup>
+            <Label>Password</Label>
+            <Input
+              placeholder="Seleccionar ubicacion"
+              onTouchEnd={() => navigation.navigate("map")}
+            />
+          </FormGroup>
+        </Fieldset>
 
         {/* CALENDARIO */}
         <View>
@@ -151,40 +146,29 @@ function AddRestaurantForm(props) {
         </View>
 
         {/* SEGURO */}
-        <Text style={styles.Titulo}>Seleccione el seguro</Text>
-        <View style={[styles.container, styles.collegeContainer]}>
-          <View style={styles.collegeIconColumn}>
-            <Icon
-              name="ballot"
-              type="material-community"
-              underlayColor="transparent"
-              iconStyle={styles.collegeIcon}
-              color="gray"
-              size={20}
+        <Fieldset label="Seleccione su Seguro" last>
+          <FormGroup>
+            <Label>Seguro</Label>
+            <Select
+              name="seguro"
+              label="seguro"
+              options={seguroData}
+              placeholder="Sin seleccion"
+              value={seguro}
+              onValueChange={a => setseguro(a)}
             />
-          </View>
-          <View style={styles.collegeColumn}>
-            <RNPickerSelect
-              placeholder={{
-                label: "Seleccionar",
-                value: null
-              }}
-              style={styles.veamos}
-              items={seguroData}
-              onValueChange={value => setseguro(value)}
-            />
-          </View>
-        </View>
-        <View style={styles.lineStyle} />
-
-        <Button
-          containerStyle={styles.btnContainerLogin}
-          buttonStyle={styles.btnCitas}
-          title="Buscar cita "
-          onPress={() =>
-            navigation.navigate("AppointmentList", { seguro, esp })
-          }
-        />
+          </FormGroup>
+        </Fieldset>
+        <ActionsContainer style={{ marginBottom: 30 }}>
+          <Button
+            icon="md-search"
+            onPress={() =>
+              navigation.navigate("AppointmentList", { seguro, esp })
+            }
+          >
+            Buscar Cita
+          </Button>
+        </ActionsContainer>
       </View>
     </ScrollView>
   );
@@ -232,7 +216,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginLeft: 27,
     marginRight: 27,
-    fontSize: 16
+    fontSize: 16,
+    color: "grey"
   },
   formContainer: {
     flex: 1,
