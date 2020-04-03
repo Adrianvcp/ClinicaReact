@@ -29,7 +29,7 @@ export default function Header({ navigation, title, icon }) {
             name={icon}
             type="material-community"
             underlayColor="transparent"
-            color="gray"
+            color="red"
             size={20}
             onPress={() =>
               navigation.navigate("informacioncitaconfirmada", { navigation })

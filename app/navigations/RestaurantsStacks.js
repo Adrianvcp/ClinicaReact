@@ -17,7 +17,7 @@ export const AppointmentScreenStacks = createStackNavigator({
       //title: "Restaurantes"
       return {
         headerTitle: () => (
-          <Header navigation={navigation} title="Reserva tu cita" />
+          <Header navigation={navigation} title="Reserva tu citaga" />
         )
       };
     }
@@ -38,7 +38,11 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       return {
         headerTitle: () => (
-          <Header navigation={navigation} title="Citas disponibles" />
+          <Header
+            navigation={navigation}
+            title="Citas disponibles"
+            icon="check"
+          />
         )
       };
     }

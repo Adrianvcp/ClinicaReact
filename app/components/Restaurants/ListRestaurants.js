@@ -21,18 +21,18 @@ export default function ListRestaurants(props) {
   console.log(navigation);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "white" }}>
       {restaurants ? (
         <View>
-          <Text
-            style={{ margin: 10, marginLeft: 15, color: "grey", fontSize: 20 }}
+          {/*           <Text
+            style={{  marginLeft: 15, color: "grey", fontSize: 20 }}
           >
             {navigation.state.params.esp}
-          </Text>
+          </Text> */}
           <FlatList
             pagingEnabled
             disableScrollViewPanResponder
-            style={{ overflow: "visible", height: 300 }}
+            style={{ overflow: "visible", height: height + 50, marginTop: 15 }}
             showsVerticalScrollIndicator={false}
             decelerationRate={0}
             snapToAlignment="center"
@@ -120,7 +120,7 @@ function Restaurant(props) {
             <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
               {nombreDoctor}
             </Text>
-            <Text style={{ color: clinics.colors.white }}>
+            <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
               <Octicons
                 name="location"
                 size={clinics.sizes.font * 0.8}
@@ -157,7 +157,7 @@ function Restaurant(props) {
             { justifyContent: "space-between", alignItems: "flex-end" }
           ]}
         >
-          <Text style={{ color: clinics.colors.caption }}>{hora}</Text>
+          <Text style={{ color: "black" }}>{hora}</Text>
 
           <Text
             onPress={() => navigation.navigate("cita", { restaurant })}
@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
     paddingBottom: 30
   },
   destination: {
-    width: width - clinics.sizes.padding * 2,
-    height: width * 1,
-    marginHorizontal: clinics.sizes.margin,
+    width: width - clinics.sizes.padding,
+    height: width * 0.5,
+    marginHorizontal: 20,
     paddingHorizontal: clinics.sizes.padding,
     paddingVertical: clinics.sizes.padding * 0.66,
     borderRadius: clinics.sizes.radius

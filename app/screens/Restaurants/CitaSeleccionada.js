@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  ScrollView,
+  Animated,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import SelectInfo from "../../components/ReservaCita/SelectInfo";
 import RNPickerSelect from "react-native-picker-select";
 import { Icon } from "react-native-elements";
@@ -7,6 +16,20 @@ import Dialog, {
   DialogContent,
   SlideAnimation
 } from "react-native-popup-dialog";
+import {
+  Input,
+  Label,
+  Switch,
+  FormGroup,
+  Fieldset,
+  FieldsContainer,
+  ActionsContainer,
+  Select,
+  Button
+} from "react-native-clean-form";
+
+import * as theme from "../../../themes/clinics";
+const { width, height } = Dimensions.get("window");
 
 export default function CitaSeleccionada(props) {
   const { navigation, alerta } = props;
@@ -17,49 +40,84 @@ export default function CitaSeleccionada(props) {
     { label: "Hockey", value: "hockey" }
   ];
   const [paciente, setpaciente] = useState("");
+  const scrollX = new Animated.Value(0);
+  const seguroData = [
+    { label: "Pacifico Seguro", value: "Pacifico Seguro" },
+    { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
+    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" }
+  ];
+  const [esp, setesp] = useState("");
 
   console.log(restaurant.item);
 
   return (
-    <View style={styles.viewBody}>
-      {/* HEADDER : LOGO Y DESCRIPCION */}
-      <View>
-        <Image
-          source={require("../../../assets/img/carpeta.png")}
-          style={styles.logo}
-          reziseMode="contain"
-        />
-        <Text style={styles.description}>
-          Reserva tu cita de acuerdo a la especialidad medica
-        </Text>
+    <View style={styles.flex}>
+      <View style={[styles.flex]}>
+        <ScrollView
+          horizontal
+          pagingEnabled
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          decelerationRate={0}
+          scrollEventThrottle={16}
+          snapToAlignment="center"
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { x: scrollX } } }
+          ])}
+        >
+          <Image
+            source={{ uri: restaurant.item.url }}
+            resizeMode="cover"
+            style={{ width, height: width / 2 }}
+          />
+        </ScrollView>
       </View>
 
-      <View style={styles.lineStyle} />
-
-      <View style={styles.margenDetalle}>
-        {/* ESPECIALIDAD */}
-        {/* DETALLE CITA */}
-        <View>
-          <Text style={styles.restaurantName}> DETALLE DE LA CITA </Text>
-          <Text style={styles.restaurantDescription}> Dia: FECHA </Text>
-          <Text style={styles.restaurantAddress}>
-            Horario: {restaurant.item.hora}
-          </Text>
-          <Text style={styles.restaurantAddress}>
-            {restaurant.item.nombreDoctor}
-          </Text>
-          <Text style={styles.restaurantAddress}> {restaurant.item.path} </Text>
-          {/* AGREGAR PACIENTE */}
-          <Text style={styles.Titulo}> Paciente </Text>
-          <RNPickerSelect
-            placeholder={{
-              label: "Seleccionar",
-              value: null
-            }}
-            items={data}
-            onValueChange={value => setpaciente(value)}
+      <View style={[styles.flex, styles.content]}>
+        {/* INFO  */}
+        <View style={[styles.flex, styles.contentHeader]}>
+          <Image
+            style={[styles.avatar, styles.shadow]}
+            source={{ uri: restaurant.item.phurl }}
           />
-          <View style={styles.linerstyle} />
+
+          <Text style={styles.title}>{restaurant.item.name_clinic}</Text>
+
+          <View style={{ height: 400 }}>
+            <ScrollView>
+              <View>
+                <Text
+                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                >
+                  ESPECIALIDAD
+                </Text>
+                <Label>Especialidad</Label>
+
+                {/* DETALLE CITA */}
+
+                <Text
+                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                >
+                  DETALLE DE LA CITA
+                </Text>
+                <View style={{ flex: 1 }}></View>
+                <Label>Dia: 13/04/20</Label>
+                <Label>{restaurant.item.nombreDoctor}</Label>
+                <Label>{restaurant.item.path}</Label>
+
+                <Fieldset label="Paciente" last>
+                  <Select
+                    name="esp"
+                    label="esp"
+                    options={seguroData}
+                    placeholder="Sin seleccion"
+                    value={esp}
+                    onValueChange={a => setesp(a)}
+                  />
+                </Fieldset>
+              </View>
+            </ScrollView>
+          </View>
         </View>
       </View>
     </View>
@@ -67,92 +125,85 @@ export default function CitaSeleccionada(props) {
 }
 
 const styles = StyleSheet.create({
-  viewBody: {
-    flex: 1,
-    backgroundColor: "#fff"
+  flex: {
+    flex: 0,
+    backgroundColor: "white"
   },
-  collegeIconColumn: {
-    flex: 2,
-    justifyContent: "center"
+  column: {
+    flexDirection: "column"
   },
-  linerstyle: {
-    borderWidth: 0.5,
-    borderColor: "black",
-    margin: 10,
-    marginTop: -14,
-    color: "#9CA6AF"
+  row: {
+    flexDirection: "row"
   },
-  container: {
-    marginBottom: 10,
-    marginTop: -11
+  header: {
+    // backgroundColor: 'transparent',
+    paddingHorizontal: theme.sizes.padding,
+    paddingTop: theme.sizes.padding,
+    justifyContent: "space-between",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0
   },
-  collegeContainer: {
-    flex: 1
+  back: {
+    width: theme.sizes.base * 3,
+    height: theme.sizes.base * 3,
+    justifyContent: "center",
+    alignItems: "flex-start"
   },
-  Titulo: {
-    fontSize: 16,
-    color: "#86939E",
-    marginTop: 10,
-    fontWeight: "bold"
+  content: {
+    // backgroundColor: theme.colors.active,
+    // borderTopLeftRadius: theme.sizes.border,
+    // borderTopRightRadius: theme.sizes.border,
   },
-  logo: {
-    width: "30%",
-    height: 140,
-    marginTop: 20,
-    margin: 35,
-    marginLeft: 140
+  contentHeader: {
+    backgroundColor: "transparent",
+    padding: theme.sizes.padding,
+    backgroundColor: theme.colors.white,
+    borderTopLeftRadius: theme.sizes.radius,
+    borderTopRightRadius: theme.sizes.radius,
+    marginTop: -theme.sizes.padding / 2
+  },
+  avatar: {
+    position: "absolute",
+    top: -theme.sizes.margin,
+    right: theme.sizes.margin,
+    width: theme.sizes.padding * 2,
+    height: theme.sizes.padding * 2,
+    borderRadius: theme.sizes.padding
+  },
+  shadow: {
+    shadowColor: theme.colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 6
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5
+  },
+  dotsContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 36,
+    right: 0,
+    left: 0
+  },
+  dots: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 6,
+    backgroundColor: theme.colors.gray
   },
   title: {
-    fontWeight: "bold",
-    fontSize: 22,
-    marginBottom: 10,
-    textAlign: "center"
-  },
-  description: {
-    color: "grey",
-    marginBottom: 20,
-    textAlign: "center",
-    marginLeft: 80,
-    marginRight: 80,
-    textAlign: "center",
-    marginTop: -30
-  },
-  lineStyle: {
-    borderWidth: 0.5,
-    borderColor: "#E1E6ED",
-    marginLeft: 20,
-    marginRight: 20
-  },
-  restaurantName: {
+    fontSize: theme.sizes.font * 2,
     fontWeight: "bold"
   },
-  restaurantAddress: {
-    paddingTop: 2,
-    color: "grey"
-  },
-  restaurantDescription: {
-    paddingTop: 10,
-    color: "grey",
-    width: 300
-  },
-  margenDetalle: {
-    marginTop: 20,
-    marginRight: 30,
-    marginLeft: 30
-  },
-  collegeColumn: {
-    flex: 8,
-    flexDirection: "column",
-    justifyContent: "center",
-    textAlign: "left"
-  },
-  estructura: {
-    flex: 1,
-    marginTop: 15,
-    backgroundColor: "#fff",
-    marginRight: 40,
-    marginLeft: 40,
-    textAlign: "left"
-  },
-  veamos: { marginTop: -14 }
+  description: {
+    fontSize: theme.sizes.font * 1.2,
+    lineHeight: theme.sizes.font * 2,
+    color: theme.colors.caption
+  }
 });
