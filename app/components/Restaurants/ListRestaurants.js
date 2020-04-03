@@ -70,32 +70,10 @@ function Restaurant(props) {
   const [imageRestaurant, setImageRestaurant] = useState(null);
 
   return (
-    /*     <TouchableOpacity
-      
-    >
-      <View style={styles.viewRestaurant}>
-        <View style={styles.viewRestaurantImage}>
-          <Image
-            resizeMode="cover"
-            source={{ uri: url }}
-            style={styles.imageRestaurant}
-            PlaceholderContent={<ActivityIndicator color="fff" />}
-          />
-        </View>
-        <View>
-          <Text style={styles.restaurantName}>{hora} hrs - 13 Abril</Text>
-          <Text style={styles.restaurantAddress}>{nombreDoctor}</Text>
-          <Text style={styles.restaurantAddress}>{path}</Text>
-          <Text style={styles.restaurantAddress}>{name_clinic} </Text>
-        </View>
-      </View>
-    </TouchableOpacity> */
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ marginBottom: 20 }}
       onPress={() => navigation.navigate("cita", { restaurant })}
-
-      /*   onPress={() => navigation.navigate("Article", { article: item })} */
     >
       <ImageBackground
         style={[styles.flex, styles.destination, styles.shadow]}

@@ -38,11 +38,7 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       return {
         headerTitle: () => (
-          <Header
-            navigation={navigation}
-            title="Citas disponibles"
-            icon="check"
-          />
+          <Header navigation={navigation} title="Citas disponibles" />
         )
       };
     }
@@ -62,7 +58,11 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation, alert }) => {
       return {
         headerTitle: () => (
-          <Header navigation={navigation} title="Reservar cita" icon="check" />
+          <Header
+            navigation={navigation}
+            title="Reservar cita"
+            iconcheck="check"
+          />
         )
       };
     }

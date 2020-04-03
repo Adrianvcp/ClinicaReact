@@ -8,7 +8,7 @@ import Dialog, {
   SlideAnimation
 } from "react-native-popup-dialog";
 
-export default function Header({ navigation, title, icon }) {
+export default function Header({ navigation, title, iconcheck, iconsearch }) {
   const ancho = Dimensions.get("window").width;
   const { as } = "";
   const alerta = true;
@@ -18,7 +18,7 @@ export default function Header({ navigation, title, icon }) {
       <View style={{ flex: 1 }}>
         <Text style={styles.headerText}>{title}</Text>
       </View>
-      {icon ? (
+      {iconcheck ? (
         <View
           style={{
             flex: 1,
@@ -26,7 +26,29 @@ export default function Header({ navigation, title, icon }) {
           }}
         >
           <Icon
-            name={icon}
+            name={iconcheck}
+            type="material-community"
+            underlayColor="transparent"
+            color="red"
+            size={20}
+            onPress={() =>
+              navigation.navigate("informacioncitaconfirmada", { navigation })
+            }
+          />
+        </View>
+      ) : (
+        <View></View>
+      )}
+
+      {iconsearch ? (
+        <View
+          style={{
+            flex: 1,
+            paddingLeft: 180
+          }}
+        >
+          <Icon
+            name={iconsearch}
             type="material-community"
             underlayColor="transparent"
             color="red"
