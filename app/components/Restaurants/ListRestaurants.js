@@ -17,8 +17,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props) {
-  const { restaurants, navigation } = props;
-  console.log(navigation);
+  const { navigation } = props;
+  const restaurants = props.navigation.state.params.Data;
 
   return (
     <View style={{ backgroundColor: "white" }}>
@@ -56,8 +56,7 @@ export default function ListRestaurants(props) {
 
 function Restaurant(props) {
   const { restaurant, navigation } = props;
-  console.log("GEnial");
-  console.log(restaurant.item);
+
   const {
     path,
     nombreDoctor,

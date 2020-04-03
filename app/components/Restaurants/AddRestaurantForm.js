@@ -47,8 +47,7 @@ function AddRestaurantForm(props) {
   /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
   const [esp, setesp] = useState("");
   const [seguro, setseguro] = useState("");
-  console.log("dasdasdasd");
-  console.log(esp);
+
   /* METODOS CALENDARIO - FECHA */
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -75,6 +74,7 @@ function AddRestaurantForm(props) {
     { label: "Germany", value: "Germany" },
     { label: "United State", value: "United State" }
   ];
+  const Data = require("../../utils/dat");
 
   return (
     <ScrollView>
@@ -163,7 +163,10 @@ function AddRestaurantForm(props) {
           <Button
             icon="md-search"
             onPress={() =>
-              navigation.navigate("AppointmentList", { seguro, esp })
+              navigation.navigate("listaClinicaCitasDisponibles", {
+                navigation,
+                Data
+              })
             }
           >
             Buscar Cita

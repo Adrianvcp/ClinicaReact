@@ -12,24 +12,28 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
   const ancho = Dimensions.get("window").width;
   const { as } = "";
   const alerta = true;
-
+  console.log(ancho);
   return (
     <View style={styles.header}>
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1
+        }}
+      >
         <Text style={styles.headerText}>{title}</Text>
       </View>
       {iconcheck ? (
         <View
           style={{
             flex: 1,
-            paddingLeft: 180
+            padding: 180
           }}
         >
           <Icon
             name={iconcheck}
             type="material-community"
             underlayColor="transparent"
-            color="red"
+            color="black"
             size={20}
             onPress={() =>
               navigation.navigate("informacioncitaconfirmada", { navigation })
@@ -44,14 +48,14 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
         <View
           style={{
             flex: 1,
-            paddingLeft: 180
+            padding: 150
           }}
         >
           <Icon
             name={iconsearch}
             type="material-community"
             underlayColor="transparent"
-            color="red"
+            color="black"
             size={20}
             onPress={() =>
               navigation.navigate("informacioncitaconfirmada", { navigation })
