@@ -10,75 +10,21 @@ import {
 } from "react-native";
 
 import { useState, useRef } from "react";
-import {
-  Fieldset,
-  FormGroup,
-  Label,
-  Input,
-  Select
-} from "react-native-clean-form";
+
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props) {
+  const restaurants = require("../../utils/dat");
+
   console.log("jasdjas");
-
   const { navigation } = props;
-  const restaurants = props.navigation.state.params.Data;
-  const varHora = props.navigation.state.params.SearchHora;
-  const varClinica = props.navigation.state.params.SearchClinica;
-  console.log(varHora);
-  const searchHora = useRef();
-  const SearchClinica = useRef();
-
-  const hideSearch = () => {
-    searchHora.current.hide();
-  };
   const [esp, setesp] = useState("");
 
-  const show = () => searchHora.current.show();
-  const countryOptions = [
-    { label: "Denmark", value: "Denmark" },
-    { label: "Germany", value: "Germany" },
-    { label: "United State", value: "United State" }
-  ];
   return (
     <View style={{ backgroundColor: "white" }}>
-      {/* FILTRAR POR HORA */}
-      {varHora ? (
-        <View ref={searchHora} style={{ margin: 10, marginBottom: -20 }}>
-          <Fieldset label="Filtrar por Hora" last>
-            <FormGroup>
-              <Label>HORA</Label>
-              <Input placeholder="10:00 PM" />
-            </FormGroup>
-          </Fieldset>
-        </View>
-      ) : (
-        <View></View>
-      )}
-      {/* FILTRAR POR CLINICA */}
-      {varClinica ? (
-        <View ref={SearchClinica} style={{ margin: 10, marginBottom: -20 }}>
-          <Fieldset label="Filtrar por Clinica" last>
-            <FormGroup>
-              <Label>Clinica</Label>
-              <Select
-                name="esp"
-                label="esp"
-                options={countryOptions}
-                placeholder="Sin seleccion"
-                value={esp}
-                onValueChange={a => setesp(a)}
-              />
-            </FormGroup>
-          </Fieldset>
-        </View>
-      ) : (
-        <View></View>
-      )}
       {/* LISTA DE CLINICAS */}
       {restaurants ? (
         <View>
@@ -125,7 +71,7 @@ function Restaurant(props) {
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ marginBottom: 20 }}
-      onPress={() => navigation.navigate("cita", { restaurant })}
+      onPress={() => navigation.navigate("MiCitaSeleccionada", { restaurant })}
     >
       <ImageBackground
         style={[styles.flex, styles.destination, styles.shadow]}
@@ -190,13 +136,17 @@ function Restaurant(props) {
           <Text style={{ color: "black" }}>{hora}</Text>
 
           <Text
-            onPress={() => navigation.navigate("cita", { restaurant })}
+            onPress={() =>
+              navigation.navigate("MiCitaSeleccionada", { restaurant })
+            }
             style={{ textAlign: "right" }}
           >
             Ver info
           </Text>
           <FontAwesome
-            onPress={() => navigation.navigate("cita", { restaurant })}
+            onPress={() =>
+              navigation.navigate("MiCitaSeleccionada", { restaurant })
+            }
             name="chevron-right"
             size={clinics.sizes.font * 0.75}
             color={clinics.colors.caption}

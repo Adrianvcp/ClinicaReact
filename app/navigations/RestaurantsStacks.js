@@ -9,6 +9,7 @@ import ListRestaurants from "../components/Restaurants/ListRestaurants";
 //le aumento mi headers
 import Header from "../navigations/Header";
 import React from "react";
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 
 export const AppointmentScreenStacks = createStackNavigator({
   restaurants: {
@@ -61,7 +62,7 @@ export const AppointmentScreenStacks = createStackNavigator({
           <Header
             navigation={navigation}
             title="Buscar Ubicacion"
-            iconsearch="check"
+            iconsearch="dots-vertical"
           />
         )
       };

@@ -7,9 +7,11 @@ import RestaurantScreenStacks from "./RestaurantsStacks";
 //import TopListScreenStacks from "./TopListsStacks";
 import SearchScreenStacks from "./SearchStacks";
 import AccountScreenStack from "./AccountStacks";
+import MisCitasStacks from "./MisCitasStacks";
 
 const NavigationStacks = createBottomTabNavigator(
   {
+    /* BARRA INFERIOR  */
     Restaurants: {
       screen: RestaurantScreenStacks,
       navigationOptions: () => ({
@@ -26,7 +28,7 @@ const NavigationStacks = createBottomTabNavigator(
     },
 
     Search: {
-      screen: SearchScreenStacks,
+      screen: MisCitasStacks,
       navigationOptions: () => ({
         tabBarLabel: "Mis citas",
         tabBarIcon: ({ tintColor }) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { StyleSheet, View, Image, Text, Dimensions, Alert } from "react-native";
 import { Icon } from "react-native-elements";
 import { FancyAlert } from "react-native-expo-fancy-alerts";
@@ -7,12 +7,34 @@ import Dialog, {
   DialogContent,
   SlideAnimation
 } from "react-native-popup-dialog";
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 
 export default function Header({ navigation, title, iconcheck, iconsearch }) {
   const ancho = Dimensions.get("window").width;
   const { as } = "";
   const alerta = true;
+  const SearchHora = true;
+  const SearchClinica = true;
   console.log(ancho);
+
+  const menu = useRef();
+
+  const hideMenu = () => {
+    navigation.navigate("listaClinicaCitasDisponibles", {
+      SearchHora
+    });
+    menu.current.hide();
+  };
+
+  const hideMenuClinica = () => {
+    navigation.navigate("listaClinicaCitasDisponibles", {
+      SearchClinica
+    });
+    menu.current.hide();
+  };
+
+  const showMenu = () => menu.current.show();
+
   return (
     <View style={styles.header}>
       <View
@@ -51,16 +73,23 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
             padding: 150
           }}
         >
-          <Icon
-            name={iconsearch}
-            type="material-community"
-            underlayColor="transparent"
-            color="black"
-            size={20}
-            onPress={() =>
-              navigation.navigate("informacioncitaconfirmada", { navigation })
+          <Menu
+            ref={menu}
+            button={
+              <Icon
+                name={iconsearch}
+                type="material-community"
+                underlayColor="transparent"
+                color="black"
+                size={20}
+                onPress={showMenu}
+              />
             }
-          />
+          >
+            <MenuItem disabled>Filtrar por...</MenuItem>
+            <MenuItem onPress={hideMenu}>Hora</MenuItem>
+            <MenuItem onPress={hideMenuClinica}>Clinica</MenuItem>
+          </Menu>
         </View>
       ) : (
         <View></View>
