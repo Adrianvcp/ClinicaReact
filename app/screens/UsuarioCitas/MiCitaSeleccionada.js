@@ -7,51 +7,160 @@ import {
   ScrollView,
   Animated,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import SelectInfo from "../../components/ReservaCita/SelectInfo";
-import RNPickerSelect from "react-native-picker-select";
 import { Icon } from "react-native-elements";
-import Dialog, {
-  DialogContent,
-  SlideAnimation
-} from "react-native-popup-dialog";
-import {
-  Input,
-  Label,
-  Switch,
-  FormGroup,
-  Fieldset,
-  FieldsContainer,
-  ActionsContainer,
-  Select,
-  Button
-} from "react-native-clean-form";
+import { Label, Select } from "react-native-clean-form";
+import { Ionicons } from "@expo/vector-icons";
 
 import * as theme from "../../../themes/clinics";
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
+
+/*----------- CUADRO DE DIALOGO - ACEPTAR O DECLINAR SOLICITUD -----------*/
+import Dialog from "react-native-dialog";
+
+import call from "react-native-phone-call";
 
 export default function CitaSeleccionada(props) {
-  const { navigation, alerta } = props;
+  const [dialogVisible, setdialogVisible] = useState(false);
+  const [dialogVisibleRepro, setdialogVisibleRepro] = useState(false);
+
+  const { navigation } = props;
   const { restaurant } = navigation.state.params;
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
-    { label: "Hockey", value: "hockey" }
+    { label: "Hockey", value: "hockey" },
   ];
-  const [paciente, setpaciente] = useState("");
   const scrollX = new Animated.Value(0);
   const seguroData = [
     { label: "Pacifico Seguro", value: "Pacifico Seguro" },
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
-    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" }
+    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
   ];
   const [esp, setesp] = useState("");
-
+  const args = {
+    number: "986141854", // String value with the number to call
+    prompt: false, // Optional boolean property. Determines if the user should be prompt prior to the call
+  };
   console.log(restaurant.item);
+
+  /* FUNCIONES ANULAR */
+  const showDialog = () => {
+    setdialogVisible(true);
+  };
+  const handleCancel = () => {
+    setdialogVisible(false);
+  };
+  const handleOK = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    setdialogVisible(false);
+    navigation.navigate("restaurants");
+  };
+  /* FUNCIONES REPROGRAMAR */
+  const showDialogRepro = () => {
+    setdialogVisibleRepro(true);
+  };
+  const handleCancelRepro = () => {
+    setdialogVisibleRepro(false);
+  };
+  const handleOKRepro = () => {
+    navigation.navigate("listaClinicaCitasDisponibles");
+    setdialogVisibleRepro(false);
+  };
 
   return (
     <View style={styles.flex}>
+      {/* ANULAR CITA */}
+      <View>
+        <Dialog.Container visible={dialogVisible}>
+          <View>
+            <Icon
+              name="delete-circle"
+              type="material-community"
+              underlayColor="transparent"
+              color="#52B1B1"
+              size={100}
+            />
+          </View>
+
+          <View>
+            <Dialog.Title
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Desea anular su cita ?
+            </Dialog.Title>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              Aceptar si desea anular la cita:
+            </Dialog.Description>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              OFTAMOLOGIA
+            </Dialog.Description>
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              DIA:11/11/1996 - {restaurant.item.hora}
+            </Dialog.Description>
+            <Dialog.Description
+              style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
+            >
+              {restaurant.item.name_clinic}
+            </Dialog.Description>
+          </View>
+
+          <Dialog.Button label="Cancel" onPress={handleCancel} />
+          <Dialog.Button label="OK" onPress={handleOK} />
+        </Dialog.Container>
+      </View>
+
+      {/* REPROGRAMAR CITA */}
+      <View>
+        <Dialog.Container visible={dialogVisibleRepro}>
+          <View>
+            <Icon
+              name="delete-circle"
+              type="material-community"
+              underlayColor="transparent"
+              color="#52B1B1"
+              size={100}
+            />
+          </View>
+
+          <View>
+            <Dialog.Title
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Desea reprogramar su cita ?
+            </Dialog.Title>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              Aceptar si desea anular la cita:
+            </Dialog.Description>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              OFTAMOLOGIA
+            </Dialog.Description>
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              DIA:11/11/1996 - {restaurant.item.hora}
+            </Dialog.Description>
+            <Dialog.Description
+              style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
+            >
+              {restaurant.item.name_clinic}
+            </Dialog.Description>
+          </View>
+          <Dialog.Button label="Cancel" onPress={handleCancelRepro} />
+          <Dialog.Button label="OK" onPress={handleOK} />
+        </Dialog.Container>
+      </View>
+
       <View style={[styles.flex]}>
         <ScrollView
           horizontal
@@ -62,27 +171,27 @@ export default function CitaSeleccionada(props) {
           scrollEventThrottle={16}
           snapToAlignment="center"
           onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: scrollX } } }
+            { nativeEvent: { contentOffset: { x: scrollX } } },
           ])}
         >
           <Image
             source={{
               uri:
-                "https://www.vesalio.com.pe/wp-content/uploads/2018/04/Oftalmolog%C3%ADa.jpg"
+                "https://www.vesalio.com.pe/wp-content/uploads/2018/04/Oftalmolog%C3%ADa.jpg",
             }}
             resizeMode="cover"
             style={{
               position: "relative",
               width,
-              height: width / 2
+              height: width / 2,
             }}
           />
-          <View
+          {/*           <View
             style={{
               flexDirection: "column",
               flex: 1,
               justifyContent: "center",
-              position: "absolute"
+              position: "absolute",
             }}
           >
             <View>
@@ -90,7 +199,7 @@ export default function CitaSeleccionada(props) {
                 containerStyle={{
                   marginTop: 70,
                   marginRight: 20,
-                  marginLeft: 20
+                  marginLeft: 20,
                 }}
                 name="phone"
                 type="material-community"
@@ -109,46 +218,69 @@ export default function CitaSeleccionada(props) {
                 size={20}
               />
             </View>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
 
       <View style={[styles.flex, styles.content]}>
-        {/* INFO  */}
+        {/* INFO  -- DETALLE DE LAS CITAS*/}
         <View style={[styles.flex, styles.contentHeader]}>
           <Image
             style={[styles.avatar, styles.shadow]}
             source={{ uri: restaurant.item.phurl }}
           />
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.title}>Oftalmologia</Text>
-            <Icon
-              containerStyle={{ marginTop: 5, marginRight: 20, marginLeft: 20 }}
-              name="phone"
-              type="material-community"
-              underlayColor="transparent"
-              color="#2CBC00"
-              size={30}
-            />
-            <Icon
-              containerStyle={{ marginTop: 5 }}
-              name="map-marker"
-              type="material-community"
-              underlayColor="transparent"
-              color="#EE272A"
-              size={30}
-            />
-          </View>
-          <TouchableOpacity>
-            <Text
-              style={{ marginTop: 5, color: "#007BFA" }}
-              onPress={() =>
-                navigation.navigate("PerfilClinica", { navigation })
-              }
+            <View style={{ width: "60%" }}>
+              <Text style={styles.title}>Oftalmologia</Text>
+              <TouchableOpacity>
+                <Text
+                  style={{ paddingTop: -100, color: "#007BFA" }}
+                  onPress={() =>
+                    navigation.navigate("PerfilClinica", { navigation })
+                  }
+                >
+                  {restaurant.item.name_clinic}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                width: "50%",
+                flexDirection: "row",
+                justifyContent: "center",
+                paddingTop: 10,
+              }}
             >
-              {restaurant.item.name_clinic}
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity>
+                <Icon
+                  containerStyle={{
+                    marginTop: 5,
+                    marginRight: 20,
+                    marginLeft: 20,
+                  }}
+                  name="phone"
+                  type="material-community"
+                  underlayColor="transparent"
+                  color="#2CBC00"
+                  size={25}
+                  onPress={() => {
+                    call(args).catch(console.error);
+                  }}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Icon
+                  containerStyle={{ marginTop: 5 }}
+                  name="map-marker"
+                  type="material-community"
+                  underlayColor="transparent"
+                  color="#EE272A"
+                  size={25}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <View
             style={{
@@ -156,75 +288,79 @@ export default function CitaSeleccionada(props) {
               borderWidth: 0.5,
               borderColor: "black",
               marginBottom: 10,
-              marginTop: 10
+              marginTop: 10,
             }}
           ></View>
 
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ height: 400, width: "60%" }}>
               <ScrollView>
                 <View>
-                  {/*                 <Text
-                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
-                  >
-                    ESPECIALIDAD
-                  </Text>
-                  <Label>Especialidad</Label>
- */}
                   {/* DETALLE CITA */}
 
                   <Text
-                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                    style={{
+                      fontWeight: "bold",
+                      marginTop: 15,
+                      marginBottom: 5,
+                      color: "grey",
+                    }}
                   >
                     DETALLE DE LA CITA
                   </Text>
                   <View style={{ flex: 1 }}></View>
-                  <Label>Dia: 13/04/20</Label>
-                  <Label>{restaurant.item.nombreDoctor}</Label>
-                  <Label>{restaurant.item.path}</Label>
+                  <Text style={{ fontWeight: "100" }}>Dia: 13/04/20</Text>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    {restaurant.item.nombreDoctor}
+                  </Text>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    {restaurant.item.path}
+                  </Text>
 
                   <Text
-                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                    style={{ fontWeight: "bold", marginTop: 20, color: "grey" }}
                   >
                     PACIENTE
                   </Text>
-                  <Select
-                    name="esp"
-                    label="esp"
-                    options={seguroData}
-                    placeholder="Sin seleccion"
-                    value={esp}
-                    onValueChange={a => setesp(a)}
-                  />
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    Cesar Castro
+                  </Text>
                 </View>
               </ScrollView>
             </View>
+
+            {/* ICONOS ->  ANULAR  Y REPROGRAMAR*/}
             <View
               style={{
-                paddingTop: 10,
-                width: "45%"
+                paddingTop: 21.5,
+                width: "45%",
               }}
             >
-              <Icon
-                name="delete-forever-outline"
-                type="material-community"
-                underlayColor="transparent"
-                color="#C9AB2A"
-                size={40}
-              />
-              <Text style={{ textAlign: "center", marginBottom: 20 }}>
-                ANULAR
-              </Text>
+              <View style={{ paddingLeft: 30 }}>
+                <Icon
+                  name="delete-forever-outline"
+                  type="material-community"
+                  underlayColor="transparent"
+                  color="#C9AB2A"
+                  size={35}
+                  onPress={showDialog}
+                />
+                <Text style={{ textAlign: "center", marginBottom: 20 }}>
+                  ANULAR
+                </Text>
+              </View>
 
-              <Icon
-                name="calendar-clock"
-                type="material-community"
-                underlayColor="transparent"
-                color="#3394D5"
-                size={40}
-              />
-
-              <Text style={{ textAlign: "center" }}>REPRO</Text>
+              <View style={{ marginTop: 10, paddingLeft: 30 }}>
+                <Icon
+                  name="calendar-clock"
+                  type="material-community"
+                  underlayColor="transparent"
+                  color="#3394D5"
+                  size={30}
+                  onPress={showDialogRepro}
+                />
+                <Text style={{ textAlign: "center" }}>REPRO</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -236,22 +372,22 @@ export default function CitaSeleccionada(props) {
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "flex-start" // if you want to fill rows left to right
+    alignItems: "flex-start", // if you want to fill rows left to right
   },
   def: {
-    backgroundColor: "red"
+    backgroundColor: "red",
   },
   column: {
-    flexDirection: "column"
+    flexDirection: "column",
   },
   row: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   header: {
     // backgroundColor: 'transparent',
@@ -262,13 +398,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   back: {
     width: theme.sizes.base * 3,
     height: theme.sizes.base * 3,
     justifyContent: "center",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   content: {
     // backgroundColor: theme.colors.active,
@@ -281,7 +417,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
-    marginTop: -theme.sizes.padding / 2
+    marginTop: -theme.sizes.padding / 2,
   },
   avatar: {
     position: "absolute",
@@ -289,16 +425,16 @@ const styles = StyleSheet.create({
     right: theme.sizes.margin,
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
-    borderRadius: theme.sizes.padding
+    borderRadius: theme.sizes.padding,
   },
   shadow: {
     shadowColor: theme.colors.black,
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 5
+    shadowRadius: 5,
   },
   dotsContainer: {
     justifyContent: "center",
@@ -306,23 +442,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 36,
     right: 0,
-    left: 0
+    left: 0,
   },
   dots: {
     width: 8,
     height: 8,
     borderRadius: 4,
     marginHorizontal: 6,
-    backgroundColor: theme.colors.gray
+    backgroundColor: theme.colors.gray,
   },
   title: {
     fontSize: theme.sizes.font * 2,
     fontWeight: "bold",
-    width: width / 2
+    width: width / 2,
   },
   description: {
     fontSize: theme.sizes.font * 1.2,
     lineHeight: theme.sizes.font * 2,
-    color: theme.colors.caption
-  }
+    color: theme.colors.caption,
+  },
 });

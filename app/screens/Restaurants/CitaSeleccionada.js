@@ -7,14 +7,14 @@ import {
   ScrollView,
   Animated,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import SelectInfo from "../../components/ReservaCita/SelectInfo";
 import RNPickerSelect from "react-native-picker-select";
 import { Icon } from "react-native-elements";
 import Dialog, {
   DialogContent,
-  SlideAnimation
+  SlideAnimation,
 } from "react-native-popup-dialog";
 import {
   Input,
@@ -25,7 +25,7 @@ import {
   FieldsContainer,
   ActionsContainer,
   Select,
-  Button
+  Button,
 } from "react-native-clean-form";
 
 import * as theme from "../../../themes/clinics";
@@ -37,14 +37,14 @@ export default function CitaSeleccionada(props) {
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
-    { label: "Hockey", value: "hockey" }
+    { label: "Hockey", value: "hockey" },
   ];
   const [paciente, setpaciente] = useState("");
   const scrollX = new Animated.Value(0);
   const seguroData = [
     { label: "Pacifico Seguro", value: "Pacifico Seguro" },
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
-    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" }
+    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
   ];
   const [esp, setesp] = useState("");
 
@@ -62,7 +62,7 @@ export default function CitaSeleccionada(props) {
           scrollEventThrottle={16}
           snapToAlignment="center"
           onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: scrollX } } }
+            { nativeEvent: { contentOffset: { x: scrollX } } },
           ])}
         >
           <Image
@@ -91,7 +91,9 @@ export default function CitaSeleccionada(props) {
                 >
                   ESPECIALIDAD
                 </Text>
-                <Label>Especialidad</Label>
+                <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                  Especialidad
+                </Text>
 
                 {/* DETALLE CITA */}
 
@@ -101,20 +103,30 @@ export default function CitaSeleccionada(props) {
                   DETALLE DE LA CITA
                 </Text>
                 <View style={{ flex: 1 }}></View>
-                <Label>Dia: 13/04/20</Label>
-                <Label>{restaurant.item.nombreDoctor}</Label>
-                <Label>{restaurant.item.path}</Label>
 
-                <Fieldset label="Paciente" last>
-                  <Select
-                    name="esp"
-                    label="esp"
-                    options={seguroData}
-                    placeholder="Sin seleccion"
-                    value={esp}
-                    onValueChange={a => setesp(a)}
-                  />
-                </Fieldset>
+                <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                  Dia: 13/04/20
+                </Text>
+                <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                  {restaurant.item.nombreDoctor}
+                </Text>
+                <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                  {restaurant.item.path}
+                </Text>
+                <Text
+                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                >
+                  PACIENTE
+                </Text>
+
+                <Select
+                  name="esp"
+                  label="esp"
+                  options={seguroData}
+                  placeholder="Sin seleccion"
+                  value={esp}
+                  onValueChange={(a) => setesp(a)}
+                />
               </View>
             </ScrollView>
           </View>
@@ -127,13 +139,13 @@ export default function CitaSeleccionada(props) {
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   column: {
-    flexDirection: "column"
+    flexDirection: "column",
   },
   row: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   header: {
     // backgroundColor: 'transparent',
@@ -144,13 +156,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   back: {
     width: theme.sizes.base * 3,
     height: theme.sizes.base * 3,
     justifyContent: "center",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   content: {
     // backgroundColor: theme.colors.active,
@@ -163,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
-    marginTop: -theme.sizes.padding / 2
+    marginTop: -theme.sizes.padding / 2,
   },
   avatar: {
     position: "absolute",
@@ -171,16 +183,16 @@ const styles = StyleSheet.create({
     right: theme.sizes.margin,
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
-    borderRadius: theme.sizes.padding
+    borderRadius: theme.sizes.padding,
   },
   shadow: {
     shadowColor: theme.colors.black,
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 5
+    shadowRadius: 5,
   },
   dotsContainer: {
     justifyContent: "center",
@@ -188,22 +200,22 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 36,
     right: 0,
-    left: 0
+    left: 0,
   },
   dots: {
     width: 8,
     height: 8,
     borderRadius: 4,
     marginHorizontal: 6,
-    backgroundColor: theme.colors.gray
+    backgroundColor: theme.colors.gray,
   },
   title: {
     fontSize: theme.sizes.font * 2,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   description: {
     fontSize: theme.sizes.font * 1.2,
     lineHeight: theme.sizes.font * 2,
-    color: theme.colors.caption
-  }
+    color: theme.colors.caption,
+  },
 });

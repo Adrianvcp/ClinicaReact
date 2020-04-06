@@ -6,6 +6,7 @@ import React from "react";
 import MisCitas from "../screens/UsuarioCitas/MisCitas";
 import MiCitaSeleccionada from "../screens/UsuarioCitas/MiCitaSeleccionada";
 import PerfilClinica from "../screens/Clinica/Perfil";
+import ListRestaurants from "../components/Restaurants/ListRestaurants";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 
 export const AppointmentScreenStacks = createStackNavigator({
@@ -14,28 +15,42 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Mis Citas" />
+        headerTitle: () => <Header title="Mis Citas" />,
       };
-    }
+    },
   },
   MiCitaSeleccionada: {
     screen: MiCitaSeleccionada,
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Mi Cita Seleccionada" />
+        headerTitle: () => <Header title="Mi Cita Seleccionada" />,
       };
-    }
+    },
   },
   PerfilClinica: {
     screen: PerfilClinica,
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Clinica" />
+        headerTitle: () => <Header title="Clinica" />,
       };
-    }
-  }
+    },
+  },
+  listaClinicaCitasDisponibles: {
+    screen: ListRestaurants,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTitle: () => (
+          <Header
+            navigation={navigation}
+            title="Buscar Ubicacion"
+            iconsearch="dots-vertical"
+          />
+        ),
+      };
+    },
+  },
 });
 
 export default AppointmentScreenStacks;
