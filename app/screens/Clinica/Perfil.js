@@ -84,12 +84,14 @@ export default function CitaSeleccionada(props) {
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "70%" }}>
               <Text style={styles.title}>{restaurant.item.name_clinic}</Text>
+              <Text>{restaurant.item.path}</Text>
             </View>
             <View
               style={{
                 width: "30%",
                 flexDirection: "row",
                 justifyContent: "center",
+                paddingLeft: 15,
               }}
             >
               <TouchableOpacity>
@@ -124,7 +126,12 @@ export default function CitaSeleccionada(props) {
               <View>
                 {/* DETALLE CITA */}
                 <Text
-                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                  style={{
+                    fontWeight: "bold",
+                    marginTop: 10,
+                    color: "grey",
+                    textAlign: "justify",
+                  }}
                 >
                   Estamos dedicados desde 1991 a brindarte una atención segura y
                   de calidad. Tenemos más de 5O especialidades médicas y un
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray,
   },
   title: {
-    fontSize: theme.sizes.font * 2.4,
+    fontSize: theme.sizes.font * 2,
     fontWeight: "bold",
   },
   description: {

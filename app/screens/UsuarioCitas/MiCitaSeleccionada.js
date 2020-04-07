@@ -22,6 +22,7 @@ import Dialog from "react-native-dialog";
 import call from "react-native-phone-call";
 
 export default function CitaSeleccionada(props) {
+  console.log(props);
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogVisibleRepro, setdialogVisibleRepro] = useState(false);
 
@@ -66,7 +67,7 @@ export default function CitaSeleccionada(props) {
     setdialogVisibleRepro(false);
   };
   const handleOKRepro = () => {
-    navigation.navigate("listaClinicaCitasDisponibles");
+    navigation.navigate("Repro", { navigation });
     setdialogVisibleRepro(false);
   };
 
@@ -157,7 +158,7 @@ export default function CitaSeleccionada(props) {
             </Dialog.Description>
           </View>
           <Dialog.Button label="Cancel" onPress={handleCancelRepro} />
-          <Dialog.Button label="OK" onPress={handleOK} />
+          <Dialog.Button label="OK" onPress={handleOKRepro} />
         </Dialog.Container>
       </View>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -11,11 +11,8 @@ import {
 } from "react-native";
 import SelectInfo from "../../components/ReservaCita/SelectInfo";
 import RNPickerSelect from "react-native-picker-select";
-import { Icon } from "react-native-elements";
-import Dialog, {
-  DialogContent,
-  SlideAnimation,
-} from "react-native-popup-dialog";
+import { Icon, CheckBox } from "react-native-elements";
+import { DialogContent, SlideAnimation } from "react-native-popup-dialog";
 import {
   Input,
   Label,
@@ -27,11 +24,18 @@ import {
   Select,
   Button,
 } from "react-native-clean-form";
+import Dialog from "react-native-dialog";
 
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 
 export default function CitaSeleccionada(props) {
+  const confirmar = props.navigation.state.params.confirmar;
+  console.log("Cita selecciondad");
+  console.log(props.navigation.state.params);
+  console.log(props.navigation.state.params.confirmar);
+  console.log(confirmar);
+  const [checkedvar, setchecked] = useState(false);
   const { navigation, alerta } = props;
   const { restaurant } = navigation.state.params;
   const data = [
@@ -48,10 +52,115 @@ export default function CitaSeleccionada(props) {
   ];
   const [esp, setesp] = useState("");
 
-  console.log(restaurant.item);
+  const menu = useRef();
+  /* FUNCIONES ANULAR */
+  const showDialog = () => {
+    setdialogVisible(true);
+  };
+  const handleCancel = () => {
+    confirmar === false;
+  };
+  const handleOK = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    setconfirmar(false);
+  };
+
+  const showMenu = () => menu.current.show();
 
   return (
     <View style={styles.flex}>
+      {/* ANULAR CITA */}
+      <View>
+        <Dialog.Container visible={confirmar}>
+          <View>
+            {/*             <Icon
+              name="delete-circle"
+              type="material-community"
+              underlayColor="transparent"
+              color="#52B1B1"
+              size={100}
+            /> */}
+            <Icon
+              name="check-circle-outline"
+              type="material-community"
+              underlayColor="transparent"
+              iconStyle={styles.collegeIcon}
+              color="green"
+              size={60}
+            />
+          </View>
+
+          <View>
+            {/*             <Dialog.Title
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Desea anular su cita ?
+            </Dialog.Title>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              Aceptar si desea anular la cita:
+            </Dialog.Description>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              OFTAMOLOGIA
+            </Dialog.Description>
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              DIA:11/11/1996 - {restaurant.item.hora}
+            </Dialog.Description>
+            <Dialog.Description
+              style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
+            >
+              {restaurant.item.name_clinic}
+            </Dialog.Description> */}
+            <Dialog.Title
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Reserva completada{" "}
+            </Dialog.Title>
+            {/*             <Text style={styles.title}>Reserva completada</Text>
+             */}
+            <Dialog.Description style={styles.textoMenu}>
+              Especialidad: Oftalmologia
+            </Dialog.Description>
+            <Dialog.Description style={styles.textoMenu}>
+              Dia: 13/04/20
+            </Dialog.Description>
+            <Dialog.Description style={styles.textoMenu}>
+              Horario:
+            </Dialog.Description>
+            <Dialog.Description style={styles.textoMenu}>
+              Clinica:
+            </Dialog.Description>
+            <Dialog.Description style={styles.textoMenu}>
+              Paciente: Cesar Castro
+            </Dialog.Description>
+
+            <CheckBox
+              title="Notificar cita medica"
+              checked={checkedvar}
+              onPress={() => {
+                setchecked(!checkedvar);
+              }}
+            />
+          </View>
+
+          <Dialog.Button
+            label="Cancel"
+            onPress={() => {
+              navigation.navigate("cita", { navigation, confirmar: false });
+            }}
+          />
+          <Dialog.Button label="OK" onPress={handleOK} />
+        </Dialog.Container>
+      </View>
+
       <View style={[styles.flex]}>
         <ScrollView
           horizontal
@@ -217,5 +326,13 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font * 1.2,
     lineHeight: theme.sizes.font * 2,
     color: theme.colors.caption,
+  },
+  textoMenu: {
+    alignSelf: "center",
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: "center",
+    marginTop: 4,
+    fontSize: 17,
   },
 });

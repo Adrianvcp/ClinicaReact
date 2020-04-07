@@ -8,6 +8,7 @@ import MiCitaSeleccionada from "../screens/UsuarioCitas/MiCitaSeleccionada";
 import PerfilClinica from "../screens/Clinica/Perfil";
 import ListRestaurants from "../components/Restaurants/ListRestaurants";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import ReprogramacionCita from "../screens/UsuarioCitas/ReprogramacionCita";
 
 export const AppointmentScreenStacks = createStackNavigator({
   restaurants: {
@@ -47,6 +48,16 @@ export const AppointmentScreenStacks = createStackNavigator({
             title="Buscar Ubicacion"
             iconsearch="dots-vertical"
           />
+        ),
+      };
+    },
+  },
+  Repro: {
+    screen: ReprogramacionCita,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTitle: () => (
+          <Header navigation={navigation} title="Buscar Ubicacion" />
         ),
       };
     },
