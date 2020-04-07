@@ -95,7 +95,7 @@ function AddRestaurantForm(props) {
     { label: "Germany", value: "Germany" },
     { label: "United State", value: "United State" },
   ];
-  const Data = require("../../utils/dat");
+  const Datito = require("../../utils/dat");
 
   return (
     <ScrollView>
@@ -218,7 +218,7 @@ function AddRestaurantForm(props) {
             onPress={() =>
               navigation.navigate("listaClinicaCitasDisponibles", {
                 navigation,
-                Data,
+                Datito,
               })
             }
           >

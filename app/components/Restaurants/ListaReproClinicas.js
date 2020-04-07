@@ -23,13 +23,13 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props) {
-  console.log("jasdjas");
+  const { navigation, info } = props;
+  const restaurants = props.navigation.state.params.Data;
+  console.log("aquasdai");
   console.log(props);
-  const { navigation } = props;
-  const restaurants = props.navigation.state.params.Datito;
   const varHora = props.navigation.state.params.SearchHora;
   const varClinica = props.navigation.state.params.SearchClinica;
-  console.log(varHora);
+
   const searchHora = useRef();
   const SearchClinica = useRef();
 
@@ -80,7 +80,7 @@ export default function ListRestaurants(props) {
         <View></View>
       )}
       {/* LISTA DE CLINICAS */}
-      {restaurants ? (
+      {info ? (
         <View>
           <FlatList
             pagingEnabled
@@ -89,7 +89,7 @@ export default function ListRestaurants(props) {
             showsVerticalScrollIndicator={false}
             decelerationRate={0}
             snapToAlignment="center"
-            data={restaurants}
+            data={info}
             renderItem={(restaurant) => (
               <Restaurant restaurant={restaurant} navigation={navigation} />
             )}

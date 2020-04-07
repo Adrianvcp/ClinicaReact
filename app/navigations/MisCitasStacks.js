@@ -7,6 +7,8 @@ import MisCitas from "../screens/UsuarioCitas/MisCitas";
 import MiCitaSeleccionada from "../screens/UsuarioCitas/MiCitaSeleccionada";
 import PerfilClinica from "../screens/Clinica/Perfil";
 import ListRestaurants from "../components/Restaurants/ListRestaurants";
+import ReprogramacionCita from "../screens/UsuarioCitas/ReprogramacionCita";
+
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 
 export const AppointmentScreenStacks = createStackNavigator({
@@ -37,16 +39,12 @@ export const AppointmentScreenStacks = createStackNavigator({
       };
     },
   },
-  listaClinicaCitasDisponibles: {
-    screen: ListRestaurants,
+  Repro: {
+    screen: ReprogramacionCita,
     navigationOptions: ({ navigation }) => {
       return {
         headerTitle: () => (
-          <Header
-            navigation={navigation}
-            title="Buscar Ubicacion"
-            iconsearch="dots-vertical"
-          />
+          <Header navigation={navigation} title="Reprogramacion Cita" />
         ),
       };
     },

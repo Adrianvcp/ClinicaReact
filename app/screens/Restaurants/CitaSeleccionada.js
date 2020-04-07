@@ -12,10 +12,7 @@ import {
 import SelectInfo from "../../components/ReservaCita/SelectInfo";
 import RNPickerSelect from "react-native-picker-select";
 import { Icon } from "react-native-elements";
-import Dialog, {
-  DialogContent,
-  SlideAnimation,
-} from "react-native-popup-dialog";
+import { DialogContent, SlideAnimation } from "react-native-popup-dialog";
 import {
   Input,
   Label,
@@ -30,15 +27,23 @@ import {
 
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
+import Dialog from "react-native-dialog";
 
 export default function CitaSeleccionada(props) {
   const { navigation, alerta } = props;
+  console.log("Cita Seleccionada");
+  console.log(props);
   const { restaurant } = navigation.state.params;
+
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
     { label: "Hockey", value: "hockey" },
   ];
+  const [dialogvisibleConfirmCita, setdialogvisibleConfirmCita] = useState(
+    false
+  );
+  setdialogvisibleConfirmCita(true);
   const [paciente, setpaciente] = useState("");
   const scrollX = new Animated.Value(0);
   const seguroData = [
@@ -49,9 +54,61 @@ export default function CitaSeleccionada(props) {
   const [esp, setesp] = useState("");
 
   console.log(restaurant.item);
-
+  const handleCancel = () => {
+    setdialogvisibleConfirmCita(false);
+  };
+  const handleOK = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    setdialogvisibleConfirmCita(false);
+  };
   return (
     <View style={styles.flex}>
+      {/* CONFIRMAR CITA */}
+      <View>
+        <Dialog.Container visible={dialogvisibleConfirmCita}>
+          <View>
+            <Icon
+              name="delete-circle"
+              type="material-community"
+              underlayColor="transparent"
+              color="#52B1B1"
+              size={100}
+            />
+          </View>
+
+          <View>
+            <Dialog.Title
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Desea anular su cita ?
+            </Dialog.Title>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              Aceptar si desea anular la cita:
+            </Dialog.Description>
+
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              OFTAMOLOGIA
+            </Dialog.Description>
+            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
+              DIA:11/11/1996 - {restaurant.item.hora}
+            </Dialog.Description>
+            <Dialog.Description
+              style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
+            >
+              {restaurant.item.name_clinic}
+            </Dialog.Description>
+          </View>
+
+          <Dialog.Button label="Cancel" onPress={handleCancel} />
+          <Dialog.Button label="OK" onPress={handleOK} />
+        </Dialog.Container>
+      </View>
+
       <View style={[styles.flex]}>
         <ScrollView
           horizontal

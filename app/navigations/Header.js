@@ -5,9 +5,10 @@ import { FancyAlert } from "react-native-expo-fancy-alerts";
 import { ConfirmDialog } from "react-native-simple-dialogs";
 import Dialog, {
   DialogContent,
-  SlideAnimation
+  SlideAnimation,
 } from "react-native-popup-dialog";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function Header({ navigation, title, iconcheck, iconsearch }) {
   const ancho = Dimensions.get("window").width;
@@ -15,20 +16,21 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
   const alerta = true;
   const SearchHora = true;
   const SearchClinica = true;
+  const confirmar = true;
   console.log(ancho);
 
   const menu = useRef();
 
   const hideMenu = () => {
     navigation.navigate("listaClinicaCitasDisponibles", {
-      SearchHora
+      SearchHora,
     });
     menu.current.hide();
   };
 
   const hideMenuClinica = () => {
     navigation.navigate("listaClinicaCitasDisponibles", {
-      SearchClinica
+      SearchClinica,
     });
     menu.current.hide();
   };
@@ -39,7 +41,7 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
     <View style={styles.header}>
       <View
         style={{
-          flex: 1
+          flex: 1,
         }}
       >
         <Text style={styles.headerText}>{title}</Text>
@@ -48,19 +50,21 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
         <View
           style={{
             flex: 1,
-            padding: 180
+            padding: 180,
           }}
         >
-          <Icon
-            name={iconcheck}
-            type="material-community"
-            underlayColor="transparent"
-            color="black"
-            size={20}
-            onPress={() =>
-              navigation.navigate("informacioncitaconfirmada", { navigation })
-            }
-          />
+          <TouchableOpacity>
+            <Icon
+              name={iconcheck}
+              type="material-community"
+              underlayColor="transparent"
+              color="black"
+              size={20}
+              onPress={() =>
+                navigation.navigate("cita", { navigation, confirmar })
+              }
+            />
+          </TouchableOpacity>
         </View>
       ) : (
         <View></View>
@@ -70,7 +74,7 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
         <View
           style={{
             flex: 1,
-            padding: 150
+            padding: 150,
           }}
         >
           <Menu
@@ -104,11 +108,11 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   headerText: {
     fontWeight: "bold",
     fontSize: 20,
-    color: "#333"
-  }
+    color: "#333",
+  },
 });
