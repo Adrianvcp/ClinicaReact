@@ -91,7 +91,7 @@ export default withNavigation(UserLogged);
 const styles = StyleSheet.create({
   viewUserInfo: {
     minHeight: "100%",
-    backgroundColor: "#f2f2f2"
+    backgroundColor: "white",
   },
   btnCloseSession: {
     marginTop: 30,
@@ -102,45 +102,45 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#e3e3e3",
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   btnCloseSessionText: {
-    color: "#1e90ff"
+    color: "#1e90ff",
   },
   text: {
     fontSize: 16,
     marginBottom: 7,
     color: "#2f4f4f",
     marginTop: 7,
-    marginRight: 205
+    marginRight: 205,
   },
   text2: {
     fontSize: 16,
     marginBottom: 7,
     color: "#2f4f4f",
     marginTop: 7,
-    marginRight: 190
+    marginRight: 190,
   },
   menuItem: {
-    borderBottomWidth: 10,
+    borderBottomWidth: 1,
     borderBottomColor: "#e3e3e3",
-    backgroundColor: "#fff",
-    paddingBottom: 10
+    backgroundColor: "white",
+    paddingBottom: 10,
   },
   menuItem2: {
-    borderBottomWidth: 10,
+    borderBottomWidth: 1,
     borderBottomColor: "#e3e3e3",
     backgroundColor: "#fff",
     paddingBottom: 10,
-    borderTopWidth: 10,
-    borderTopColor: "#e3e3e3"
+    borderTopWidth: 1,
+    borderTopColor: "#e3e3e3",
   },
 
   iconL: {
-    marginRight: 16
+    marginRight: 16,
   },
   icon2: {
-    marginRight: 16
-  }
+    marginRight: 16,
+  },
 });
 //15

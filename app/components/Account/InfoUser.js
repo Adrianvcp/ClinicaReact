@@ -11,7 +11,7 @@ export default function InfoUser(props) {
     setReloadData,
     toastRef,
     setIsLoading,
-    setTextLoading
+    setTextLoading,
   } = props;
 
   const changeAvatar = async () => {
@@ -23,7 +23,7 @@ export default function InfoUser(props) {
     } else {
       const result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        aspect: [4, 3]
+        aspect: [4, 3],
       });
 
       if (result.cancelled) {
@@ -41,22 +41,19 @@ export default function InfoUser(props) {
     setIsLoading(true);
     const response = await fetch(uri);
     const blob = await response.blob();
-    const ref = firebase
-      .storage()
-      .ref()
-      .child(`avatar/${nameImage}`);
+    const ref = firebase.storage().ref().child(`avatar/${nameImage}`);
 
     return ref.put(blob);
   };
 
-  const updatePhotoUrl = uid => {
+  const updatePhotoUrl = (uid) => {
     firebase
       .storage()
       .ref(`avatar/${uid}`)
       .getDownloadURL()
-      .then(async result => {
+      .then(async (result) => {
         const update = {
-          photoURL: result
+          photoURL: result,
         };
         await firebase.auth().currentUser.updateProfile(update);
         setReloadData(true);
@@ -68,20 +65,22 @@ export default function InfoUser(props) {
   };
 
   return (
-    <View style={styles.viewUserInfo}>
-      <Avatar
-        rounded
-        size="xlarge"
-        showEditButton
-        onEditPress={changeAvatar}
-        containerStyle={styles.userInfoAvatar}
-        source={{
-          uri: photoURL
-            ? photoURL
-            : "https://api.adorable.io/avatars/266/abott@adorable.png"
-        }}
-      />
-      <View>
+    <View>
+      <View style={styles.viewUserInfo}>
+        <Avatar
+          rounded
+          size="xlarge"
+          showEditButton
+          onEditPress={changeAvatar}
+          containerStyle={styles.userInfoAvatar}
+          source={{
+            uri: photoURL
+              ? photoURL
+              : "https://api.adorable.io/avatars/266/abott@adorable.png",
+          }}
+        />
+      </View>
+      <View style={styles.formContainer}>
         <Text style={styles.displayName}>
           {displayName ? displayName : "Anónimo"}
         </Text>
@@ -96,17 +95,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     paddingTop: 40,
-    paddingBottom: 40,
-    borderTopWidth: 10,
-    borderTopColor: "#e3e3e3"
+    paddingBottom: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#e3e3e3",
+  },
+  formContainer: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   userInfoAvatar: {
-    marginRight: 20
+    marginRight: 20,
   },
   displayName: {
     fontWeight: "bold",
-    fontSize: 17
-  }
+    fontSize: 17,
+  },
 });

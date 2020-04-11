@@ -1,18 +1,32 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Input, Icon, Button } from "react-native-elements";
+import React, { useState, useRef } from "react";
+import { StyleSheet, View, Dimensions, Image } from "react-native";
+import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import { withNavigation } from "react-navigation";
 import * as firebase from "firebase";
 import Loading from "../Loading";
 
+import Text from "../../components/loginstyle/Text";
+import Button from "../../components/loginstyle/Button";
+import Input from "../../components/loginstyle/Input";
+import Block from "../../components/loginstyle/Block";
+import { theme } from "../../constants";
+import Toast from "react-native-easy-toast";
+
 function LoginForm(props) {
   console.log(props);
-  const { toastRef, navigation } = props;
+  const { navigation } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisibleLoading, setIsVisibleLoading] = useState(false);
+  const hasErrors = (key) => (errors.includes(key) ? styles.hasErrors : null);
+  const VALID_EMAIL = "contact@vela.com";
+  const VALID_PASSWORD = "vela123";
+  const { width, height } = Dimensions.get("window");
+  const errors = [];
+  const loading = false;
+  const toastRef = useRef();
 
   const login = async () => {
     setIsVisibleLoading(true);
@@ -38,39 +52,77 @@ function LoginForm(props) {
 
   return (
     <View style={styles.formContainer}>
-      <Input
-        placeholder="Correo Electrónico"
-        containerStyle={styles.inputForm}
-        onChange={e => setEmail(e.nativeEvent.text)}
-        rightIcon={
-          <Icon
-            type="material-community"
-            name="at"
-            iconStyle={styles.iconRight}
+      <Block padding={[0, theme.sizes.base * 1]}>
+        <Text h1 center bold>
+          <Text h1 primary>
+            EasyAppointment
+          </Text>
+        </Text>
+
+        <Block center middle>
+          <View
+            style={{
+              justifyContent: "center",
+              height: 150,
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../../../assets/img/logo.png")}
+              style={{
+                width: 100,
+                resizeMode: "contain",
+                marginTop: 20,
+              }}
+              reziseMode="contain"
+            />
+          </View>
+        </Block>
+        <Block middle>
+          <Input
+            label="Email"
+            error={hasErrors("email")}
+            style={[styles.input, hasErrors("email")]}
+            /*             onChangeText={(text) => setEmail(text)}*/
+            onChange={(e) => setEmail(e.nativeEvent.text)}
+            placeholder={VALID_EMAIL}
           />
-        }
-      />
-      <Input
-        placeholder="Contraseña"
-        containerStyle={styles.inputForm}
-        password={true}
-        secureTextEntry={hidePassword}
-        onChange={e => setPassword(e.nativeEvent.text)}
-        rightIcon={
-          <Icon
-            type="material-community"
-            name={hidePassword ? "eye-outline" : "eye-off-outline"}
-            iconStyle={styles.iconRight}
-            onPress={() => setHidePassword(!hidePassword)}
+          <Input
+            secure
+            label="Password"
+            error={hasErrors("password")}
+            style={[styles.input, hasErrors("password")]}
+            defaultValue={VALID_PASSWORD}
+            /* onChangeText={(text) => setPassword(tex)} */
+            onChange={(e) => setPassword(e.nativeEvent.text)}
           />
-        }
-      />
-      <Button
-        title="Iniciar Sesión"
-        containerStyle={styles.btnContainerLogin}
-        buttonStyle={styles.btnLogin}
-        onPress={login}
-      />
+          <Button
+            gradient
+            onPress={login}
+            /*  onPress={() => this.handleLogin()} */
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text bold white center>
+                Login
+              </Text>
+            )}
+          </Button>
+
+          <Button onPress={() => navigation.navigate("Forgot")}>
+            <Text
+              gray
+              caption
+              center
+              style={{ textDecorationLine: "underline" }}
+            >
+              Forgot your password?
+            </Text>
+          </Button>
+        </Block>
+      </Block>
+
       <Loading isVisible={isVisibleLoading} text="Iniciando sesión" />
     </View>
   );
@@ -80,22 +132,49 @@ export default withNavigation(LoginForm);
 const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 30
   },
   inputForm: {
     width: "100%",
-    marginTop: 20
+    marginTop: 20,
   },
   iconRight: {
-    color: "#c1c1c1"
+    color: "#c1c1c1",
   },
   btnContainerLogin: {
     marginTop: 20,
-    width: "95%"
+    width: "95%",
   },
   btnLogin: {
-    backgroundColor: "#00a680"
-  }
+    backgroundColor: "#00a680",
+  },
+  login: {
+    marginTop: 10,
+    flex: 1,
+    justifyContent: "center",
+  },
+  viewContainer: {
+    marginRight: 40,
+    marginLeft: 40,
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.accent,
+  },
+  stepsContainer: {
+    position: "absolute",
+    bottom: theme.sizes.base * 3,
+    right: 0,
+    left: 0,
+  },
+  steps: {
+    width: 5,
+    height: 5,
+    borderRadius: 5,
+    marginHorizontal: 2.5,
+  },
 });
