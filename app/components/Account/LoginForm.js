@@ -52,30 +52,45 @@ function LoginForm(props) {
 
   return (
     <View style={styles.formContainer}>
-      <Block padding={[0, theme.sizes.base * 1]}>
-        <Text h1 center bold>
-          <Text h1 primary>
-            EasyAppointment
-          </Text>
-        </Text>
-
-        <Block center middle>
-          <View
-            style={{
-              justifyContent: "center",
-              height: 150,
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={require("../../../assets/img/logo.png")}
+      <Block padding={[0, theme.sizes.base * 0.1]}>
+        <Block>
+          <View style={{ flexDirection: "row" }}>
+            <View
               style={{
-                width: 100,
-                resizeMode: "contain",
-                marginTop: 20,
+                justifyContent: "center",
+                height: 150,
+                width: "38%",
+                alignItems: "flex-start",
               }}
-              reziseMode="contain"
-            />
+            >
+              <Image
+                source={require("../../../assets/img/logo.png")}
+                style={{
+                  width: 100,
+                  resizeMode: "contain",
+                  marginTop: 20,
+                }}
+                reziseMode="contain"
+              />
+            </View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View style={{ marginLeft: -15 }}>
+                <Text h2 bold>
+                  <Text h2 primary>
+                    EasyAppointment
+                  </Text>
+                </Text>
+              </View>
+
+              <View style={{ marginLeft: -13 }}>
+                <Text h3>Citas Disponible Siempre</Text>
+              </View>
+            </View>
           </View>
         </Block>
         <Block middle>

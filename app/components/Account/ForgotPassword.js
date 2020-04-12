@@ -139,7 +139,7 @@ function RegisterForm(props) {
             />
 
             <Button
-              title="REGISTRARSE"
+              title="CAMBIAR CONTRASEÑA"
               containerStyle={styles.btnContainerRegister}
               buttonStyle={styles.btnRegister}
               onPress={register}
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
-    backgroundColor: "white",
   },
   inputForm: {
     width: "100%",

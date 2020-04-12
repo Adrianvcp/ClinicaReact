@@ -5,44 +5,58 @@ import RegisterScreen from "../screens/Account/Register";
 import GestFamiliarScreen from "../screens/Account/GestionFamiliar";
 import ConfigScreen from "../components/Account/ConfigForm";
 import AddPatientScreen from "../screens/Patients/AddPatient";
+import ForgotPassword from "../screens/Account/ForgotPassword";
+import DatosPersonales from "../screens/Account/DatosPersonales";
 
 export const AccountScreenStack = createStackNavigator({
   MyAccount: {
     screen: MyAccountScreen,
     navigationOptions: () => ({
-      title: "Mi cuenta"
-    })
+      title: "Mi cuenta",
+    }),
   },
   Login: {
     screen: LoginScreen,
     navigationOptions: () => ({
-      title: "Login"
-    })
+      title: "Login",
+    }),
+  },
+  Forgot: {
+    screen: ForgotPassword,
+    navigationOptions: () => ({
+      title: "Reestablecer Contraseña",
+    }),
   },
   Register: {
     screen: RegisterScreen,
     navigationOptions: () => ({
-      title: "Registro"
-    })
+      title: "Registro",
+    }),
+  },
+  Datos: {
+    screen: DatosPersonales,
+    navigationOptions: () => ({
+      title: "Añadir datos personales",
+    }),
   },
   GestFamiliar: {
     screen: GestFamiliarScreen,
     navigationOptions: () => ({
-      title: "Gestión Familiar"
-    })
+      title: "Gestión Familiar",
+    }),
   },
   Config: {
     screen: ConfigScreen,
     navigationOptions: () => ({
-      title: "Configuración"
-    })
+      title: "Configuración",
+    }),
   },
   AddPatient: {
     screen: AddPatientScreen,
     navigationOptions: () => ({
-      title: "Agregar Familiar"
-    })
-  }
+      title: "Agregar Familiar",
+    }),
+  },
 });
 
 export default AccountScreenStack;

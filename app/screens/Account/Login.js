@@ -10,7 +10,7 @@ export default function Login(props) {
   const toastRef = useRef();
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.viewContainer}>
         <LoginForm toastRef={toastRef} />
         <CreateAccount navigation={navigation} />
