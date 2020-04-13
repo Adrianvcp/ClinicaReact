@@ -5379,6 +5379,13 @@ react-native-modal-datetime-picker@^8.5.1:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-modal-selector@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal-selector/-/react-native-modal-selector-2.0.0.tgz#29f8112db8ffffc86b11a86482b0c2533b564e3b"
+  integrity sha512-n3J6BooO3ZHZG45AAPIjiXG4CF56w9Z2T2/fBQU3BE13h/gtF+iJzAb9acdRml28Ja29P8N3qRZU4n/b3UE5Ew==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-modal@^11.5.6:
   version "11.5.6"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.5.6.tgz#bb25a78c35a5e24f45de060e5f64284397d38a87"
@@ -5455,6 +5462,11 @@ react-native-safe-area-view@^0.14.1, react-native-safe-area-view@^0.14.6:
   integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
   dependencies:
     debounce "^1.2.0"
+
+react-native-select-input-ios@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-select-input-ios/-/react-native-select-input-ios-2.0.4.tgz#963245049ea670d850f03e8cd77637714b33239d"
+  integrity sha512-w2rQTeLehbj/KVZMFBSXxdwQDOjOgqKyVJ0nGtPNlnaMDgSpz1aDgSRpoVcvOaqTpkEZSZMkYykGi+JYkcevWA==
 
 react-native-simple-dialogs@^1.2.1:
   version "1.2.1"

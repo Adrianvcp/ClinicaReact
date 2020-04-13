@@ -7,6 +7,7 @@ import {
   Platform,
   Keyboard,
   TouchableOpacity,
+  Picker,
 } from "react-native";
 
 import { Icon, Image } from "react-native-elements";
@@ -26,6 +27,8 @@ import {
   Select,
   Button,
 } from "react-native-clean-form";
+import SelectInput from "react-native-select-input-ios";
+
 import styled from "styled-components";
 import DatePicker from "react-native-datepicker";
 import { set } from "react-native-reanimated";
@@ -91,9 +94,10 @@ function AddRestaurantForm(props) {
   `;
 
   const countryOptions = [
-    { label: "Denmark", value: "Denmark" },
-    { label: "Germany", value: "Germany" },
-    { label: "United State", value: "United State" },
+    { value: 0, label: "Apple" },
+    { value: 1, label: "Banana" },
+    { value: 2, label: "Orange" },
+    { value: 3, label: "Strawberry" },
   ];
   const Data = require("../../utils/dat");
 
@@ -116,44 +120,61 @@ function AddRestaurantForm(props) {
         {/* LISTA ESPECIALIDAD */}
         <Fieldset label="Especialidad" last>
           <FormGroup>
-            <Label>Especialidad</Label>
-            <Select
-              name="esp"
-              label="esp"
-              options={countryOptions}
-              placeholder="Sin seleccion"
-              value={esp}
-              onValueChange={(a) => setesp(a)}
-            />
+            <View style={styles.dividir}>
+              <Label>Especialidad</Label>
+              <SelectInput
+                value={esp ? esp : 0}
+                options={countryOptions}
+                onCancelEditing={() => console.log("onCancel")}
+                onSubmitEditing={(a) => setesp(a)}
+                onValueChange={(a) => setesp(a)}
+                style={[styles.selectInput, styles.selectInputLarge]}
+                labelStyle={styles.selectInputInner}
+              />
+              {Platform.OS === "ios" ? (
+                <View style={{ marginLeft: -25 }}>
+                  <Icon name="menu-down" type="material-community" />
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </View>
           </FormGroup>
         </Fieldset>
 
         {/* SELECCIONAR FECHA */}
         <Fieldset label="Seleccionar Fecha" last>
           <FormGroup>
-            <Label>Fecha</Label>
-
-            <View style={{ marginLeft: 80 }}>
+            <View style={styles.dividir}>
+              <Label>Fecha</Label>
               <DatePicker
-                style={{ width: 100 }}
+                style={{
+                  width: "50%",
+                  /*                   backgroundColor: "red",
+                   */
+                }}
                 date={date}
                 mode={mode}
+                containerStyle={""}
                 placeholder="select date"
                 format="YYYY-MM-DD"
                 minDate="2006-05-01"
-                maxDate="2016-06-01"
+                maxDate="2026-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
+                showIcon={false}
                 customStyles={{
                   dateIcon: {
                     position: "absolute",
                     left: 0,
                     top: 4,
                     marginLeft: 0,
+                    borderWidth: 0,
                   },
                   dateInput: {
-                    marginLeft: 0,
-                    marginRight: 10,
+                    borderWidth: 0,
+                    justifyContent: "center",
+                    alignItems: "flex-start",
                   },
                   // ... You can check the source to find the other keys.
                 }}
@@ -168,11 +189,22 @@ function AddRestaurantForm(props) {
         {/* UBICACION */}
         <Fieldset label="Lugar" last>
           <FormGroup>
-            <Label>Password</Label>
-            <Input
-              placeholder="Seleccionar ubicacion"
-              onTouchEnd={() => navigation.navigate("map")}
-            />
+            <View style={styles.dividir}>
+              <Label>Password</Label>
+              <View
+                style={{
+                  /* backgroundColor: "red", */ width: "50%",
+                  height: "200%",
+                  color: "black",
+                }}
+              >
+                <Input
+                  style={{ color: "black" }}
+                  placeholder="Seleccionar ubicacion"
+                  onTouchEnd={() => navigation.navigate("map")}
+                />
+              </View>
+            </View>
           </FormGroup>
         </Fieldset>
 
@@ -201,17 +233,37 @@ function AddRestaurantForm(props) {
         {/* SEGURO */}
         <Fieldset label="Seleccione su Seguro" last>
           <FormGroup>
-            <Label>Seguro</Label>
-            <Select
-              name="seguro"
-              label="seguro"
-              options={seguroData}
-              placeholder="Sin seleccion"
-              value={seguro}
-              onValueChange={(a) => setseguro(a)}
-            />
+            <View style={styles.dividir}>
+              <Label>Seguro</Label>
+              {/*               <Select
+                name="seguro"
+                label="seguro"
+                options={seguroData}
+                placeholder="Sin seleccion"
+                value={seguro}
+                onValueChange={(a) => setseguro(a)}
+              /> */}
+
+              <SelectInput
+                value={seguro ? seguro : 0}
+                options={countryOptions}
+                onCancelEditing={() => console.log("onCancel")}
+                onSubmitEditing={(a) => setseguro(a)}
+                onValueChange={(a) => setseguro(a)}
+                style={[styles.selectInput, styles.selectInputLarge]}
+                labelStyle={styles.selectInputInner}
+              />
+              {Platform.OS === "ios" ? (
+                <View style={{ marginLeft: -25 }}>
+                  <Icon name="menu-down" type="material-community" />
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </View>
           </FormGroup>
         </Fieldset>
+
         <ActionsContainer style={{ marginBottom: 30 }}>
           <Button
             icon="md-search"
@@ -230,23 +282,6 @@ function AddRestaurantForm(props) {
   );
 }
 
-/* 
-<DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={(e, d) => {
-                  if (Platform.OS === "ios") {
-                    this.setState({ date: d });
-                    onChange(d);
-                  } else {
-                    onClose(d);
-                  }
-                }}
-              /> */
 export default withNavigation(AddRestaurantForm);
 
 const styles = StyleSheet.create({
@@ -255,6 +290,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginBottom: 10,
     marginTop: -11,
+  },
+  selectInput: {
+    /*     backgroundColor: "red", */
+    marginTop: 5,
+    overflow: "hidden",
+    height: "50%",
+  },
+  dividir: { width: "100%", flexDirection: "row" },
+  selectInputLarge: {
+    width: "50%",
+  },
+  selectInputInner: {
+    borderRadius: 4,
   },
   collegeContainer: {
     flex: 1,
