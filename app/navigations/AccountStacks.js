@@ -7,6 +7,7 @@ import ConfigScreen from "../components/Account/ConfigForm";
 import AddPatientScreen from "../screens/Patients/AddPatient";
 import ForgotPassword from "../screens/Account/ForgotPassword";
 import DatosPersonales from "../screens/Account/DatosPersonales";
+import UserLogged from "../screens/Account/UserLogged";
 
 export const AccountScreenStack = createStackNavigator({
   MyAccount: {
@@ -35,6 +36,12 @@ export const AccountScreenStack = createStackNavigator({
   },
   Datos: {
     screen: DatosPersonales,
+    navigationOptions: () => ({
+      title: "Añadir datos personales",
+    }),
+  },
+  UserLoggued: {
+    screen: UserLogged,
     navigationOptions: () => ({
       title: "Añadir datos personales",
     }),

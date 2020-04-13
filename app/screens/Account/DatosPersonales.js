@@ -173,7 +173,12 @@ function RegisterForm(props) {
                   />
                 }
               />
-
+              <Button
+                title="GUARDAR"
+                containerStyle={styles.btnContainerRegister}
+                buttonStyle={styles.btnRegister}
+                onPress={() => navigation.navigate("UserLoggued")}
+              />
               <Loading text="Creando cuenta" isVisible={isVisibleLoading} />
             </View>
           </Block>
@@ -201,6 +206,7 @@ const styles = StyleSheet.create({
   btnContainerRegister: {
     marginTop: 20,
     width: "95%",
+    marginBottom: 20,
   },
   btnRegister: {
     backgroundColor: "#00a680",
