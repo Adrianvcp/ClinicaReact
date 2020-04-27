@@ -8,11 +8,15 @@ export default StyleSheet.create({
   mapView: {
     flex: 1,
     justifyContent: "center",
-    height: "50%",
+    height: "90%",
     width: "100%",
   },
   placeList: {
-    flex: 1,
+    zIndex: 1,
+    height: "20%",
+    width: "100%",
+
+    backgroundColor: "rgba(255, 255, 255,0)",
     justifyContent: "center",
   },
 });

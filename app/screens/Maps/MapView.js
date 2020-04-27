@@ -1,11 +1,17 @@
 import React, { Component } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { View } from "react-native";
-import { GOOGLE_API_KEY } from "react-native-dotenv"; //Styles
-
+/* import { GOOGLE_API_KEY } from "react-native-dotenv"; //Styles
+ */
 //Components
 /* import PlaceList from "../Place/PlaceList";
  */ import styles from "./styles";
+
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Input from "../Maps/Input";
+const GOOGLE_API_KEY = "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs";
+const LATITUDE = 0.0;
+const LONGITUDE = 0.0;
 
 class MapScreen extends Component {
   //Set the HeaderTitle screen
@@ -13,25 +19,90 @@ class MapScreen extends Component {
     const placeName = props.navigation.getParam("placeName");
     return { headerTitle: placeName.toUpperCase() };
   };
+
   constructor(props) {
     super(props);
     //Initial State
     this.state = {
-      lat: 0,
-      long: 0.0,
+      lat: LATITUDE,
+      long: LONGITUDE,
       places: [],
       isLoading: false,
       placeType: "restaurant",
     };
   }
+
+  findMe = async () => {
+    this.watchID = await navigator.geolocation.watchPosition(({ coords }) => {
+      const { latitude, longitude } = coords;
+      this.setState({
+        lat: latitude,
+        long: longitude,
+      });
+    });
+
+    await navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        });
+      },
+      (error) => console.log(JSON.stringify(error)),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  };
+
+  getData(loc) {
+    const url = this.getPlacesUrl(
+      10,
+      10,
+      10,
+      10,
+      loc.description,
+      GOOGLE_API_KEY
+    );
+
+    console.log(url);
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.results[0].geometry.location);
+        this.setState({
+          lat: res.results[0].geometry.location.lat,
+          long: res.results[0].geometry.location.lng,
+        });
+        this.getCurrentLocation();
+
+        //update our places array
+        /*         this.setState({ places: markers });
+         */
+      });
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const long = position.coords.longitude;
+      this.setState({ lat: "-12.123", long: "-12.231" });
+    });
+  }
+
   componentDidMount() {
-    console.log(this.props);
-    const { navigation } = this.props;
-    const placeType = navigation.getParam("placeType");
+    /*     console.log(this.props);
+     */ const { navigation } = this.props;
+    const placeType = "Bank";
     this.setState({ placeType: placeType });
 
     this.getCurrentLocation();
+    this.findMe();
   }
+
+  /*   getCoordsFromName(loc) {
+    this.setState({
+      lat: loc.lat,
+      long: loc.lng,
+    });
+  } */
+
   /**
    * Get current user's position
    */
@@ -47,7 +118,7 @@ class MapScreen extends Component {
   /**
    * Get the Place URL
    */
-  getPlacesUrl(lat, long, radius, type, apiKey) {
+  getPlacesUrl(lat, long, radius, type, querydat, apiKey) {
     /*     const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
      */
 
@@ -67,9 +138,16 @@ class MapScreen extends Component {
   getPlaces() {
     const { lat, long, placeType } = this.state;
     const markers = [];
-    const url = this.getPlacesUrl(lat, long, 1500, "clinics", GOOGLE_API_KEY);
-    console.log(url);
-    fetch(url)
+    const url = this.getPlacesUrl(
+      lat,
+      long,
+      1500,
+      "clinics",
+      "asdasd",
+      GOOGLE_API_KEY
+    );
+    /*     console.log(url);
+     */ fetch(url)
       .then((res) => res.json())
       .then((res) => {
         res.results.map((element, index) => {
@@ -95,12 +173,16 @@ class MapScreen extends Component {
     const { lat, long, places } = this.state;
     return (
       <View style={styles.container}>
+        <View style={styles.placeList}>
+          <Input notifyChange={(loc) => this.getData(loc)} />
+        </View>
         <View style={styles.mapView}>
           <MapView
             style={{
               flex: 1,
             }}
             provider={PROVIDER_GOOGLE}
+            showsUserLocation={true}
             initialRegion={{
               latitude: lat,
               longitude: long,
