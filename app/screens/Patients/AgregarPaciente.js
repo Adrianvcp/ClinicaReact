@@ -203,7 +203,7 @@ function RegisterForm(props) {
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
-                onPress={() => navigation.navigate("UserLoggued")}
+                onPress={() => navigation.navigate("GestFamiliar")}
               >
                 <Text bold white center>
                   Guardar

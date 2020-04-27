@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,7 +9,6 @@ import {
 } from "react-native";
 
 import { Icon, Image } from "react-native-elements";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
 
 import {
@@ -29,35 +28,16 @@ function AddRestaurantForm(props) {
   const { navigation } = props;
 
   /* VAR - DATA(JSONFAKE) */
-  const [opt_esp, setOptEsp] = useState([]);
-
-  const [opt_seguro, setOptSeguro] = useState([]);
-
+  const data = [
+    { label: "Football", value: "football" },
+    { label: "Baseball", value: "baseball" },
+    { label: "Hockey", value: "hockey" },
+  ];
   const seguroData = [
     { label: "Pacifico Seguro", value: "Pacifico Seguro" },
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
     { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
   ];
-
-  useEffect(() => {
-    fetch("http://192.168.100.21:8080/api/especialidades")
-      .then((response) => response.json())
-      .then((json) => setOptEsp(json))
-      .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
-  }, []);
-
-  useEffect(() => {
-    fetch("http://192.168.100.21:8080/api/seguros")
-      .then((response) => response.json())
-      .then((json) => setOptSeguro(json))
-      .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
-  }, []);
-
-  console.log(opt_esp);
 
   /* VAR - FECHA */
   const [date, setDate] = useState(new Date(1598051730000));
@@ -88,32 +68,14 @@ function AddRestaurantForm(props) {
     setDatePickerVisibility(false);
   };
 
-  const countryOptions = [{ value: 0, label: "Seleccionar" }];
-  const segurosOptions = [{ value: 0, label: "Seleccionar" }];
-
-  for (let i = 0; i < opt_esp.length; i++) {
-    const element = opt_esp[i];
-    const obj = {
-      value: element.id,
-      label: element.nombre,
-    };
-
-    countryOptions.push(obj);
-  }
-
-  for (let i = 0; i < opt_seguro.length; i++) {
-    const element = opt_seguro[i];
-    const obj = {
-      value: element.id,
-      label: element.nombre,
-    };
-
-    segurosOptions.push(obj);
-  }
-
+  const countryOptions = [
+    { value: 0, label: "Apple" },
+    { value: 1, label: "Banana" },
+    { value: 2, label: "Orange" },
+    { value: 3, label: "Strawberry" },
+  ];
   const Data = require("../../utils/dat");
-  console.log("VEAMOS");
-  console.log(props);
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <Image
@@ -199,89 +161,11 @@ function AddRestaurantForm(props) {
           </FormGroup>
         </Fieldset>
 
-        {/* UBICACION */}
-        <Fieldset label="Ubicación" last>
-          <FormGroup>
-            <View style={styles.dividir}>
-              <Label>Ubicación</Label>
-              <View
-                style={{
-                  /* backgroundColor: "red", */ width: "50%",
-                  height: "200%",
-                  color: "black",
-                }}
-              >
-                <Input
-                  style={{ color: "black" }}
-                  placeholder="Seleccionar ubicacion"
-                  onTouchEnd={() => navigation.navigate("map")}
-                />
-              </View>
-            </View>
-          </FormGroup>
-        </Fieldset>
-
-        {/* CALENDARIO */}
-        <View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              timeZoneOffsetInMinutes={0}
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={(e, d) => {
-                if (Platform.OS === "ios") {
-                  this.setState({ date: d });
-                  onChange(d);
-                } else {
-                  onClose(d);
-                }
-              }}
-            />
-          )}
-        </View>
-
-        {/* SEGURO */}
-        <Fieldset label="Seleccione su Seguro" last>
-          <FormGroup>
-            <View style={styles.dividir}>
-              <Label>Seguro</Label>
-              {/*               <Select
-                name="seguro"
-                label="seguro"
-                options={seguroData}
-                placeholder="Sin seleccion"
-                value={seguro}
-                onValueChange={(a) => setseguro(a)}
-              /> */}
-
-              <SelectInput
-                value={seguro ? seguro : 0}
-                options={segurosOptions}
-                onCancelEditing={() => console.log("onCancel")}
-                onSubmitEditing={(a) => setseguro(a)}
-                onValueChange={(a) => setseguro(a)}
-                style={[styles.selectInput, styles.selectInputLarge]}
-                labelStyle={styles.selectInputInner}
-              />
-              {Platform.OS === "ios" ? (
-                <View style={{ marginLeft: -25 }}>
-                  <Icon name="menu-down" type="material-community" />
-                </View>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          </FormGroup>
-        </Fieldset>
-
         <ActionsContainer style={{ marginBottom: 30 }}>
           <Button
             icon="md-search"
             onPress={() =>
-              navigation.navigate("listaClinicaCitasDisponibles", {
+              navigation.navigate("citaReservadas", {
                 navigation,
                 Data,
               })

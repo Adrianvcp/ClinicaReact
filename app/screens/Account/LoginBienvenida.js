@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, View, Image, Dimensions, Text } from "react-native";
-import { Button, Icon } from "react-native-elements";
+import { StyleSheet, View, Image, Dimensions } from "react-native";
+import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 import InfoUser from "../../components/Account/InfoUser";
 import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading";
-
+import Button from "../../components/loginstyle/Button";
+import Text from "../../components/loginstyle/Text";
 import { withNavigation } from "react-navigation";
 const { width, height } = Dimensions.get("window");
+import { theme } from "../../constants";
 
 function UserLogged(props) {
   //aumento esto
@@ -35,7 +37,7 @@ function UserLogged(props) {
           style={{
             width: "50%",
             resizeMode: "contain",
-            height: 150,
+            height: 50 + height / 3,
             marginTop: height / 2 - 250,
             backgroundColor: "white",
           }}
@@ -53,12 +55,18 @@ function UserLogged(props) {
         >
           Para reservar tu cita,llena los siguientes datos
         </Text>
-        <Button
-          title="SIGUIENTE"
-          containerStyle={styles.btnContainerNext}
-          buttonStyle={styles.btnNext}
-          onPress={() => navigation.navigate("Datos")}
-        />
+
+        <View style={{ margin: 60 }}>
+          <Button
+            gradient
+            containerStyle={styles.btnContainerNext}
+            onPress={() => navigation.navigate("Datos")}
+          >
+            <Text bold white center>
+              Siguiente
+            </Text>
+          </Button>
+        </View>
       </View>
     </View>
   );
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    width: "50%",
   },
   btnCloseSessionText: {
     color: "#1e90ff",

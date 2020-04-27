@@ -25,13 +25,12 @@ import {
   Button,
 } from "react-native-clean-form";
 import Dialog from "react-native-dialog";
-
+import SelectInput from "react-native-select-input-ios";
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 
 export default function CitaSeleccionada(props) {
   const confirmar = props.navigation.state.params.confirmar;
-  console.log("Cita selecciondad");
   console.log(props.navigation.state.params);
   console.log(props.navigation.state.params.confirmar);
   console.log(confirmar);
@@ -45,12 +44,15 @@ export default function CitaSeleccionada(props) {
   ];
   const [paciente, setpaciente] = useState("");
   const scrollX = new Animated.Value(0);
-  const seguroData = [
-    { label: "Pacifico Seguro", value: "Pacifico Seguro" },
-    { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
-    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
-  ];
   const [esp, setesp] = useState("");
+  const [sinSeleccion, setsinSeleccion] = useState("Sinseleccion");
+
+  const seguroData = [
+    { value: 0, label: "Paciente 1" },
+    { value: 1, label: "Paciente 2" },
+    { value: 2, label: "Paciente 3" },
+    { value: 3, label: "Paciente 4" },
+  ];
 
   const menu = useRef();
   /* FUNCIONES ANULAR */
@@ -203,16 +205,13 @@ export default function CitaSeleccionada(props) {
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
                   Especialidad
                 </Text>
-
                 {/* DETALLE CITA */}
-
                 <Text
                   style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
                 >
                   DETALLE DE LA CITA
                 </Text>
                 <View style={{ flex: 1 }}></View>
-
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
                   Dia: 13/04/20
                 </Text>
@@ -227,15 +226,33 @@ export default function CitaSeleccionada(props) {
                 >
                   PACIENTE
                 </Text>
-
-                <Select
+                {/*                 <Select
                   name="esp"
                   label="esp"
                   options={seguroData}
                   placeholder="Sin seleccion"
                   value={esp}
                   onValueChange={(a) => setesp(a)}
-                />
+                /> */}
+                {/* LISTA ESPECIALIDAD */}
+                <View style={styles.dividir}>
+                  <SelectInput
+                    value={esp ? esp : 0}
+                    options={seguroData}
+                    onCancelEditing={() => console.log("onCancel")}
+                    onSubmitEditing={(a) => setesp(a)}
+                    onValueChange={(a) => setesp(a)}
+                    style={[styles.selectInput, styles.selectInputLarge]}
+                    labelStyle={styles.selectInputInner}
+                  />
+                  {Platform.OS === "ios" ? (
+                    <View style={{ borderBottomWidth: 0.3 }}>
+                      <Icon name="menu-down" type="material-community" />
+                    </View>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
               </View>
             </ScrollView>
           </View>
@@ -255,6 +272,20 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+  },
+  dividir: { width: "100%", flexDirection: "row" },
+
+  selectInput: {
+    /*     backgroundColor: "red",
+     */ marginTop: 5,
+    borderBottomWidth: 0.3,
+    overflow: "hidden",
+  },
+  selectInputLarge: {
+    width: "50%",
+  },
+  selectInputInner: {
+    borderRadius: 4,
   },
   header: {
     // backgroundColor: 'transparent',

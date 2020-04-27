@@ -53,7 +53,6 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
         <View
           style={{
             flex: 1,
-            padding: 180,
           }}
         >
           <TouchableOpacity onPress={() => {}}>
@@ -111,6 +110,7 @@ export default function Header({ navigation, title, iconcheck, iconsearch }) {
 const styles = StyleSheet.create({
   header: {
     width: "100%",
+    backgroundColor: "red",
     height: "100%",
     flexDirection: "row",
     alignItems: "center",

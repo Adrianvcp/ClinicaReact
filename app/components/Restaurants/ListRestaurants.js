@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ImageBackground,
-  Dimensions
+  Dimensions,
 } from "react-native";
 
 import { useState, useRef } from "react";
@@ -15,40 +15,43 @@ import {
   FormGroup,
   Label,
   Input,
-  Select
+  Select,
 } from "react-native-clean-form";
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const { width, height } = Dimensions.get("window");
 
-export default function ListRestaurants(props) {
+export default function ListRestaurants(props, abc) {
   console.log("jasdjas");
 
   const { navigation } = props;
   const restaurants = props.navigation.state.params.Data;
-  const varHora = props.navigation.state.params.SearchHora;
-  const varClinica = props.navigation.state.params.SearchClinica;
-  console.log(varHora);
-  const searchHora = useRef();
-  const SearchClinica = useRef();
+  const { SearchHora, SearchClinica } = props.navigation.state.params;
+  /*   const {} = props.navigation.state.params;
+   */ console.log("PROPS");
+  console.log(props);
+  /*   const searchHora = useRef();
+  onst SearchClinica = useRef();*/
 
-  const hideSearch = () => {
+  /*   const hideSearch = () => {
     searchHora.current.hide();
-  };
+  }; */
   const [esp, setesp] = useState("");
 
-  const show = () => searchHora.current.show();
-  const countryOptions = [
+  /*   const show = () => searchHora.current.show();
+   */ const countryOptions = [
     { label: "Denmark", value: "Denmark" },
     { label: "Germany", value: "Germany" },
-    { label: "United State", value: "United State" }
+    { label: "United State", value: "United State" },
   ];
   return (
     <View style={{ backgroundColor: "white" }}>
       {/* FILTRAR POR HORA */}
-      {varHora ? (
-        <View ref={searchHora} style={{ margin: 10, marginBottom: -20 }}>
+      {/*       {console.log("Datos: " + varHora + " " + varClinica)}
+       */}
+      {SearchHora ? (
+        <View /* ref={searchHora} */ style={{ margin: 10, marginBottom: -20 }}>
           <Fieldset label="Filtrar por Hora" last>
             <FormGroup>
               <Label>HORA</Label>
@@ -60,8 +63,10 @@ export default function ListRestaurants(props) {
         <View></View>
       )}
       {/* FILTRAR POR CLINICA */}
-      {varClinica ? (
-        <View ref={SearchClinica} style={{ margin: 10, marginBottom: -20 }}>
+      {SearchClinica ? (
+        <View
+          /* ref={SearchClinica} */ style={{ margin: 10, marginBottom: -20 }}
+        >
           <Fieldset label="Filtrar por Clinica" last>
             <FormGroup>
               <Label>Clinica</Label>
@@ -71,7 +76,7 @@ export default function ListRestaurants(props) {
                 options={countryOptions}
                 placeholder="Sin seleccion"
                 value={esp}
-                onValueChange={a => setesp(a)}
+                onValueChange={(a) => setesp(a)}
               />
             </FormGroup>
           </Fieldset>
@@ -83,14 +88,14 @@ export default function ListRestaurants(props) {
       {restaurants ? (
         <View>
           <FlatList
-            pagingEnabled
-            disableScrollViewPanResponder
-            style={{ overflow: "visible", height: height + 50, marginTop: 15 }}
+            /*             pagingEnabled
+            disableScrollViewPanResponder */
+            style={{ overflow: "visible", height: "100%", marginTop: 15 }}
             showsVerticalScrollIndicator={false}
             decelerationRate={0}
             snapToAlignment="center"
             data={restaurants}
-            renderItem={restaurant => (
+            renderItem={(restaurant) => (
               <Restaurant restaurant={restaurant} navigation={navigation} />
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -117,7 +122,7 @@ function Restaurant(props) {
     url,
     name_clinic,
     id,
-    phurl
+    phurl,
   } = restaurant.item;
   const [imageRestaurant, setImageRestaurant] = useState(null);
 
@@ -132,90 +137,129 @@ function Restaurant(props) {
         imageStyle={{ borderRadius: clinics.sizes.radius }}
         source={{ uri: url }}
       >
-        <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <View style={{ flex: 0 }}>
-            <Image
-              source={{ uri: phurl }}
-              borderRadius={1000}
-              style={styles.avatar}
-            />
-          </View>
-
+        <View style={{ marginBottom: 50 }}>
           <View
             style={[
-              styles.column,
-              { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 }
+              styles.row,
+              {
+                justifyContent: "space-between",
+              },
             ]}
           >
-            <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
-              {nombreDoctor}
-            </Text>
-            <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
-              <Octicons
-                name="location"
-                size={clinics.sizes.font * 0.8}
-                color={clinics.colors.white}
+            <View style={{ flex: 0 }}>
+              <Image
+                source={{ uri: phurl }}
+                borderRadius={1000}
+                style={styles.avatar}
               />
-              <Text> {name_clinic}</Text>
-            </Text>
-          </View>
-          <View
-            style={{
-              flex: 0,
-              justifyContent: "center",
-              alignItems: "flex-end"
-            }}
-          >
-            <Text style={styles.rating}>{id}</Text>
+            </View>
+
+            <View
+              style={[
+                styles.column,
+                { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 },
+              ]}
+            >
+              <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
+                {nombreDoctor}
+              </Text>
+              <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
+                <Octicons
+                  name="location"
+                  size={clinics.sizes.font * 0.8}
+                  color={clinics.colors.white}
+                />
+                <Text> {name_clinic}</Text>
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 0,
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={styles.rating}>{id}</Text>
+            </View>
           </View>
         </View>
-      </ImageBackground>
 
-      <View style={[styles.column, styles.destinationInfo, styles.shadow]}>
-        <Text
-          style={{
-            fontSize: clinics.sizes.font * 1.25,
-            fontWeight: "500",
-            paddingBottom: 8
-          }}
-        >
-          {path}
-        </Text>
         <View
           style={[
             styles.row,
-            { justifyContent: "space-between", alignItems: "flex-end" }
+            styles.destinationInfo,
+            styles.shadow,
+
+            { paddingTop: -30 },
           ]}
         >
-          <Text style={{ color: "black" }}>{hora}</Text>
-
-          <Text
-            onPress={() => navigation.navigate("cita", { restaurant })}
-            style={{ textAlign: "right" }}
+          <View
+            style={{
+              marginTop: 5,
+              marginLeft: -25,
+              marginRight: 5,
+              justifyContent: "center",
+            }}
           >
-            Ver info
-          </Text>
-          <FontAwesome
-            onPress={() => navigation.navigate("cita", { restaurant })}
-            name="chevron-right"
-            size={clinics.sizes.font * 0.75}
-            color={clinics.colors.caption}
-          />
+            <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
+          </View>
+          <View
+            style={{
+              marginTop: 5,
+              flexDirection: "column",
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  fontSize: clinics.sizes.font * 1.05,
+                  fontWeight: "500",
+                  marginTop: 5,
+                }}
+              >
+                {path}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.row,
+                {
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                },
+              ]}
+            >
+              {/*               <Text style={{ color: "black" }}>{hora}</Text>
+               */}
+              <Text
+                onPress={() => navigation.navigate("cita", { restaurant })}
+                style={{ textAlign: "right" }}
+              >
+                Ver info
+              </Text>
+              <FontAwesome
+                onPress={() => navigation.navigate("cita", { restaurant })}
+                name="chevron-right"
+                size={clinics.sizes.font * 0.75}
+                color={clinics.colors.caption}
+              />
+            </View>
+          </View>
         </View>
-      </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 0
-  },
-  column: {
-    flexDirection: "column"
+    flex: 0,
   },
   row: {
-    flexDirection: "row"
+    flexDirection: "row",
+  },
+  row: {
+    flexDirection: "row",
   },
   header: {
     backgroundColor: clinics.colors.white,
@@ -223,13 +267,13 @@ const styles = StyleSheet.create({
     paddingTop: clinics.sizes.padding * 1.33,
     paddingBottom: clinics.sizes.padding * 0.66,
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   articles: {},
   destinations: {
     flex: 1,
     justifyContent: "space-between",
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   destination: {
     width: width - clinics.sizes.padding,
@@ -237,7 +281,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingHorizontal: clinics.sizes.padding,
     paddingVertical: clinics.sizes.padding * 0.66,
-    borderRadius: clinics.sizes.radius
+    borderRadius: clinics.sizes.radius,
   },
   destinationInfo: {
     position: "absolute",
@@ -246,15 +290,15 @@ const styles = StyleSheet.create({
     paddingVertical: clinics.sizes.padding / 2,
     bottom: 20,
     left:
-      (width - clinics.sizes.padding * 4) / (Platform.OS === "ios" ? 3.2 : 3),
-    backgroundColor: clinics.colors.white,
-    width: width - clinics.sizes.padding * 4
+      (width - clinics.sizes.padding * 7) / (Platform.OS === "ios" ? 3.2 : 3),
+    backgroundColor: "white",
+    width: width - clinics.sizes.padding * 4,
   },
   recommended: {},
   recommendedHeader: {
     justifyContent: "space-between",
     alignItems: "flex-end",
-    paddingHorizontal: clinics.sizes.padding
+    paddingHorizontal: clinics.sizes.padding,
   },
   recommendedList: {},
   recommendation: {
@@ -263,12 +307,12 @@ const styles = StyleSheet.create({
     backgroundColor: clinics.colors.white,
     overflow: "hidden",
     borderRadius: clinics.sizes.radius,
-    marginVertical: clinics.sizes.margin * 0.5
+    marginVertical: clinics.sizes.margin * 0.5,
   },
   recommendationHeader: {
     overflow: "hidden",
     borderTopRightRadius: clinics.sizes.radius,
-    borderTopLeftRadius: clinics.sizes.radius
+    borderTopLeftRadius: clinics.sizes.radius,
   },
   recommendationOptions: {
     alignItems: "center",
@@ -277,35 +321,35 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   recommendationTemp: {
     fontSize: clinics.sizes.font * 1.25,
-    color: clinics.colors.white
+    color: clinics.colors.white,
   },
   recommendationImage: {
     width: (width - clinics.sizes.padding * 2) / 2,
-    height: (width - clinics.sizes.padding * 2) / 2
+    height: (width - clinics.sizes.padding * 2) / 2,
   },
   avatar: {
     width: clinics.sizes.padding,
     height: clinics.sizes.padding,
-    borderRadius: clinics.sizes.padding / 2
+    borderRadius: clinics.sizes.padding / 2,
   },
   rating: {
     fontSize: clinics.sizes.font * 2,
     color: clinics.colors.white,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   shadow: {
     shadowColor: clinics.colors.black,
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.05,
     shadowRadius: 0,
-    elevation: 5
+    elevation: 5,
   },
   dots: {
     width: 10,
@@ -314,12 +358,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 6,
     backgroundColor: clinics.colors.gray,
-    borderColor: "transparent"
+    borderColor: "transparent",
   },
   activeDot: {
     width: 12.5,
     height: 12.5,
     borderRadius: 6.25,
-    borderColor: clinics.colors.active
-  }
+    borderColor: clinics.colors.active,
+  },
 });

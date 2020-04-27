@@ -15,12 +15,12 @@ export default function Login(props) {
         <LoginForm toastRef={toastRef} />
         <CreateAccount navigation={navigation} />
       </View>
-
+      {/* 
       <Divider style={styles.divider} />
       <View style={styles.viewContainer}>
         <LoginFacebook toastRef={toastRef} navigation={navigation} />
         <Text>Login Facebook...</Text>
-      </View>
+      </View> */}
       <Toast ref={toastRef} position="center" opacity={(0, 5)} />
     </ScrollView>
   );

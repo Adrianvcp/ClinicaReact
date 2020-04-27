@@ -9,6 +9,9 @@ import PerfilClinica from "../screens/Clinica/Perfil";
 import ListRestaurants from "../components/Restaurants/ListRestaurants";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import ReprogramacionCita from "../screens/UsuarioCitas/ReprogramacionCita";
+import { Icon } from "react-native-elements";
+import { Text, View, Dimensions } from "react-native";
+const { width, height } = Dimensions.get("window");
 
 export const AppointmentScreenStacks = createStackNavigator({
   restaurants: {
@@ -16,7 +19,7 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Mis Citas" />,
+        headerTitle: "Mis Citas",
       };
     },
   },
@@ -25,7 +28,19 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Mi Cita Seleccionada" />,
+        headerLeft: (
+          <Icon
+            containerStyle={{ margin: 5 }}
+            name={"chevron-left"}
+            type="material-community"
+            underlayColor="transparent"
+            color="black"
+            size={30}
+            onPress={() => navigation.navigate("restaurants")}
+          />
+        ),
+        headerTitle: "Mis Citas",
+        headerTitleAlign: "left",
       };
     },
   },
@@ -34,7 +49,23 @@ export const AppointmentScreenStacks = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: () => <Header title="Clinica" />,
+        headerTitle: "Clinica",
+        headerTitleAlign: "left",
+        headerLeft: (
+          <View style={{ flexDirection: "row", alignContent: "center" }}>
+            <Icon
+              containerStyle={{ margin: 5 }}
+              name={"chevron-left"}
+              type="material-community"
+              underlayColor="transparent"
+              color="black"
+              size={30}
+              onPress={() => navigation.navigate("MiCitaSeleccionada")}
+            />
+          </View>
+        ),
+        /*         headerTitle: "Clinica",
+         */
       };
     },
   },

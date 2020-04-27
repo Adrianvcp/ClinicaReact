@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image } from "react-native";
-import { Icon, Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
 import { withNavigation } from "react-navigation";
 import Loading from "../Loading";
 import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
+import Button from "../../components/loginstyle/Button";
 import { theme } from "../../constants";
 import Toast from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
@@ -49,47 +50,37 @@ function RegisterForm(props) {
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View style={{ flex: 1, marginTop: -20 }}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
-        <Block>
-          <View style={{ flexDirection: "row" }}>
-            <View
+        <Block center middle>
+          <View
+            style={{
+              justifyContent: "center",
+              height: 150,
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../../../assets/img/logo2.png")}
               style={{
-                justifyContent: "center",
-                height: 150,
-                width: "38%",
-                alignItems: "flex-start",
+                width: 100,
+                resizeMode: "contain",
+                marginTop: 20,
               }}
-            >
-              <Image
-                source={require("../../../assets/img/logo.png")}
-                style={{
-                  width: 100,
-                  resizeMode: "contain",
-                  marginTop: 20,
-                }}
-                reziseMode="contain"
-              />
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <View style={{ marginLeft: -15 }}>
-                <Text h2 bold>
-                  <Text h2 primary>
-                    EasyAppointment
-                  </Text>
-                </Text>
-              </View>
-
-              <View style={{ marginLeft: -13 }}>
-                <Text h3>Citas Disponible Siempre</Text>
-              </View>
-            </View>
+              reziseMode="contain"
+            />
           </View>
+        </Block>
+        <Text h1 center bold>
+          <Text h1 primary>
+            EasyAppointment
+          </Text>
+        </Text>
+        <Text h1 center>
+          <Text h3>Citas Disponible Siempre</Text>
+        </Text>
+
+        <Block middle>
           <View>
             <Input
               label="Correo electronico"
@@ -138,12 +129,18 @@ function RegisterForm(props) {
               }
             />
 
-            <Button
+            {/*             <Button
               title="CAMBIAR CONTRASEÑA"
               containerStyle={styles.btnContainerRegister}
               buttonStyle={styles.btnRegister}
               onPress={register}
             />
+ */}
+            <Button gradient onPress={register}>
+              <Text bold white center>
+                Cambiar Contraseña
+              </Text>
+            </Button>
             <Loading text="Creando cuenta" isVisible={isVisibleLoading} />
           </View>
         </Block>

@@ -40,7 +40,7 @@ function LoginForm(props) {
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(() => {
-            navigation.navigate("MyAccount");
+            navigation.navigate("Welcome");
           })
           .catch(() => {
             toastRef.current.show("Email o contraseña incorrecta");
@@ -53,46 +53,34 @@ function LoginForm(props) {
   return (
     <View style={styles.formContainer}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
-        <Block>
-          <View style={{ flexDirection: "row" }}>
-            <View
+        <Block center middle>
+          <View
+            style={{
+              justifyContent: "center",
+              height: 150,
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../../../assets/img/logo2.png")}
               style={{
-                justifyContent: "center",
-                height: 150,
-                width: "38%",
-                alignItems: "flex-start",
+                width: 100,
+                resizeMode: "contain",
+                marginTop: 20,
               }}
-            >
-              <Image
-                source={require("../../../assets/img/logo.png")}
-                style={{
-                  width: 100,
-                  resizeMode: "contain",
-                  marginTop: 20,
-                }}
-                reziseMode="contain"
-              />
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <View style={{ marginLeft: -15 }}>
-                <Text h2 bold>
-                  <Text h2 primary>
-                    EasyAppointment
-                  </Text>
-                </Text>
-              </View>
-
-              <View style={{ marginLeft: -13 }}>
-                <Text h3>Citas Disponible Siempre</Text>
-              </View>
-            </View>
+              reziseMode="contain"
+            />
           </View>
         </Block>
+        <Text h1 center bold>
+          <Text h1 primary>
+            EasyAppointment
+          </Text>
+        </Text>
+        <Text h1 center>
+          <Text h3>Citas Disponible Siempre</Text>
+        </Text>
+
         <Block middle>
           <Input
             label="Email"
@@ -111,6 +99,7 @@ function LoginForm(props) {
             /* onChangeText={(text) => setPassword(tex)} */
             onChange={(e) => setPassword(e.nativeEvent.text)}
           />
+
           <Button
             gradient
             onPress={login}
@@ -132,7 +121,7 @@ function LoginForm(props) {
               center
               style={{ textDecorationLine: "underline" }}
             >
-              Forgot your password?
+              ¿Olvide mi contraseña?
             </Text>
           </Button>
         </Block>
@@ -147,6 +136,7 @@ export default withNavigation(LoginForm);
 const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
+    marginTop: -20,
   },
   inputForm: {
     width: "100%",

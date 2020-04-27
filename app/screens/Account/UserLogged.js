@@ -5,6 +5,10 @@ import * as firebase from "firebase";
 import InfoUser from "../../components/Account/InfoUser";
 import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading";
+import { theme } from "../../constants";
+import Button2 from "../../components/loginstyle/Button";
+import Text from "../../components/loginstyle/Text";
+import Block from "../../components/loginstyle/Block";
 
 import { withNavigation } from "react-navigation";
 
@@ -35,38 +39,40 @@ function UserLogged(props) {
         setIsLoading={setIsLoading}
         setTextLoading={setTextLoading}
       />
+      <View style={{ marginTop: 30 }}>
+        <Button
+          title="Datos Personales"
+          buttonStyle={styles.menuItem2}
+          titleStyle={styles.text}
+          /*           onPress={() => navigation.navigate("Config")}
+           */
 
-      <Button
-        title="Configuración"
-        buttonStyle={styles.menuItem2}
-        titleStyle={styles.text}
-        onPress={() => navigation.navigate("Config")}
-        icon={
-          <Icon
-            type="material-community"
-            name="settings"
-            size={27}
-            color="#ccc"
-            iconStyle={styles.iconL}
-            //iconNameRight="chevron-right"
-            //iconColorRight="#ccc"
-          />
-        }
-        //iconLeft
-      />
-
+          onPress={() => navigation.navigate("InfoUser")}
+          iconRight={true}
+          icon={
+            <Icon
+              type="material-community"
+              name="check"
+              size={27}
+              color="#ccc"
+              iconStyle={{ marginRight: "25%" }}
+            />
+          }
+        />
+      </View>
       <Button
         title="Gestión Familiar"
-        buttonStyle={styles.menuItem}
-        titleStyle={styles.text2}
+        buttonStyle={styles.menuItem2}
+        titleStyle={styles.text}
         onPress={() => navigation.navigate("GestFamiliar")}
+        iconRight={true}
         icon={
           <Icon
             type="material-community"
             name="account-group"
             size={30}
             color="#ccc"
-            iconStyle={styles.icon2}
+            iconStyle={{ marginRight: "26%" }}
             //iconNameRight="chevron-right"
             //iconColorRight="#ccc"
           />
@@ -74,12 +80,21 @@ function UserLogged(props) {
         //iconLeft
       />
 
-      <Button
+      {/*       <Button
         title="Cerrar sesión"
         buttonStyle={styles.btnCloseSession}
         titleStyle={styles.btnCloseSessionText}
         onPress={() => firebase.auth().signOut()}
       />
+ */}
+      <Block padding={[30, theme.sizes.base * 3]}>
+        <Button2 gradient onPress={() => firebase.auth().signOut()}>
+          <Text bold white center>
+            Cerrar Sesion
+          </Text>
+        </Button2>
+      </Block>
+
       <Toast ref={toastRef} position="center" opacity={0.5} />
       <Loading text={textLoading} isVisible={isLoading} />
     </View>
@@ -108,11 +123,13 @@ const styles = StyleSheet.create({
     color: "#1e90ff",
   },
   text: {
+    alignContent: "flex-start",
+    width: "70%",
     fontSize: 16,
     marginBottom: 7,
     color: "#2f4f4f",
     marginTop: 7,
-    marginRight: 205,
+    marginRight: "20%",
   },
   text2: {
     fontSize: 16,
@@ -130,8 +147,9 @@ const styles = StyleSheet.create({
   menuItem2: {
     borderBottomWidth: 1,
     borderBottomColor: "#e3e3e3",
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     paddingBottom: 10,
+    paddingLeft: "10%",
     borderTopWidth: 1,
     borderTopColor: "#e3e3e3",
   },

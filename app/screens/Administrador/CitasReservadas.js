@@ -19,7 +19,7 @@ const { width, height } = Dimensions.get("window");
 export default function ListRestaurants(props) {
   const restaurants = require("../../utils/dat");
 
-  console.log("jasdjas");
+  console.log("Webada");
   const { navigation } = props;
   const [esp, setesp] = useState("");
 

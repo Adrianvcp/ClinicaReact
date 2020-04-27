@@ -7,7 +7,7 @@ import RestaurantScreenStacks from "./RestaurantsStacks";
 //import TopListScreenStacks from "./TopListsStacks";
 import SearchScreenStacks from "./SearchStacks";
 import AccountScreenStack from "./AccountStacks";
-import MisCitasStacks from "./MisCitasStacks";
+import AdmStack from "./AdmStack";
 
 const adminVar = false;
 
@@ -15,24 +15,10 @@ const NavigationStacks = createBottomTabNavigator(
   {
     /* BARRA INFERIOR  */
 
-    Restaurants: {
-      screen: RestaurantScreenStacks,
-      navigationOptions: () => ({
-        tabBarLabel: "Reserva tu citas",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon
-            type="material-community"
-            name="calendar-plus"
-            size={22}
-            color={tintColor}
-          />
-        ),
-      }),
-    },
     Search: {
-      screen: MisCitasStacks,
+      screen: AdmStack,
       navigationOptions: () => ({
-        tabBarLabel: "Mis citas",
+        tabBarLabel: "Citas Reservadas",
         tabBarIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
@@ -57,13 +43,10 @@ const NavigationStacks = createBottomTabNavigator(
         ),
       }),
     },
-    hasdhasd: {
-      screen: AccountScreenStack,
-    },
   },
   {
-    initialRouteName: "Restaurants",
-    order: ["Restaurants", "Search", "Account"],
+    initialRouteName: "Search",
+    order: ["Search", "Account"],
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#1e90ff",
