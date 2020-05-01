@@ -27,6 +27,7 @@ import DatePicker from "react-native-datepicker";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
+  const parametros = props.navigation.state.params;
 
   /* VAR - DATA(JSONFAKE) */
   const [opt_esp, setOptEsp] = useState([]);
@@ -40,7 +41,7 @@ function AddRestaurantForm(props) {
   ];
 
   useEffect(() => {
-    fetch("http://192.168.100.21:8080/api/especialidades")
+    fetch("http://192.168.100.2:8080/api/especialidades")
       .then((response) => response.json())
       .then((json) => setOptEsp(json))
       .catch((error) => console.error(error));
@@ -49,15 +50,13 @@ function AddRestaurantForm(props) {
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.100.21:8080/api/seguros")
+    fetch("http://192.168.100.2:8080/api/seguros")
       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
       .catch((error) => console.error(error));
     /*       .finally(() => setLoading(false));
      */
   }, []);
-
-  console.log(opt_esp);
 
   /* VAR - FECHA */
   const [date, setDate] = useState(new Date(1598051730000));
@@ -66,6 +65,7 @@ function AddRestaurantForm(props) {
   /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
   const [esp, setesp] = useState("");
   const [seguro, setseguro] = useState("");
+  const [Data, setData] = useState("");
 
   /* METODOS CALENDARIO - FECHA */
   const onChange = (event, selectedDate) => {
@@ -88,6 +88,31 @@ function AddRestaurantForm(props) {
     setDatePickerVisibility(false);
   };
 
+  const busquedaData = (dis, esp, fec, seg) => {
+    /* http://localhost:8080/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-01-01&seguro=RIMAC */
+    const urlBase = `http://192.168.100.2:8080/api/citas/citaIdeal?`;
+    const distrito = `distrito=${dis}`;
+    const especialidad = `&especialidad=${esp}`;
+    const fecha = `&fecha=${fec}`;
+    const seguro = `&seguro=${seg}`;
+    const url = urlBase + distrito + especialidad + fecha + seguro;
+    console.log(url);
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        /*         let dataSource = [];
+        Object.values(res).forEach((item) => {
+          dataSource = dataSource.concat(item);
+        }); */
+        console.log(res);
+        navigation.navigate("listaClinicaCitasDisponibles", {
+          navigation,
+          res,
+        });
+        /*         setData(res);
+         */
+      });
+  };
   const countryOptions = [{ value: 0, label: "Seleccionar" }];
   const segurosOptions = [{ value: 0, label: "Seleccionar" }];
 
@@ -109,12 +134,12 @@ function AddRestaurantForm(props) {
     };
 
     segurosOptions.push(obj);
-  }
+  } /*   console.log("VEAMOS");
+   console.log(props);
+   */
 
-  const Data = require("../../utils/dat");
-  console.log("VEAMOS");
-  console.log(props);
-  return (
+  /*   const Data = require("../../utils/dat");
+   */ return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <Image
         source={require("../../../assets/img/foto.jpg")}
@@ -140,7 +165,7 @@ function AddRestaurantForm(props) {
                 options={countryOptions}
                 onCancelEditing={() => console.log("onCancel")}
                 onSubmitEditing={(a) => setesp(a)}
-                onValueChange={(a) => setesp(a)}
+                onValueChange={(a) => setesp(a)} /* setesp(a) */
                 style={[styles.selectInput, styles.selectInputLarge]}
                 labelStyle={styles.selectInputInner}
               />
@@ -214,6 +239,9 @@ function AddRestaurantForm(props) {
                 <Input
                   style={{ color: "black" }}
                   placeholder="Seleccionar ubicacion"
+                  value={
+                    parametros ? parametros.lugar : "seleccionar ubicacion"
+                  }
                   onTouchEnd={() => navigation.navigate("map")}
                 />
               </View>
@@ -280,12 +308,21 @@ function AddRestaurantForm(props) {
         <ActionsContainer style={{ marginBottom: 30 }}>
           <Button
             icon="md-search"
-            onPress={() =>
-              navigation.navigate("listaClinicaCitasDisponibles", {
+            onPress={() => {
+              busquedaData(
+                parametros.lugar,
+                countryOptions[esp].label,
+                date,
+                segurosOptions[seguro].label
+              );
+              console.log(Data);
+              console.log("Data");
+
+              /*               navigation.navigate("listaClinicaCitasDisponibles", {
                 navigation,
                 Data,
-              })
-            }
+              }); */
+            }}
           >
             Buscar Cita
           </Button>

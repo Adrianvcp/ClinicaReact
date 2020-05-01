@@ -33,6 +33,7 @@ export const AccountScreenStack = createStackNavigator({
       };
     },
   },
+  /* ACA MENOS  */
   Login: {
     screen: LoginScreen,
     navigationOptions: ({ navigation }) => {

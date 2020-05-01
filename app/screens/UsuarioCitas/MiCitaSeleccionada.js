@@ -12,7 +12,8 @@ import {
 import { Icon } from "react-native-elements";
 import { Label, Select } from "react-native-clean-form";
 import { Ionicons } from "@expo/vector-icons";
-
+import MapView from "../../components/Mapa/JustMapa";
+import Ubicacion from "../../screens/Restaurants/Ubicacion";
 import * as theme from "../../../themes/clinics";
 const { width } = Dimensions.get("window");
 
@@ -162,7 +163,7 @@ export default function CitaSeleccionada(props) {
         </Dialog.Container>
       </View>
 
-      <View style={[styles.flex]}>
+      <View>
         <ScrollView
           horizontal
           pagingEnabled
@@ -257,7 +258,7 @@ export default function CitaSeleccionada(props) {
                   containerStyle={{
                     marginTop: 5,
                     marginRight: 20,
-                    marginLeft: 20,
+                    marginLeft: 40,
                   }}
                   name="phone"
                   type="material-community"
@@ -270,7 +271,7 @@ export default function CitaSeleccionada(props) {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              {/*               <TouchableOpacity>
                 <Icon
                   containerStyle={{ marginTop: 5 }}
                   name="map-marker"
@@ -279,7 +280,7 @@ export default function CitaSeleccionada(props) {
                   color="#EE272A"
                   size={25}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
 
@@ -292,10 +293,14 @@ export default function CitaSeleccionada(props) {
               marginTop: 10,
             }}
           ></View>
-
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <View style={{ height: 400, width: "60%" }}>
-              <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 10,
+              }}
+            >
+              <View style={{ height: "100%", width: "60%" }}>
                 <View>
                   {/* DETALLE CITA */}
 
@@ -327,43 +332,46 @@ export default function CitaSeleccionada(props) {
                     Cesar Castro
                   </Text>
                 </View>
-              </ScrollView>
-            </View>
-
-            {/* ICONOS ->  ANULAR  Y REPROGRAMAR*/}
-            <View
-              style={{
-                paddingTop: 21.5,
-                width: "45%",
-              }}
-            >
-              <View style={{ paddingLeft: 30 }}>
-                <Icon
-                  name="delete-forever-outline"
-                  type="material-community"
-                  underlayColor="transparent"
-                  color="#C9AB2A"
-                  size={35}
-                  onPress={showDialog}
-                />
-                <Text style={{ textAlign: "center", marginBottom: 20 }}>
-                  ANULAR
-                </Text>
               </View>
 
-              <View style={{ marginTop: 10, paddingLeft: 30 }}>
-                <Icon
-                  name="calendar-clock"
-                  type="material-community"
-                  underlayColor="transparent"
-                  color="#3394D5"
-                  size={30}
-                  onPress={showDialogRepro}
-                />
-                <Text style={{ textAlign: "center" }}>REPRO</Text>
+              {/* ICONOS ->  ANULAR  Y REPROGRAMAR*/}
+              <View
+                style={{
+                  paddingTop: 21.5,
+                  width: "45%",
+                }}
+              >
+                <View style={{ paddingLeft: 30 }}>
+                  <Icon
+                    name="delete-forever-outline"
+                    type="material-community"
+                    underlayColor="transparent"
+                    color="#C9AB2A"
+                    size={35}
+                    onPress={showDialog}
+                  />
+                  <Text style={{ textAlign: "center", marginBottom: 20 }}>
+                    ANULAR
+                  </Text>
+                </View>
+
+                <View style={{ marginTop: 10, paddingLeft: 30 }}>
+                  <Icon
+                    name="calendar-clock"
+                    type="material-community"
+                    underlayColor="transparent"
+                    color="#3394D5"
+                    size={30}
+                    onPress={showDialogRepro}
+                  />
+                  <Text style={{ textAlign: "center" }}>REPRO</Text>
+                </View>
               </View>
             </View>
-          </View>
+            <View style={{ height: 200 }}>
+              <MapView></MapView>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </View>
@@ -372,7 +380,7 @@ export default function CitaSeleccionada(props) {
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 0,
+    flex: 1,
     backgroundColor: "white",
   },
   container: {

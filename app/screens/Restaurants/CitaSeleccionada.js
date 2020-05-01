@@ -25,6 +25,8 @@ import {
   Button,
 } from "react-native-clean-form";
 import Dialog from "react-native-dialog";
+import MapView from "../../components/Mapa/JustMapa";
+
 import SelectInput from "react-native-select-input-ios";
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
@@ -163,7 +165,7 @@ export default function CitaSeleccionada(props) {
         </Dialog.Container>
       </View>
 
-      <View style={[styles.flex]}>
+      <View style={[styles.flexa]}>
         <ScrollView
           horizontal
           pagingEnabled
@@ -194,8 +196,8 @@ export default function CitaSeleccionada(props) {
 
           <Text style={styles.title}>{restaurant.item.name_clinic}</Text>
 
-          <View style={{ height: 400 }}>
-            <ScrollView>
+          <View>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <View>
                 <Text
                   style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
@@ -254,6 +256,9 @@ export default function CitaSeleccionada(props) {
                   )}
                 </View>
               </View>
+              <View style={{ height: 200 }}>
+                <MapView></MapView>
+              </View>
             </ScrollView>
           </View>
         </View>
@@ -264,8 +269,11 @@ export default function CitaSeleccionada(props) {
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 0,
+    flex: 1,
     backgroundColor: "white",
+  },
+  flexa: {
+    flex: 0,
   },
   column: {
     flexDirection: "column",

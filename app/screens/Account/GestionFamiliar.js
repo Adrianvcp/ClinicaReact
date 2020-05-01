@@ -41,11 +41,6 @@ export default function NuevoPaciente(props) {
       </Text> */}
       <Text style={styles.title}>Agrega a tu familiar como paciente</Text>
       <FlatList
-        style={{
-          overflow: "hidden",
-          flex: 1,
-          height: 100,
-        }}
         showsVerticalScrollIndicator={false}
         decelerationRate={0}
         snapToAlignment="center"

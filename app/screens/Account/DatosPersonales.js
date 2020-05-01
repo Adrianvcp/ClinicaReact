@@ -17,6 +17,7 @@ import Button from "../../components/loginstyle/Button";
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
+  const idUser = props.navigation.state.params.id;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepPassword, setHideRepPassword] = useState(true);
   const [isVisibleLoading, setIsVisibleLoading] = useState(false);
@@ -25,6 +26,15 @@ function RegisterForm(props) {
   const [RePassword, setRePassword] = useState("");
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState("date");
+
+  /* VARIABLES REGISTRO PACIENTE -> "PRIMER LOGIN" ? */
+  const [nombre, setNombre] = useState("");
+  const [apellidoPaterno, setapellidoPaterno] = useState("");
+  const [apellidoMaterno, setapellidoMaterno] = useState("");
+  const [dni, setDni] = useState("");
+  const [fnacimiento, setFnacimiento] = useState("");
+  const [edad, setEdad] = useState("");
+  const [Telefono, setTelefono] = useState("");
 
   const register = async () => {
     setIsVisibleLoading(true);
@@ -54,6 +64,48 @@ function RegisterForm(props) {
     setIsVisibleLoading(false);
   };
 
+  const registroDatos = () => {
+    /* http://localhost:8080/api/usuarios/1/paciente */
+    /*     fetch(
+      "http://192.168.100.21:8080/api/usuarios/login?correo=abc%40abc.com&password=123"
+    )
+      .then((response) => response.json())
+      .then((json) => setuserObj(json))
+      .then(() => navigation.navigate("Welcome"))
+      .catch((error) => console.error(error)); */
+    const urlbase = `http://192.168.100.2:8080/api/usuarios/`;
+    const id = idUser;
+    const url = urlbase + id + "/paciente";
+
+    const DataObj = {};
+    (DataObj.apellidoMaterno = apellidoMaterno),
+      (DataObj.apellidoPaterno = apellidoPaterno),
+      (DataObj.correo = "a@a.com"),
+      (DataObj.dni = dni),
+      (DataObj.edad = parseInt(edad)),
+      (DataObj.fechaNac = date),
+      (DataObj.nombre = nombre),
+      (DataObj.parentesco = "otro weon"),
+      (DataObj.telefono = Telefono),
+      console.log(JSON.stringify(DataObj));
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(DataObj),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        navigation.navigate("UserLoggued");
+      });
+  };
+
+  /*   return fetch('/appointments/get_appos', data)
+          .then(response => response.json())  // promise
+          .then(json => dispatch(receiveAppos(json)))
+  }  */
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.formContainer}>
@@ -71,7 +123,7 @@ function RegisterForm(props) {
                 label="Nombres"
                 placeholder="Pedro Adrian"
                 style={styles.input}
-                onChange={(e) => setEmail(e.nativeEvent.text)}
+                onChange={(e) => setNombre(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -85,9 +137,8 @@ function RegisterForm(props) {
                 label="Apellido Paterno"
                 placeholder="Vela"
                 password={true}
-                secureTextEntry={hidePassword}
                 style={styles.input}
-                onChange={(e) => setPassword(e.nativeEvent.text)}
+                onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -100,10 +151,8 @@ function RegisterForm(props) {
               <Input
                 label="Apellido Materno"
                 placeholder="Cruz"
-                password={true}
-                secureTextEntry={true}
                 style={styles.input}
-                onChange={(e) => setRePassword(e.nativeEvent.text)}
+                onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -116,10 +165,8 @@ function RegisterForm(props) {
               <Input
                 label="DNI"
                 placeholder="12345678"
-                password={true}
-                secureTextEntry={true}
                 style={styles.input}
-                onChange={(e) => setRePassword(e.nativeEvent.text)}
+                onChange={(e) => setDni(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -171,10 +218,8 @@ function RegisterForm(props) {
               <Input
                 label="Edad"
                 placeholder="22"
-                password={true}
-                secureTextEntry={true}
                 style={styles.input}
-                onChange={(e) => setRePassword(e.nativeEvent.text)}
+                onChange={(e) => setEdad(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -187,10 +232,8 @@ function RegisterForm(props) {
               <Input
                 label="Telefono"
                 placeholder="134235346"
-                password={true}
-                secureTextEntry={true}
                 style={styles.input}
-                onChange={(e) => setRePassword(e.nativeEvent.text)}
+                onChange={(e) => setTelefono(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -203,7 +246,9 @@ function RegisterForm(props) {
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
-                onPress={() => navigation.navigate("UserLoggued")}
+                onPress={
+                  () => registroDatos() /* navigation.navigate("UserLoggued") */
+                }
               >
                 <Text bold white center>
                   Guardar

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
-import { Image } from "react-native-elements";
+import { Image, Icon } from "react-native-elements";
 import * as clinics from "../../../themes/clinics";
 import {
   ActivityIndicator,
@@ -17,6 +17,9 @@ import {
   Input,
   Select,
 } from "react-native-clean-form";
+import DatePicker from "react-native-datepicker";
+import SelectInput from "react-native-select-input-ios";
+
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -25,19 +28,22 @@ const { width, height } = Dimensions.get("window");
 export default function ListRestaurants(props, abc) {
   console.log("jasdjas");
 
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState("time");
   const { navigation } = props;
-  const restaurants = props.navigation.state.params.Data;
-  const { SearchHora, SearchClinica } = props.navigation.state.params;
-  /*   const {} = props.navigation.state.params;
-   */ console.log("PROPS");
-  console.log(props);
-  /*   const searchHora = useRef();
-  onst SearchClinica = useRef();*/
 
-  /*   const hideSearch = () => {
+  const restaurants = props.navigation.state.params.res;
+  console.log(restaurants);
+  const {
+    SearchHora,
+    SearchClinica,
+  } = props.navigation.state.params; /*   const searchHora = useRef();
+  onst SearchClinica = useRef();*/ /*   const hideSearch = () => {
     searchHora.current.hide();
-  }; */
-  const [esp, setesp] = useState("");
+  }; */ /* console.log("PROPS");
+  console.log(props); */
+  /*   const {} = props.navigation.state.params;
+   */ const [esp, setesp] = useState("");
 
   /*   const show = () => searchHora.current.show();
    */ const countryOptions = [
@@ -45,6 +51,9 @@ export default function ListRestaurants(props, abc) {
     { label: "Germany", value: "Germany" },
     { label: "United State", value: "United State" },
   ];
+
+  const segurosOptions = [{ value: 0, label: "Seleccionar" }];
+
   return (
     <View style={{ backgroundColor: "white" }}>
       {/* FILTRAR POR HORA */}
@@ -84,13 +93,84 @@ export default function ListRestaurants(props, abc) {
       ) : (
         <View></View>
       )}
+
+      {/* FILTROS */}
+
+      <View>
+        <View /* ref={searchHora} */ style={{ margin: 10, marginBottom: -20 }}>
+          <Fieldset label="Filtrar por Hora" last>
+            <FormGroup>
+              <Label>HORA</Label>
+              <DatePicker
+                style={{
+                  width: "40%",
+                  marginLeft: width / 4,
+                  /*                   backgroundColor: "red",
+                   */
+                }}
+                date={date}
+                mode={mode}
+                containerStyle={""}
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                showIcon={false}
+                customStyles={{
+                  dateIcon: {
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                    borderWidth: 0,
+                  },
+                  dateInput: {
+                    borderWidth: 0,
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  },
+                  // ... You can check the source to find the other keys.
+                }}
+                onDateChange={(date) => {
+                  setDate(date);
+                }}
+              />
+            </FormGroup>
+          </Fieldset>
+        </View>
+
+        <View
+          /* ref={SearchClinica} */ style={{ margin: 10, marginBottom: -20 }}
+        >
+          <Fieldset label="Filtrar por Clinica" last>
+            <FormGroup>
+              <Label>Clinica</Label>
+              <SelectInput
+                value={esp ? esp : 0}
+                options={segurosOptions}
+                onCancelEditing={() => console.log("onCancel")}
+                onSubmitEditing={(a) => setesp(a)}
+                onValueChange={(a) => setesp(a)}
+                style={[styles.selectInput, styles.selectInputLarge]}
+                labelStyle={styles.selectInputInner}
+              />
+              {Platform.OS === "ios" ? (
+                <View style={{ marginLeft: -5 }}>
+                  <Icon name="menu-down" type="material-community" />
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </FormGroup>
+          </Fieldset>
+        </View>
+      </View>
+
       {/* LISTA DE CLINICAS */}
       {restaurants ? (
         <View>
           <FlatList
             /*             pagingEnabled
             disableScrollViewPanResponder */
-            style={{ overflow: "visible", height: "100%", marginTop: 15 }}
+            style={{ overflow: "hidden", height: "100%", marginTop: 15 }}
             showsVerticalScrollIndicator={false}
             decelerationRate={0}
             snapToAlignment="center"
@@ -114,8 +194,8 @@ export default function ListRestaurants(props, abc) {
 
 function Restaurant(props) {
   const { restaurant, navigation } = props;
-
-  const {
+  console.log(restaurant);
+  /*   const {
     path,
     nombreDoctor,
     hora,
@@ -123,7 +203,13 @@ function Restaurant(props) {
     name_clinic,
     id,
     phurl,
-  } = restaurant.item;
+  } = restaurant.item; */
+  const { fecha, hora, id, medico } = restaurant.item;
+  const {
+    nombre,
+    telefono,
+    descripcion,
+  } = restaurant.item.ubicacion.clinica.nombre;
   const [imageRestaurant, setImageRestaurant] = useState(null);
 
   return (
@@ -135,7 +221,8 @@ function Restaurant(props) {
       <ImageBackground
         style={[styles.flex, styles.destination, styles.shadow]}
         imageStyle={{ borderRadius: clinics.sizes.radius }}
-        source={{ uri: url }}
+        /*         source={{ uri: url }}
+         */
       >
         <View style={{ marginBottom: 50 }}>
           <View
@@ -148,7 +235,7 @@ function Restaurant(props) {
           >
             <View style={{ flex: 0 }}>
               <Image
-                source={{ uri: phurl }}
+                /* source={{ uri: phurl }} */
                 borderRadius={1000}
                 style={styles.avatar}
               />
@@ -161,7 +248,7 @@ function Restaurant(props) {
               ]}
             >
               <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
-                {nombreDoctor}
+                {medico.nombre}
               </Text>
               <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
                 <Octicons
@@ -169,7 +256,7 @@ function Restaurant(props) {
                   size={clinics.sizes.font * 0.8}
                   color={clinics.colors.white}
                 />
-                <Text> {name_clinic}</Text>
+                <Text> {nombre}</Text>
               </Text>
             </View>
             <View
@@ -217,7 +304,7 @@ function Restaurant(props) {
                   marginTop: 5,
                 }}
               >
-                {path}
+                {fecha}
               </Text>
             </View>
             <View
@@ -365,5 +452,18 @@ const styles = StyleSheet.create({
     height: 12.5,
     borderRadius: 6.25,
     borderColor: clinics.colors.active,
+  },
+  selectInput: {
+    /*     backgroundColor: "red", */
+    marginLeft: width / 5,
+    marginTop: 5,
+    overflow: "hidden",
+    height: "50%",
+  },
+  selectInputLarge: {
+    width: "30%",
+  },
+  selectInputInner: {
+    borderRadius: 4,
   },
 });

@@ -21,8 +21,8 @@ class Map extends Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      }
+        longitudeDelta: LONGITUDE_DELTA,
+      },
     };
   }
   findMe = async () => {
@@ -33,23 +33,23 @@ class Map extends Component {
           latitude,
           longitude,
           latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA
-        }
+          longitudeDelta: LONGITUDE_DELTA,
+        },
       });
     });
 
     await navigator.geolocation.getCurrentPosition(
-      position => {
+      (position) => {
         this.setState({
           region: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          }
+            longitudeDelta: LONGITUDE_DELTA,
+          },
         });
       },
-      error => console.log(JSON.stringify(error)),
+      (error) => console.log(JSON.stringify(error)),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   };
@@ -57,9 +57,11 @@ class Map extends Component {
   componentDidMount() {
     this.findMe();
   }
+
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchId);
   }
+
   render() {
     const { region } = this.state;
     return (
@@ -93,13 +95,13 @@ class Map extends Component {
 Map.navigationOptions = {
   title: "Location",
   headerStyle: {
-    backgroundColor: "#ff6666"
+    backgroundColor: "#ff6666",
   },
   headerTintColor: "#fff",
   headerTitleStyle: {
     fontWeight: "bold",
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 };
 const styles = StyleSheet.create({
   container: {
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 30,
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   map: {
     position: "absolute",
@@ -118,8 +120,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
-  }
+    bottom: 0,
+  },
 });
 
 export default Map;

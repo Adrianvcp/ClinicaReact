@@ -77,19 +77,49 @@ function Restaurant(props) {
         ]}
       >
         <View style={styles.viewRestaurantImage}>
-          <Image
+          {/*           <Image
             resizeMode="cover"
             source={{ uri: url }}
             borderRadius={50}
             style={styles.imageRestaurant}
             PlaceholderContent={<ActivityIndicator color="fff" />}
-          />
+          /> */}
         </View>
-        <View>
-          <Text style={styles.restaurantName}>{hora} hrs - 13 Abril</Text>
-          <Text style={styles.restaurantAddress}>{nombreDoctor}</Text>
-          <Text style={styles.restaurantAddress}>{path}</Text>
-          <Text style={styles.restaurantAddress}>{name_clinic} </Text>
+        <View style={{ flexDirection: "row" }}>
+          <View>
+            <View>
+              <Text style={{ color: "gray" }}>October</Text>
+            </View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 34, color: "#1C90FF" }}>13</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "gray" }}>MAR</Text>
+            </View>
+          </View>
+          <View style={styles.lineVert}></View>
+          <View style={{ width: "75%" }}>
+            <View style={{ flexDirection: "row" }}>
+              <View>
+                <Text style={{ fontWeight: "100" }}>Hora </Text>
+                <Text style={styles.restaurantName}>{hora} </Text>
+              </View>
+              <View
+                style={{
+                  alignSelf: "flex-end",
+                  /*                   backgroundColor: "green",
+                   */ marginLeft: 40,
+                }}
+              >
+                <Text style={{ fontWeight: "100" }}>Doctor </Text>
+                <Text style={styles.restaurantName}>{nombreDoctor}</Text>
+              </View>
+            </View>
+
+            <View style={styles.lineHor}></View>
+            <Text style={styles.restaurantAddress}>{path}</Text>
+            <Text style={styles.restaurantAddress}>{name_clinic} </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -254,5 +284,20 @@ const styles = StyleSheet.create({
     height: 12.5,
     borderRadius: 6.25,
     borderColor: clinics.colors.active,
+  },
+  lineVert: {
+    marginLeft: 5,
+    marginRight: 7,
+
+    borderWidth: 1,
+    borderColor: "#E8E6E9",
+    borderRadius: 1,
+  },
+  lineHor: {
+    margin: 3,
+    borderWidth: 1,
+    borderColor: "#E8E6E9",
+    width: "100%",
+    borderRadius: 1,
   },
 });

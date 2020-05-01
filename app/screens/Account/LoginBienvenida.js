@@ -14,6 +14,7 @@ import { theme } from "../../constants";
 function UserLogged(props) {
   //aumento esto
   const { navigation } = props;
+  const id = props.navigation.state.params.user;
 
   const [userInfo, setUserInfo] = useState({});
   const [reloadData, setReloadData] = useState(false);
@@ -60,7 +61,7 @@ function UserLogged(props) {
           <Button
             gradient
             containerStyle={styles.btnContainerNext}
-            onPress={() => navigation.navigate("Datos")}
+            onPress={() => navigation.navigate("Datos", { id: id })}
           >
             <Text bold white center>
               Siguiente

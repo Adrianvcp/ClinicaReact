@@ -27,6 +27,8 @@ function LoginForm(props) {
   const errors = [];
   const loading = false;
   const toastRef = useRef();
+  const [id, setid] = useState("");
+  const [userObj, setuserObj] = useState();
 
   const login = async () => {
     setIsVisibleLoading(true);
@@ -49,6 +51,21 @@ function LoginForm(props) {
     }
     setIsVisibleLoading(false);
   };
+
+  const login2 = async () => {
+    /* http://192.168.100.21:8080/api/usuarios/login?correo=abc%40abc.com&password=123 */
+    const urlbase = `http://192.168.100.2:8080/api/usuarios/login?`;
+    const correo = `correo=${email}`;
+    const pass = `&password=${password}`;
+    const url = urlbase + correo + pass;
+    console.log(url);
+
+    const respuesta = await fetch(url);
+    const json = await respuesta.json();
+
+    navigation.navigate("Welcome", { user: json.id });
+  };
+  /* setOptEsp(json) */
 
   return (
     <View style={styles.formContainer}>
@@ -102,7 +119,7 @@ function LoginForm(props) {
 
           <Button
             gradient
-            onPress={login}
+            onPress={login2}
             /*  onPress={() => this.handleLogin()} */
           >
             {loading ? (

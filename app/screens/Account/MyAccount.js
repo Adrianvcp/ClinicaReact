@@ -9,7 +9,8 @@ import { View, Text } from "react-native";
 /* VARIABLE PARA EL PRIMER LOGIN */
 const viewWelcome = true;
 
-export default function MyAccount() {
+export default function MyAccount(props) {
+  const id = props.navigation.state.params.user;
   const [login, setlogin] = useState(null);
 
   useEffect(() => {
@@ -21,7 +22,9 @@ export default function MyAccount() {
   if (login == null) {
     return <Loading isVisible={true} text="Cargando..." />;
   }
-  return login ? Logeo() : <UserGuest />;
+  /*   return login ? Logeo() : <UserGuest />;
+   */
+  return Logeo();
 }
 
 /* CONDICIONAL PARA PRIMER LOGIN */
