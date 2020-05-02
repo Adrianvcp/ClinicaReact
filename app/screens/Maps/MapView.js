@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { View } from "react-native";
+import { View, Dimensions } from "react-native";
 /* import { GOOGLE_API_KEY } from "react-native-dotenv"; //Styles
  */
 //Components
@@ -12,10 +12,13 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Input from "../Maps/Input";
 import ActionButton from "react-native-action-button";
 import Btn from "react-native-micro-animated-button";
+import { districtData } from "../../utils/other";
+
+const { width, height } = Dimensions.get("window");
 
 const GOOGLE_API_KEY = "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs";
-const LATITUDE = 0.0;
-const LONGITUDE = 0.0;
+const LATITUDE = -12.08293172066294;
+const LONGITUDE = -77.09316780797866;
 
 class MapScreen extends Component {
   //Set the HeaderTitle screen
@@ -25,7 +28,7 @@ class MapScreen extends Component {
   };
 
   constructor(props) {
-    console.log("MOSTRANDO LA NAVEGACION");
+    console.log("props");
 
     super(props);
     //Initial State
@@ -40,22 +43,25 @@ class MapScreen extends Component {
     };
   }
 
-  getDistrict(lati, longi) {
+  getDistrict = async (lati, longi) => {
+    console.log("getDistrict");
     /* https://maps.googleapis.com/maps/api/geocode/json?latlng=-12.082962721932494,-77.09339214502931&sensor=true&key=AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs */
     const urlBase = `https://maps.googleapis.com/maps/api/geocode/json?`;
     const latlong = `latlng=${lati},${longi}&sensor=true`;
     const key = `&key=${GOOGLE_API_KEY}`;
     const url = urlBase + latlong + key;
-    let resultado;
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        resultado = res.results[4].address_components[1].long_name;
-      });
-  }
+    const respuesta = await fetch(url);
+    const json = await respuesta.json();
+    console.log(" GAAAA");
+    const dst = await districtData(json.results[0].plus_code.compound_code);
+    this.state.navigation.navigate("restaurants", {
+      lugar: dst,
+    });
+  };
 
   findMe = async () => {
+    console.log("finme");
     this.watchID = await navigator.geolocation.watchPosition(({ coords }) => {
       const { latitude, longitude } = coords;
 
@@ -67,6 +73,7 @@ class MapScreen extends Component {
       fetch(url)
         .then((res) => res.json())
         .then((res) => {
+          console.log(res.results[4].address_components[1].long_name);
           this.setState({
             ubi: res.results[4].address_components[1].long_name,
           });
@@ -92,6 +99,7 @@ class MapScreen extends Component {
   };
 
   getData(loc) {
+    console.log("getData");
     const markers = [];
     const url = this.getPlacesUrl(
       10,
@@ -102,7 +110,6 @@ class MapScreen extends Component {
       GOOGLE_API_KEY
     );
 
-    console.log(url);
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
@@ -219,10 +226,14 @@ class MapScreen extends Component {
         </View>
         <View style={styles.mapView}>
           <MapView
-            showsMyLocationButton={false}
             style={{
               flex: 1,
             }}
+            loadingEnabled={true}
+            scrollEnabled={true}
+            rotateEnabled={true}
+            zoomControlEnabled={true}
+            showsIndoorLevelPicker={true}
             provider={PROVIDER_GOOGLE}
             showsUserLocation={true}
             /* posicion donde estoy */
@@ -252,7 +263,7 @@ class MapScreen extends Component {
           <View
             style={{
               width: "100%",
-              height: "100%",
+              paddingTop: height / 2,
               alignItems: "center",
               justifyContent: "flex-end",
               position: "absolute",
@@ -267,9 +278,8 @@ class MapScreen extends Component {
 
                 /*                 console.log(this.getDistrict(this.state.lat, this.state.long));
                  */ this.btn.success();
-                navigation.navigate("restaurants", {
-                  lugar: this.state.ubi,
-                });
+                this.getDistrict(this.state.lat, this.state.long);
+
                 /*                 console.log(this.state);
                  */
               }}

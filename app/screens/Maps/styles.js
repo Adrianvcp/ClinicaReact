@@ -7,6 +7,7 @@ export default StyleSheet.create({
   },
   mapView: {
     flex: 1,
+    backgroundColor: "red",
     justifyContent: "center",
     height: "90%",
     width: "100%",

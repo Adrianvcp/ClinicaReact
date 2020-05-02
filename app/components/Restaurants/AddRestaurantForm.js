@@ -24,6 +24,8 @@ import SelectInput from "react-native-select-input-ios";
 
 import styled from "styled-components";
 import DatePicker from "react-native-datepicker";
+import { funcionA, funcionB } from "../../utils/endpoints";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
@@ -39,24 +41,6 @@ function AddRestaurantForm(props) {
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
     { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
   ];
-
-  useEffect(() => {
-    fetch("http://192.168.100.2:8080/api/especialidades")
-      .then((response) => response.json())
-      .then((json) => setOptEsp(json))
-      .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
-  }, []);
-
-  useEffect(() => {
-    fetch("http://192.168.100.2:8080/api/seguros")
-      .then((response) => response.json())
-      .then((json) => setOptSeguro(json))
-      .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
-  }, []);
 
   /* VAR - FECHA */
   const [date, setDate] = useState(new Date(1598051730000));
@@ -87,6 +71,8 @@ function AddRestaurantForm(props) {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
+
+  const posicion = () => {};
 
   const busquedaData = (dis, esp, fec, seg) => {
     /* http://localhost:8080/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-01-01&seguro=RIMAC */
@@ -163,6 +149,7 @@ function AddRestaurantForm(props) {
               <SelectInput
                 value={esp ? esp : 0}
                 options={countryOptions}
+                onPress={() => funcionA()}
                 onCancelEditing={() => console.log("onCancel")}
                 onSubmitEditing={(a) => setesp(a)}
                 onValueChange={(a) => setesp(a)} /* setesp(a) */
@@ -229,6 +216,7 @@ function AddRestaurantForm(props) {
           <FormGroup>
             <View style={styles.dividir}>
               <Label>Ubicación</Label>
+
               <View
                 style={{
                   /* backgroundColor: "red", */ width: "50%",
@@ -240,9 +228,12 @@ function AddRestaurantForm(props) {
                   style={{ color: "black" }}
                   placeholder="Seleccionar ubicacion"
                   value={
-                    parametros ? parametros.lugar : "seleccionar ubicacion"
+                    parametros ? parametros.lugar : "Seleccionar ubicacion"
                   }
-                  onTouchEnd={() => navigation.navigate("map")}
+                  onTouchEnd={async () => {
+                    await funcionA();
+                    await navigation.navigate("map");
+                  }}
                 />
               </View>
             </View>
@@ -304,7 +295,6 @@ function AddRestaurantForm(props) {
             </View>
           </FormGroup>
         </Fieldset>
-
         <ActionsContainer style={{ marginBottom: 30 }}>
           <Button
             icon="md-search"
