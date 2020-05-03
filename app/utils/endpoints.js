@@ -1,4 +1,4 @@
-async function funcionA(params) {
+async function funcionA() {
   const dato = {};
   await navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
