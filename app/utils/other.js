@@ -3,5 +3,5 @@ export function districtData(texto) {
 
   const arregloDeSubCadenas = dato.split(",", 1);
   const primera = arregloDeSubCadenas[0].split(" ", 1);
-  return arregloDeSubCadenas[0].replace(primera, "");
+  return arregloDeSubCadenas[0].replace(primera, "").trim();
 }
