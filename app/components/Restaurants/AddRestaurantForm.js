@@ -41,6 +41,25 @@ function AddRestaurantForm(props) {
     { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
     { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
   ];
+  
+    useEffect(() => {
+    fetch("http://192.168.100.2:8080/api/especialidades")
+      .then((response) => response.json())
+      .then((json) => setOptEsp(json))
+      .catch((error) => console.error(error));
+    /*       .finally(() => setLoading(false));
+     */
+  }, []);
+
+  useEffect(() => {
+    fetch("http://192.168.100.2:8080/api/seguros")
+      .then((response) => response.json())
+      .then((json) => setOptSeguro(json))
+      .catch((error) => console.error(error));
+    /*       .finally(() => setLoading(false));
+     */
+  }, []);
+
 
   /* VAR - FECHA */
   const [date, setDate] = useState(new Date(1598051730000));
