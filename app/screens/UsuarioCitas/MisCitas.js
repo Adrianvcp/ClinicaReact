@@ -10,9 +10,11 @@ import {
 } from "react-native";
 
 import { useState, useRef } from "react";
+import { Icon } from "react-native-elements";
 
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { AsyncStorage } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -22,14 +24,60 @@ export default function ListRestaurants(props) {
   console.log("jasdjas");
   const { navigation } = props;
   const [esp, setesp] = useState("");
+  const [login, setlogin] = useState("false");
+  const [listaCitas, setlistaCitas] = useState();
+  const [idstorage, setidstorage] = useState("");
+
+  const keydata = async () => {
+    const lg = await AsyncStorage.getItem("keyuser").then((a) => {
+      console.log("asd");
+      console.log(a);
+      setlogin(a);
+    });
+
+    /* ID en el Asyncstorage */
+    const id_s = await AsyncStorage.getItem("id").then((a) => {
+      console.log("idStorage");
+      console.log(a);
+      setidstorage(a);
+    });
+    /* Traigo la info  */
+
+    const resp = await fetch(
+      "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/citas?id=" +
+        idstorage
+    );
+    const json = await resp.json();
+    console.log(json);
+    setlistaCitas(json);
+
+    /*       .then((response) => response.json())
+      .then((json) => setOptSeguro(json))
+      .catch((error) => console.error(error)); */
+  };
+
+  useEffect(() => {
+    console.log("ME EJECUTO ANTES DE TODO - MIS CITAS");
+    /*     const data = async () => {
+      const value = await AsyncStorage.getItem("keyuser").then((a) => {
+        setData(String(a));
+        console.log(a);
+      });
+    };
+    data(); */
+
+    keydata();
+  }, []);
 
   return (
     <View style={{ backgroundColor: "white" }}>
       {/* LISTA DE CLINICAS */}
-      {restaurants ? (
-        <View>
+      {console.log("aqui")}
+      {console.log(login)}
+      {login == "true" ? (
+        <View style={{ backgroundColor: "white" }}>
           <FlatList
-            data={restaurants}
+            data={listaCitas}
             renderItem={(restaurant) => (
               <Restaurant restaurant={restaurant} navigation={navigation} />
             )}
@@ -38,9 +86,21 @@ export default function ListRestaurants(props) {
           />
         </View>
       ) : (
-        <View>
-          <ActivityIndicator size="large" />
-          <Text>Cargando resturants</Text>
+        <View style={{ backgroundColor: "white" }}>
+          <TouchableOpacity>
+            <Icon
+              name="refresh"
+              type="material-community"
+              color="#1F90FC"
+              onPress={() => {
+                keydata();
+              }}
+            />
+          </TouchableOpacity>
+
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Text>No se encuentra logeado</Text>
+          </View>
         </View>
       )}
     </View>
@@ -50,17 +110,30 @@ export default function ListRestaurants(props) {
 function Restaurant(props) {
   const { restaurant, navigation } = props;
 
-  const {
-    path,
-    nombreDoctor,
-    hora,
-    url,
-    name_clinic,
-    id,
-    phurl,
-  } = restaurant.item;
-  const [imageRestaurant, setImageRestaurant] = useState(null);
+  const { path, fecha, hora, url, name_clinic, id, phurl } = restaurant.item;
+  let days = ["DOM", "LUN", "MAR", "MIE", "JUE", "VIE", "SAB"];
 
+  const { nombre, apellidoPaterno } = restaurant.item.medico;
+  let date = new Date(fecha);
+  console.log(days[date.getUTCDay() - 1]);
+  const { clinica } = restaurant.item.ubicacion;
+  var meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  const [imageRestaurant, setImageRestaurant] = useState(null);
+  const fechasepara = fecha.split("-");
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -88,13 +161,19 @@ function Restaurant(props) {
         <View style={{ flexDirection: "row" }}>
           <View>
             <View>
-              <Text style={{ color: "gray" }}>October</Text>
+              <Text style={{ color: "gray" }}>
+                {meses[parseInt(fechasepara[1], 10)]}
+              </Text>
             </View>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <Text style={{ fontSize: 34, color: "#1C90FF" }}>13</Text>
+              <Text style={{ fontSize: 34, color: "#1C90FF" }}>
+                {fechasepara[2]}
+              </Text>
             </View>
             <View style={{ alignItems: "center" }}>
-              <Text style={{ color: "gray" }}>MAR</Text>
+              <Text style={{ color: "gray" }}>
+                {days[date.getUTCDay() - 1]}
+              </Text>
             </View>
           </View>
           <View style={styles.lineVert}></View>
@@ -112,13 +191,15 @@ function Restaurant(props) {
                 }}
               >
                 <Text style={{ fontWeight: "100" }}>Doctor </Text>
-                <Text style={styles.restaurantName}>{nombreDoctor}</Text>
+                <Text style={styles.restaurantName}>
+                  {nombre + " " + apellidoPaterno}
+                </Text>
               </View>
             </View>
 
             <View style={styles.lineHor}></View>
-            <Text style={styles.restaurantAddress}>{path}</Text>
-            <Text style={styles.restaurantAddress}>{name_clinic} </Text>
+            <Text style={styles.restaurantAddress}>{clinica.telefono}</Text>
+            <Text style={styles.restaurantAddress}>{clinica.nombre} </Text>
           </View>
         </View>
       </View>

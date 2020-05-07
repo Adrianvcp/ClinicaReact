@@ -4,14 +4,18 @@ import Loading from "../../components/Loading";
 import UserGuest from "./UserGuest";
 import UserLogged from "./UserLogged";
 import LoginBienvenida from "./LoginBienvenida";
-
 import { View, Text } from "react-native";
 /* VARIABLE PARA EL PRIMER LOGIN */
-const viewWelcome = true;
+var jsonData;
 
 export default function MyAccount(props) {
-  const id = props.navigation.state.params.user;
+  console.log(props.navigation.state.params);
+
+  const [viewWelcome, setviewWelcome] = useState(false);
+
+  const idVar = props.navigation.state.params.user;
   const [login, setlogin] = useState(null);
+  const [data, setdata] = useState([]);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -19,16 +23,27 @@ export default function MyAccount(props) {
     });
   }, []);
 
+  console.log("DATA");
+
+  /*   for (let i = 0; i < data.length; i++) {
+    console.log(data[i].usuario);
+    if (data[i].usuario.id == idVar) {
+      console.log("encontrado");
+      setviewWelcome(true);
+    }
+  } */
+
   if (login == null) {
     return <Loading isVisible={true} text="Cargando..." />;
   }
-  /*   return login ? Logeo() : <UserGuest />;
-   */
-  return Logeo();
+
+  /*   ep_primeraVez(idVar);
+  console.log("Dato valor:");
+  console.log(viewWelcome); */
+  return Logeo(true);
 }
 
-/* CONDICIONAL PARA PRIMER LOGIN */
-
-function Logeo(props) {
-  return viewWelcome ? <LoginBienvenida /> : <UserLogged />;
+function Logeo(id) {
+  console.log("asdasd");
+  return id ? <UserLogged /> : <LoginBienvenida />;
 }

@@ -9,8 +9,9 @@ import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
 import Button from "../../components/loginstyle/Button";
 import { theme } from "../../constants";
-import Toast from "react-native-easy-toast";
+import Toast, { DURATION } from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
+import { ep_login } from "../../utils/endpoints";
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
@@ -20,35 +21,74 @@ function RegisterForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [RePassword, setRePassword] = useState("");
+  const url = "http://backendapplication-1.azurewebsites.net/api/usuarios";
+  /*   {
+    "correo": "p@p.com",
+    "enable": true,
+    "id": 0,
+    "password": "holi"
+  } */
 
-  const register = async () => {
-    setIsVisibleLoading(true);
+  const register2 = async () => {
+    const ObjData = {};
+
     if (!email || !password || !RePassword) {
-      toastRef.current.show("Todos los campos son obligatorios");
+      toastRef.current.show("Todos los campos son obligatorios", 500);
     } else {
-      if (!validateEmail(email)) {
-        toastRef.current.show("El email no es correcto");
+      if (!validateEmail(email))
+        toastRef.current.show("El email no es correcto", 500);
+      else if (password !== RePassword) {
+        toastRef.current.show("Las contraseñas no son iguales", 500);
       } else {
-        if (password !== RePassword) {
-          toastRef.current.show("Las contraseñas no son iguales");
-        } else {
-          await firebase
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => {
-              navigation.navigate("MyAccount");
-            })
-            .catch(() => {
-              toastRef.current.show(
-                "Error al crear la cuenta. Inténtelo nuevamente"
-              );
-            });
-        }
+        ObjData.correo = email;
+        ObjData.password = password;
+        ObjData.enable = true;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify(ObjData),
+        })
+          .then((res) => res.json())
+          .then(() => {
+            toastRef.current.show("Usuario Grabado Satisfactoriamente!", 700);
+            toastRef.current.show("¡Iniciando Sesion!", 1000);
+            ep_login(ObjData.correo, ObjData.password, navigation);
+          });
       }
     }
-    setIsVisibleLoading(false);
   };
 
+  /*   const registroDatos = () => {
+
+    const urlbase = `http://192.168.100.2:8080/api/usuarios/`;
+    const id = idUser;
+    const url = urlbase + id + "/paciente";
+
+    const DataObj = {};
+    (DataObj.apellidoMaterno = apellidoMaterno),
+      (DataObj.apellidoPaterno = apellidoPaterno),
+      (DataObj.correo = "a@a.com"),
+      (DataObj.dni = dni),
+      (DataObj.edad = parseInt(edad)),
+      (DataObj.fechaNac = date),
+      (DataObj.nombre = nombre),
+      (DataObj.parentesco = "otro weon"),
+      (DataObj.telefono = Telefono),
+      console.log(JSON.stringify(DataObj));
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(DataObj),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        navigation.navigate("UserLoggued");
+      });
+  }; */
   return (
     <View style={{ flex: 1, marginTop: -20 }}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
@@ -129,7 +169,7 @@ function RegisterForm(props) {
               }
             />
 
-            <Button gradient onPress={register}>
+            <Button gradient onPress={register2}>
               <Text bold white center>
                 Registrarse
               </Text>

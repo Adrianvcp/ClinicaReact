@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { View } from "react-native";
 /* import { GOOGLE_API_KEY } from "react-native-dotenv"; //Styles
  */
@@ -24,155 +24,38 @@ class MapScreen extends Component {
     super(props);
     //Initial State
     this.state = {
-      lat: LATITUDE,
-      long: LONGITUDE,
+      lat: 0.0,
+      long: 0.0,
       places: [],
       isLoading: false,
       placeType: "restaurant",
     };
   }
 
-  findMe = async () => {
-    this.watchID = await navigator.geolocation.watchPosition(({ coords }) => {
-      const { latitude, longitude } = coords;
-      this.setState({
-        lat: latitude,
-        long: longitude,
-      });
-    });
-
-    await navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        });
-      },
-      (error) => console.log(JSON.stringify(error)),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  };
-
-  getData(loc) {
-    const url = this.getPlacesUrl(
-      10,
-      10,
-      10,
-      10,
-      loc.description,
-      GOOGLE_API_KEY
-    );
-
-    console.log(url);
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        res.results.map((element, index) => {
-          const marketObj = {};
-          marketObj.id = element.id;
-          marketObj.name = element.name;
-          marketObj.photos = element.photos;
-          marketObj.rating = element.rating;
-          /*           marketObj.vicinity = element.vicinity;
-           */ marketObj.marker = {
-            latitude: element.geometry.location.lat,
-            longitude: element.geometry.location.lng,
-          };
-
-          markers.push(marketObj);
-        });
-        //update our places array
-        this.setState({ places: markers });
-      });
-
-    this.render();
-  }
-
   componentDidMount() {
     /*     console.log(this.props);
      */ const { navigation } = this.props;
+    const { latitud, longitud } = navigation.state.params.restaurant.item;
+    console.log(latitud, longitud);
+
     const placeType = "Bank";
     this.setState({ placeType: placeType });
-
-    this.getCurrentLocation();
-    this.findMe();
-  }
-
-  /*   getCoordsFromName(loc) {
-    this.setState({
-      lat: loc.lat,
-      long: loc.lng,
-    });
-  } */
-
-  /**
-   * Get current user's position
-   */
-  getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const lat = position.coords.latitude;
-      const long = position.coords.longitude;
-      this.setState({ lat: lat, long: long });
-      this.getPlaces();
-    });
-  }
-
-  /**
-   * Get the Place URL
-   */
-  getPlacesUrl(lat, long, radius, type, querydat, apiKey) {
-    /*     const baseUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
-     */
-
-    const baseUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?`;
-    /*     const location = `location=${lat},${long}&radius=${radius}`;
-
-    const typeData = `&types=${type}`;
-         */
-    const query = `&query=upc`;
-
-    const api = `&key=${apiKey}`;
-    /*     return `${baseUrl}${location}${typeData}${api}`;
-     */
-    return `${baseUrl}${query}${api}`;
-  }
-
-  getPlaces() {
-    const { lat, long, placeType } = this.state;
-    const markers = [];
-    const url = this.getPlacesUrl(
-      lat,
-      long,
-      1500,
-      "clinics",
-      "asdasd",
-      GOOGLE_API_KEY
-    );
-    /*     console.log(url);
-     */ fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        res.results.map((element, index) => {
-          const marketObj = {};
-          marketObj.id = element.id;
-          marketObj.name = element.name;
-          marketObj.photos = element.photos;
-          marketObj.rating = element.rating;
-          /*           marketObj.vicinity = element.vicinity;
-           */ marketObj.marker = {
-            latitude: element.geometry.location.lat,
-            longitude: element.geometry.location.lng,
-          };
-
-          markers.push(marketObj);
-        });
-        //update our places array
-        this.setState({ places: markers });
-      });
+    this.setState({ lat: latitud, long: longitud });
   }
 
   render() {
     const { lat, long, places } = this.state;
+    console.log("CTMRRRRRRRRRRR");
+
+    const {
+      latitud,
+      longitud,
+    } = this.props.navigation.state.params.restaurant.item.ubicacion;
+    console.log(latitud, longitud);
+    const Objcorr = {
+      latitude: parseFloat(-12.058229),
+      longitude: parseFloat(-77.038408),
+    };
     return (
       <View style={styles.container}>
         <View style={styles.mapView}>
@@ -181,29 +64,28 @@ class MapScreen extends Component {
               flex: 1,
             }}
             provider={PROVIDER_GOOGLE}
-            showsUserLocation={true}
             initialRegion={{
-              latitude: lat,
-              longitude: long,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitude: parseFloat(latitud),
+              longitude: parseFloat(longitud),
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.0,
             }}
           >
-            {places.map((marker, i) => (
+            <Marker coordinate={Objcorr} />
+            {/*             {places.map((marker, i) => (
               <MapView.Marker
                 key={i}
                 coordinate={{
-                  latitude: marker.marker.latitude,
-                  longitude: marker.marker.longitude,
+                                     latitude: marker.marker.latitude,
+                  longitude: marker.marker.longitude, 
+                  latitude: latitud,
+                  longitude: longitud,
                 }}
                 title={marker.name}
               />
-            ))}
+            ))} */}
           </MapView>
         </View>
-        {/*         <View style={styles.placeList}>
-          <PlaceList places={places} />
-        </View> */}
       </View>
     );
   }

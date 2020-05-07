@@ -12,10 +12,11 @@ import Input from "../../components/loginstyle/Input";
 import Block from "../../components/loginstyle/Block";
 import { theme } from "../../constants";
 import Toast from "react-native-easy-toast";
+import { ep_login } from "../../utils/endpoints";
 
 function LoginForm(props) {
   console.log(props);
-  const { navigation } = props;
+  const { navigation, toastRef } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,46 +27,8 @@ function LoginForm(props) {
   const { width, height } = Dimensions.get("window");
   const errors = [];
   const loading = false;
-  const toastRef = useRef();
   const [id, setid] = useState("");
   const [userObj, setuserObj] = useState();
-
-  const login = async () => {
-    setIsVisibleLoading(true);
-    if (!email || !password) {
-      toastRef.current.show("Todos los campos son obligatorios");
-    } else {
-      if (!validateEmail(email)) {
-        toastRef.current.show("El email no es correcto");
-      } else {
-        await firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
-          .then(() => {
-            navigation.navigate("Welcome");
-          })
-          .catch(() => {
-            toastRef.current.show("Email o contraseña incorrecta");
-          });
-      }
-    }
-    setIsVisibleLoading(false);
-  };
-
-  const login2 = async () => {
-    /* http://192.168.100.21:8080/api/usuarios/login?correo=abc%40abc.com&password=123 */
-    const urlbase = `http://192.168.100.2:8080/api/usuarios/login?`;
-    const correo = `correo=${email}`;
-    const pass = `&password=${password}`;
-    const url = urlbase + correo + pass;
-    console.log(url);
-
-    const respuesta = await fetch(url);
-    const json = await respuesta.json();
-
-    navigation.navigate("Welcome", { user: json.id });
-  };
-  /* setOptEsp(json) */
 
   return (
     <View style={styles.formContainer}>
@@ -119,8 +82,7 @@ function LoginForm(props) {
 
           <Button
             gradient
-            onPress={login2}
-            /*  onPress={() => this.handleLogin()} */
+            onPress={() => ep_login(email, password, navigation, toastRef)}
           >
             {loading ? (
               <ActivityIndicator size="small" color="white" />

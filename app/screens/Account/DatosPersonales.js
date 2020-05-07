@@ -65,20 +65,18 @@ function RegisterForm(props) {
   };
 
   const registroDatos = () => {
-    /* http://localhost:8080/api/usuarios/1/paciente */
-    /*     fetch(
-      "http://192.168.100.21:8080/api/usuarios/login?correo=abc%40abc.com&password=123"
-    )
-      .then((response) => response.json())
-      .then((json) => setuserObj(json))
-      .then(() => navigation.navigate("Welcome"))
-      .catch((error) => console.error(error)); */
-    const urlbase = `http://192.168.100.2:8080/api/usuarios/`;
+    const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
     const id = idUser;
     const url = urlbase + id + "/paciente";
 
+    const User = {
+      correo: "probando2",
+      enable: true,
+      password: "probando2",
+    };
     const DataObj = {};
-    (DataObj.apellidoMaterno = apellidoMaterno),
+    (DataObj.accountManagment = true),
+      (DataObj.apellidoMaterno = apellidoMaterno),
       (DataObj.apellidoPaterno = apellidoPaterno),
       (DataObj.correo = "a@a.com"),
       (DataObj.dni = dni),
@@ -87,7 +85,8 @@ function RegisterForm(props) {
       (DataObj.nombre = nombre),
       (DataObj.parentesco = "otro weon"),
       (DataObj.telefono = Telefono),
-      console.log(JSON.stringify(DataObj));
+      (DataObj.usuario = User);
+    console.log(JSON.stringify(DataObj));
     fetch(url, {
       method: "POST",
       headers: {
@@ -189,7 +188,7 @@ function RegisterForm(props) {
                 containerStyle={""}
                 placeholder="select date"
                 format="YYYY-MM-DD"
-                minDate="2006-05-01"
+                minDate="1970-05-01"
                 maxDate="2026-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -246,9 +245,10 @@ function RegisterForm(props) {
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
-                onPress={
-                  () => registroDatos() /* navigation.navigate("UserLoggued") */
-                }
+                onPress={() => {
+                  registroDatos();
+                  navigation.navigate("UserLoggued");
+                }}
               >
                 <Text bold white center>
                   Guardar

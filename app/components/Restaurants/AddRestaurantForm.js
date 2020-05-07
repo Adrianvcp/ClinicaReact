@@ -6,6 +6,7 @@ import {
   Text,
   Platform,
   Keyboard,
+  TextInput,
 } from "react-native";
 
 import { Icon, Image } from "react-native-elements";
@@ -24,7 +25,7 @@ import SelectInput from "react-native-select-input-ios";
 
 import styled from "styled-components";
 import DatePicker from "react-native-datepicker";
-import { funcionA, funcionB } from "../../utils/endpoints";
+import { funcionA } from "../../utils/endpoints";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 function AddRestaurantForm(props) {
@@ -43,7 +44,7 @@ function AddRestaurantForm(props) {
   ];
 
   useEffect(() => {
-    fetch("http://192.168.100.2:8080/api/especialidades")
+    fetch("https://backendapplication-1.azurewebsites.net/api/especialidades")
       .then((response) => response.json())
       .then((json) => setOptEsp(json))
       .catch((error) => console.error(error));
@@ -52,7 +53,7 @@ function AddRestaurantForm(props) {
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.100.2:8080/api/seguros")
+    fetch("https://backendapplication-1.azurewebsites.net/api/seguros")
       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
       .catch((error) => console.error(error));
@@ -68,6 +69,8 @@ function AddRestaurantForm(props) {
   const [esp, setesp] = useState("");
   const [seguro, setseguro] = useState("");
   const [Data, setData] = useState("");
+
+  const [distritoVar, setdistritoVar] = useState("");
 
   /* METODOS CALENDARIO - FECHA */
   const onChange = (event, selectedDate) => {
@@ -94,13 +97,20 @@ function AddRestaurantForm(props) {
 
   const busquedaData = (dis, esp, fec, seg) => {
     /* http://localhost:8080/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-01-01&seguro=RIMAC */
-    const urlBase = `http://192.168.100.2:8080/api/citas/citaIdeal?`;
+    /* https://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-03-04&seguro=Pacifico%20Seguros */
+    const urlBase = `http://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?`;
     const distrito = `distrito=${dis}`;
     const especialidad = `&especialidad=${esp}`;
     const fecha = `&fecha=${fec}`;
     const seguro = `&seguro=${seg}`;
     const url = urlBase + distrito + especialidad + fecha + seguro;
     console.log(url);
+    const searchData = {};
+    searchData.especialidad = esp;
+    searchData.distrito = dis;
+    searchData.fecha = fec;
+    searchData.seguro = seg;
+
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
@@ -112,6 +122,7 @@ function AddRestaurantForm(props) {
         navigation.navigate("listaClinicaCitasDisponibles", {
           navigation,
           res,
+          searchData,
         });
         /*         setData(res);
          */
@@ -237,18 +248,33 @@ function AddRestaurantForm(props) {
 
               <View
                 style={{
-                  /* backgroundColor: "red", */ width: "50%",
+                  width: "40%",
                   height: "200%",
                   color: "black",
                 }}
               >
-                <Input
+                {/*                 <Input
                   style={{ color: "black" }}
-                  placeholder="Seleccionar ubicacion"
-                  value={
-                    parametros ? parametros.lugar : "Seleccionar ubicacion"
-                  }
-                  onTouchEnd={async () => {
+                  placeholder="asdasd"
+                  onValueChange={(e) => {
+                    setdistritoVar(e);
+                    console.log(e);
+                  }}
+                /> */}
+
+                <TextInput
+                  style={{ height: 40, fontSize: 14 }}
+                  onChangeText={(text) => setdistritoVar(text)}
+                  placeholder="Ingresa distrito"
+                />
+              </View>
+
+              <View style={{ paddingTop: 5 }}>
+                <Icon
+                  name="map-marker"
+                  type="material-community"
+                  color="#1F90FC"
+                  onPress={async () => {
                     await funcionA();
                     await navigation.navigate("map");
                   }}
@@ -318,13 +344,12 @@ function AddRestaurantForm(props) {
             icon="md-search"
             onPress={() => {
               busquedaData(
-                parametros.lugar,
+                distritoVar,
                 countryOptions[esp].label,
                 date,
                 segurosOptions[seguro].label
               );
-              console.log(Data);
-              console.log("Data");
+              console.log(distritoVar);
 
               /*               navigation.navigate("listaClinicaCitasDisponibles", {
                 navigation,

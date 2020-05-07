@@ -26,24 +26,23 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props, abc) {
-  console.log("jasdjas");
-
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState("time");
   const { navigation } = props;
-
   const restaurants = props.navigation.state.params.res;
-  console.log(restaurants);
   const {
     SearchHora,
     SearchClinica,
   } = props.navigation.state.params; /*   const searchHora = useRef();
   onst SearchClinica = useRef();*/ /*   const hideSearch = () => {
     searchHora.current.hide();
-  }; */ /* console.log("PROPS");
-  console.log(props); */
+  }; */
   /*   const {} = props.navigation.state.params;
-   */ const [esp, setesp] = useState("");
+   */ /* console.log("PROPS");
+  console.log(props); */ const [
+    esp,
+    setesp,
+  ] = useState("");
 
   /*   const show = () => searchHora.current.show();
    */ const countryOptions = [
@@ -191,38 +190,43 @@ export default function ListRestaurants(props, abc) {
     </View>
   );
 }
+/* 
+async function url(img) {
+  const rpp = await fetch(img);
+  const blob = await FileReader();
+  var reader = new FileReader();
+  reader.onload = () => {
+    console.log(reader.result);
+  };
+  reader.readAsDataURL(blob);
+} */
 
 function Restaurant(props) {
   const { restaurant, navigation } = props;
-  console.log(restaurant);
-  /*   const {
-    path,
-    nombreDoctor,
-    hora,
-    url,
-    name_clinic,
-    id,
-    phurl,
-  } = restaurant.item; */
+
+  const parametrosBuscados = props.navigation.state.params.searchData;
+
   const { fecha, hora, id, medico } = restaurant.item;
-  const {
-    nombre,
-    telefono,
-    descripcion,
-  } = restaurant.item.ubicacion.clinica.nombre;
+  const { nombre, telefono, descripcion } = restaurant.item.ubicacion.clinica;
+
+  const { img } = restaurant.item.ubicacion;
   const [imageRestaurant, setImageRestaurant] = useState(null);
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ marginBottom: 20 }}
-      onPress={() => navigation.navigate("cita", { restaurant })}
+      onPress={() =>
+        navigation.navigate("cita", { restaurant, parametrosBuscados })
+      }
     >
       <ImageBackground
         style={[styles.flex, styles.destination, styles.shadow]}
         imageStyle={{ borderRadius: clinics.sizes.radius }}
-        /*         source={{ uri: url }}
-         */
+        source={{
+          uri:
+            "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
+        }}
       >
         <View style={{ marginBottom: 50 }}>
           <View
@@ -235,7 +239,9 @@ function Restaurant(props) {
           >
             <View style={{ flex: 0 }}>
               <Image
-                /* source={{ uri: phurl }} */
+                source={{
+                  uri: "https://randomuser.me/api/portraits/women/44.jpg",
+                }}
                 borderRadius={1000}
                 style={styles.avatar}
               />
@@ -266,7 +272,8 @@ function Restaurant(props) {
                 alignItems: "flex-end",
               }}
             >
-              <Text style={styles.rating}>{id}</Text>
+              {/*               <Text style={styles.rating}>{id}</Text>
+               */}
             </View>
           </View>
         </View>
@@ -319,13 +326,23 @@ function Restaurant(props) {
               {/*               <Text style={{ color: "black" }}>{hora}</Text>
                */}
               <Text
-                onPress={() => navigation.navigate("cita", { restaurant })}
+                onPress={() =>
+                  navigation.navigate("cita", {
+                    restaurant,
+                    parametrosBuscados,
+                  })
+                }
                 style={{ textAlign: "right" }}
               >
                 Ver info
               </Text>
               <FontAwesome
-                onPress={() => navigation.navigate("cita", { restaurant })}
+                onPress={() =>
+                  navigation.navigate("cita", {
+                    restaurant,
+                    parametrosBuscados,
+                  })
+                }
                 name="chevron-right"
                 size={clinics.sizes.font * 0.75}
                 color={clinics.colors.caption}

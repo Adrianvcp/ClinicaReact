@@ -11,6 +11,7 @@ import Button from "../../components/loginstyle/Button";
 import { theme } from "../../constants";
 import Toast from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
+import { ep_listUsuarios } from "../../utils/endpoints";
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
@@ -136,7 +137,12 @@ function RegisterForm(props) {
               onPress={register}
             />
  */}
-            <Button gradient onPress={register}>
+            <Button
+              gradient
+              onPress={() =>
+                ep_listUsuarios(email, password, toastRef, navigation)
+              }
+            >
               <Text bold white center>
                 Cambiar Contraseña
               </Text>

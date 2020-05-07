@@ -73,8 +73,8 @@ class MapScreen extends Component {
       fetch(url)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res.results[4].address_components[1].long_name);
-          this.setState({
+          /*           console.log(res.results[4].address_components[1].long_name);
+           */ this.setState({
             ubi: res.results[4].address_components[1].long_name,
           });
         });
@@ -221,9 +221,9 @@ class MapScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.placeList}>
+        {/*         <View style={styles.placeList}>
           <Input notifyChange={(loc) => this.getData(loc)} />
-        </View>
+        </View> */}
         <View style={styles.mapView}>
           <MapView
             style={{
@@ -263,7 +263,7 @@ class MapScreen extends Component {
           <View
             style={{
               width: "100%",
-              paddingTop: height / 2,
+              paddingTop: height - 200,
               alignItems: "center",
               justifyContent: "flex-end",
               position: "absolute",

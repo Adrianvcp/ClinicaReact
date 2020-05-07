@@ -18,6 +18,7 @@
             },
             "assetBundlePatterns": ["**/*"],
             "ios": {
+
                 "supportsTablet": true,
                 "config": {
                     "googleMapsApiKey": "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs"
@@ -28,6 +29,8 @@
                 }
             },
             "android": {
+                "package": "com.adrianvcp.tenedores",
+                "versionCode": 2,
                 "permissions": [
                     "CAMERA_ROLL",
                     "ACCESS_COARSE_LOCATION",
@@ -35,11 +38,8 @@
                 ],
                 "config": {
                     "googleMaps": { "apiKey": "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs" }
-                },
-                "infoPlist": {
-                    "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
-                    "NSLocationWhenInUseUsageDescription": "This app uses the camera to scan barcodes on event tickets."
                 }
+
             }
         }
     }

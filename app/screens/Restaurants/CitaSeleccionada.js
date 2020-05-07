@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -32,13 +32,14 @@ import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 
 export default function CitaSeleccionada(props) {
+  console.log("DATOSSSS");
+  const parametrosBuscados = props.navigation.state.params.parametrosBuscados;
   const confirmar = props.navigation.state.params.confirmar;
-  console.log(props.navigation.state.params);
-  console.log(props.navigation.state.params.confirmar);
-  console.log(confirmar);
+
   const [checkedvar, setchecked] = useState(false);
   const { navigation, alerta } = props;
   const { restaurant } = navigation.state.params;
+
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
@@ -48,6 +49,7 @@ export default function CitaSeleccionada(props) {
   const scrollX = new Animated.Value(0);
   const [esp, setesp] = useState("");
   const [sinSeleccion, setsinSeleccion] = useState("Sinseleccion");
+  const [login, setlogin] = useState("false");
 
   const seguroData = [
     { value: 0, label: "Paciente 1" },
@@ -55,6 +57,14 @@ export default function CitaSeleccionada(props) {
     { value: 2, label: "Paciente 3" },
     { value: 3, label: "Paciente 4" },
   ];
+
+  const keydata = async () => {
+    const lg = await AsyncStorage.getItem("keyuser").then((a) => {
+      console.log("asd");
+      console.log(a);
+      setlogin(a);
+    });
+  };
 
   const menu = useRef();
   /* FUNCIONES ANULAR */
@@ -71,20 +81,22 @@ export default function CitaSeleccionada(props) {
   };
 
   const showMenu = () => menu.current.show();
+  const blabla = () => {
+    keydata();
+    if (login != "true") {
+      alert("No inicio sesion");
+    }
+  };
 
+  {
+    confirmar ? blabla() : console.log("nada");
+  }
   return (
     <View style={styles.flex}>
       {/* ANULAR CITA */}
       <View>
-        <Dialog.Container visible={confirmar}>
+        <Dialog.Container visible={login && confirmar}>
           <View>
-            {/*             <Icon
-              name="delete-circle"
-              type="material-community"
-              underlayColor="transparent"
-              color="#52B1B1"
-              size={100}
-            /> */}
             <Icon
               name="check-circle-outline"
               type="material-community"
@@ -96,30 +108,6 @@ export default function CitaSeleccionada(props) {
           </View>
 
           <View>
-            {/*             <Dialog.Title
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              Desea anular su cita ?
-            </Dialog.Title>
-
-            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
-              Aceptar si desea anular la cita:
-            </Dialog.Description>
-
-            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
-              OFTAMOLOGIA
-            </Dialog.Description>
-            <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
-              DIA:11/11/1996 - {restaurant.item.hora}
-            </Dialog.Description>
-            <Dialog.Description
-              style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
-            >
-              {restaurant.item.name_clinic}
-            </Dialog.Description> */}
             <Dialog.Title
               style={{
                 textAlign: "center",
@@ -131,16 +119,16 @@ export default function CitaSeleccionada(props) {
             {/*             <Text style={styles.title}>Reserva completada</Text>
              */}
             <Dialog.Description style={styles.textoMenu}>
-              Especialidad: Oftalmologia
+              Especialidad: {parametrosBuscados.especialidad}
             </Dialog.Description>
             <Dialog.Description style={styles.textoMenu}>
-              Dia: 13/04/20
+              Dia: {parametrosBuscados.fecha}
             </Dialog.Description>
             <Dialog.Description style={styles.textoMenu}>
-              Horario:
+              Horario:{restaurant.item.hora}
             </Dialog.Description>
             <Dialog.Description style={styles.textoMenu}>
-              Clinica:
+              Clinica: {restaurant.item.ubicacion.clinica.nombre}
             </Dialog.Description>
             <Dialog.Description style={styles.textoMenu}>
               Paciente: Cesar Castro
@@ -179,7 +167,10 @@ export default function CitaSeleccionada(props) {
           ])}
         >
           <Image
-            source={{ uri: restaurant.item.url }}
+            source={{
+              uri:
+                "https://sites.google.com/site/multisaberes58/especialidades/shutterstock_426687286.jpg",
+            }}
             resizeMode="cover"
             style={{ width, height: width / 2 }}
           />
@@ -191,7 +182,11 @@ export default function CitaSeleccionada(props) {
         <View style={[styles.flex, styles.contentHeader]}>
           <Image
             style={[styles.avatar, styles.shadow]}
-            source={{ uri: restaurant.item.phurl }}
+            source={{
+              uri:
+                /* restaurant.item.phurl  */
+                "https://randomuser.me/api/portraits/women/44.jpg",
+            }}
           />
 
           <Text style={styles.title}>{restaurant.item.name_clinic}</Text>
@@ -205,7 +200,7 @@ export default function CitaSeleccionada(props) {
                   ESPECIALIDAD
                 </Text>
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  Especialidad
+                  {parametrosBuscados.especialidad}
                 </Text>
                 {/* DETALLE CITA */}
                 <Text
@@ -215,13 +210,16 @@ export default function CitaSeleccionada(props) {
                 </Text>
                 <View style={{ flex: 1 }}></View>
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  Dia: 13/04/20
+                  Dia: {parametrosBuscados.fecha}
                 </Text>
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  {restaurant.item.nombreDoctor}
+                  Doctor:{" "}
+                  {restaurant.item.medico.nombre +
+                    " " +
+                    restaurant.item.medico.apellidoPaterno}
                 </Text>
                 <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  {restaurant.item.path}
+                  Hora: {restaurant.item.hora}
                 </Text>
                 <Text
                   style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
@@ -257,7 +255,7 @@ export default function CitaSeleccionada(props) {
                 </View>
               </View>
               <View style={{ height: 200 }}>
-                <MapView></MapView>
+                <MapView navigation={navigation}></MapView>
               </View>
             </ScrollView>
           </View>
