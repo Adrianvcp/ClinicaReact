@@ -36,8 +36,8 @@ class MapScreen extends Component {
     /*     console.log(this.props);
      */ const { navigation } = this.props;
     const { latitud, longitud } = navigation.state.params.restaurant.item;
-    console.log(latitud, longitud);
-
+    /*     console.log(latitud, longitud);
+     */
     const placeType = "Bank";
     this.setState({ placeType: placeType });
     this.setState({ lat: latitud, long: longitud });
@@ -45,14 +45,13 @@ class MapScreen extends Component {
 
   render() {
     const { lat, long, places } = this.state;
-    console.log("CTMRRRRRRRRRRR");
 
     const {
       latitud,
       longitud,
     } = this.props.navigation.state.params.restaurant.item.ubicacion;
-    console.log(latitud, longitud);
-    const Objcorr = {
+    /*     console.log(latitud, longitud);
+     */ const Objcorr = {
       latitude: parseFloat(-12.058229),
       longitude: parseFloat(-77.038408),
     };

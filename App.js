@@ -13,7 +13,6 @@ function AdministradorStack(params) {
     const keyUser = async () => {
       try {
         await AsyncStorage.setItem("keyuser", "false");
-        console.log("sda");
       } catch (error) {
         console.log("error");
       }

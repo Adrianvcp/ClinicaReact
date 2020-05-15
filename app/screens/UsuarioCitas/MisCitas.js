@@ -21,33 +21,30 @@ const { width, height } = Dimensions.get("window");
 
 function ListRestaurants(props) {
   const restaurants = require("../../utils/dat");
-
-  console.log("jasdjas");
+  console.log(props);
   const { navigation } = props;
+  const [refresh, setRefresh] = useState(false);
   const [esp, setesp] = useState("");
   const [login, setlogin] = useState("false");
   const [listaCitas, setlistaCitas] = useState();
   const [idstorage, setidstorage] = useState("");
 
   const keydata = async () => {
+    setRefresh(false);
     const lg = await AsyncStorage.getItem("keyuser").then((a) => {
-      console.log("asd");
-      console.log(a);
-      setlogin(a);
+      /*       console.log(a);
+       */ setlogin(a);
     });
 
     /* ID en el Asyncstorage */
     const id_s = await AsyncStorage.getItem("id").then((a) => {
-      console.log("idStorage");
-      console.log(a);
+      /*       console.log("idStorage");
+      console.log(a); */
+      if (a != "") setlogin("true");
       setidstorage(a);
     });
 
-     const id = await AsyncStorage.getItem("id");
-
-
-
-
+    const id = await AsyncStorage.getItem("id");
 
     /* Traigo la info  */
 
@@ -56,9 +53,10 @@ function ListRestaurants(props) {
         id
     );
     const json = await resp.json();
-    console.log(json);
+    /*     console.log(json); */
     setlistaCitas(json);
-
+    setRefresh(false);
+    /*     console.log(refresh); */
     /*       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
       .catch((error) => console.error(error)); */
@@ -77,12 +75,28 @@ function ListRestaurants(props) {
     keydata();
   }, []);
 
+  function onRefresh() {
+    this.setState({ isFetching: true }, function () {
+      this.getApiData();
+    });
+  }
   return (
-    <View style={{ backgroundColor: "white", padding: 20 }}>
+    <View style={{ backgroundColor: "white", padding: 20, height: "100%" }}>
       {/* LISTA DE CLINICAS */}
-      {console.log(login)}
-     {login == "true" ?
-       (
+      {/*       {console.log("login " + login)}
+       */}
+      <TouchableOpacity>
+        <Icon
+          name="refresh"
+          type="material-community"
+          color="#1F90FC"
+          onPress={() => {
+            keydata();
+          }}
+        />
+      </TouchableOpacity>
+
+      {login == "true" ? (
         <View style={{ backgroundColor: "white" }}>
           <FlatList
             data={listaCitas}
@@ -100,7 +114,6 @@ function ListRestaurants(props) {
               name="refresh"
               type="material-community"
               color="#1F90FC"
-              
               onPress={() => {
                 keydata();
               }}
@@ -126,8 +139,8 @@ function Restaurant(props) {
 
   const { nombre, apellidoPaterno } = restaurant.item.medico;
   let date = new Date(fecha);
-  console.log(days[date.getUTCDay() - 1]);
-  const { clinica } = restaurant.item.ubicacion;
+  /*   console.log(days[date.getUTCDay() - 1]);
+   */ const { clinica } = restaurant.item.ubicacion;
   var meses = [
     "Enero",
     "Febrero",
@@ -222,8 +235,6 @@ const styles = StyleSheet.create({
   flex: {
     flex: 0,
   },
-
-
 
   column: {
     flexDirection: "column",

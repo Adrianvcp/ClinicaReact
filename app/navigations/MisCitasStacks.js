@@ -1,5 +1,4 @@
 //le aumento mi headers
-import Header from "../navigations/Header";
 import { createStackNavigator, HeaderTitle } from "react-navigation-stack";
 
 import React from "react";
@@ -20,6 +19,17 @@ export const AppointmentScreenStacks = createStackNavigator({
       //title: "Restaurantes"
       return {
         headerTitle: "Mis Citas",
+        /* headerRight: (
+          <Icon
+            containerStyle={{ marginRight: 20 }}
+            name="refresh"
+            type="material-community"
+            color="#1F90FC"
+            onPress={() => {
+              navigation.navigate("restaurants", { actualizar: true });
+            }}
+          />
+        ) */
       };
     },
   },

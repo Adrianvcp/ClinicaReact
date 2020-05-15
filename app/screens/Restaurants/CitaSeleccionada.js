@@ -30,18 +30,16 @@ import SelectInput from "react-native-select-input-ios";
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 import { withNavigation } from "react-navigation";
-import { AsyncStorage } from "react-native";
-
+import { AsyncStorage, Alert } from "react-native";
 
 function CitaSeleccionada(props) {
-
-  console.log("DATOSSSS");
   const parametrosBuscados = props.navigation.state.params.parametrosBuscados;
   const confirmar = props.navigation.state.params.confirmar;
 
   const [checkedvar, setchecked] = useState(false);
   const { navigation, alerta } = props;
   const { restaurant } = navigation.state.params;
+  const { item } = navigation.state.params.restaurant;
 
   const data = [
     { label: "Football", value: "football" },
@@ -52,38 +50,31 @@ function CitaSeleccionada(props) {
   const [esp, setesp] = useState("");
   const [sinSeleccion, setsinSeleccion] = useState("Sinseleccion");
   const [login, setlogin] = useState("false");
-        
-
- // para listar pacientes x usuario
-
-async function Paci() {
-
+  var ObjP = {};
   // para listar pacientes x usuario
-  
-  const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
+
+  async function Paci() {
+    // para listar pacientes x usuario
+    await AsyncStorage.getItem("id").then((v) => console.log("jiji:" + v));
+    const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
     const id = await AsyncStorage.getItem("id");
-    const url = urlbase + id + "/pacientes?id="+ id;
+    const url = urlbase + id + "/pacientes?id=" + id;
 
     console.log(url);
 
- return url;
-}
+    return url;
+  }
 
-
- 
   const [opt_pac, setOptPac] = useState([]);
   useEffect(() => {
-
     Paci().then((url) => {
       fetch(url)
-      .then((response) => response.json())
-      .then((json) => setOptPac(json))
-      .catch((error) => console.error(error));
-    })
+        .then((response) => response.json())
+        .then((json) => setOptPac(json))
+        .catch((error) => console.error(error));
+    });
+  }, []);
 
-    
-  },[]);
- 
   const patientsOptions = [{ value: 0, label: "Seleccionar" }];
 
   for (let i = 0; i < opt_pac.length; i++) {
@@ -117,107 +108,133 @@ async function Paci() {
   const handleOK = () => {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
-    confirmar ===false;
+    confirmar === false;
   };
 
   const showMenu = () => menu.current.show();
- /* const blabla = () => {
+  /* const blabla = () => {
     keydata();
     if (login != "true") {
       alert("No inicio sesion");
     }
   };
-
-  {
-    confirmar ? blabla() : console.log("nada");
-  }
 */
-
-
-// para reservar citas
- function reservarCita (){
-  const urlbase = `https://backendapplication-1.azurewebsites.net/api/citas/`;
-    
-  
-  
-  
-  
-    const cita_id = restaurant.item.id;
-  
- console.log(urlbase);
-
-  const fecha= parametrosBuscados.fecha;
-
-  const hora= restaurant.item.hora;
-  
-   const medico = {
-    apellidoMaterno: "string",
-    apellidoPaterno: "string",
-    id: restaurant.item.medico.id,
-    img: "tr",
-    nombre: "blabla",
-  };
-const paciente = {
-
-  accountManagment: true,
-  apellidoMaterno: "probando",
-  apellidoPaterno: "probando",
-  correo: "probando" ,
-  dni: "probando" ,
-  edad: 1,
-  fechaNac: "2020-05-06T23:41:22.624Z",
-  id: 2,
-  nombre: "probando",
-  parentesco: "probando",
-  telefono: "probando",
-
-  usuario: {
-    correo: "pruebas@f.com",
-    enable: true,
-    id: 2,
-    password: "f"
+  {
+    confirmar ? console.log(objPaciente()) : console.log("nada");
   }
-}
-const pago= 50;
-const ubicacion= {
-  clinica:{
-    descripcion: "string",
-    id: restaurant.item.ubicacion.clinica.id,
-    nombre: "string",
-    telefono: "string"
-  },
-  distrito: "San Borja",
-  id: restaurant.item.ubicacion.id,
-  img: "string",
-  latitud: "string",
-  longitud: "string"
-}
-    const DataObj = {};
-    (DataObj.fecha= fecha),
-    (DataObj.hora= hora),
-    (DataObj.pago= pago),
-   // (DataObj.reserva = true),
-   // (DataObj.medico= medico),
-    //(DataObj.paciente = paciente),
-   // (DataObj.ubicacion= ubicacion),
-    console.log(JSON.stringify(DataObj)),
-    fetch(urlbase, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(DataObj),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        navigation.navigate("UserLoggued");
-      })
+
+  function objPaciente() {
+    for (let i = 0; i < opt_pac.length; i++) {
+      if (parseInt(opt_pac[i].id) == parseInt(esp)) {
+        ObjP = opt_pac[i];
+        break;
+      }
+      console.log("No se encontro el paciente en el arreglo obtenido");
     }
 
+    console.log(ObjP);
+    const ObjPaciente = Object.assign({}, item);
 
+    /* pOST */
+    /* Armo la info para enviar  */
+    ObjPaciente["paciente"] = Object.assign({}, ObjP);
+    ObjPaciente["hora"] = ObjPaciente["fecha"] + "T" + ObjPaciente["hora"];
+    console.log(JSON.stringify(ObjPaciente));
 
-// codigo del desplegable
+    try {
+      fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ObjPaciente),
+      });
 
+      Alert.alert("Reserva", "Cita reservada correctamente");
+      confirmar = false;
+      /* Como mejora -> confirmar cambiarlo a Asyncstorage en vez de enviar un paramtro */
+    } catch (error) {
+      console.log("error");
+    }
+  }
+
+  // para reservar citas
+  function reservarCita() {
+    const urlbase = `https://backendapplication-1.azurewebsites.net/api/citas/`;
+
+    const cita_id = restaurant.item.id;
+
+    console.log(urlbase);
+
+    const fecha = parametrosBuscados.fecha;
+
+    const hora = restaurant.item.hora;
+
+    const medico = {
+      apellidoMaterno: "string",
+      apellidoPaterno: "string",
+      id: restaurant.item.medico.id,
+      img: "tr",
+      nombre: "blabla",
+    };
+    const paciente = {
+      accountManagment: true,
+      apellidoMaterno: "probando",
+      apellidoPaterno: "probando",
+      correo: "probando",
+      dni: "probando",
+      edad: 1,
+      fechaNac: "2020-05-06T23:41:22.624Z",
+      id: 2,
+      nombre: "probando",
+      parentesco: "probando",
+      telefono: "probando",
+
+      usuario: {
+        correo: "pruebas@f.com",
+        enable: true,
+        id: 2,
+        password: "f",
+      },
+    };
+    const pago = 50;
+    const ubicacion = {
+      clinica: {
+        descripcion: "string",
+        id: restaurant.item.ubicacion.clinica.id,
+        nombre: "string",
+        telefono: "string",
+      },
+      distrito: "San Borja",
+      id: restaurant.item.ubicacion.id,
+      img: "string",
+      latitud: "string",
+      longitud: "string",
+    };
+    const DataObj = {};
+    (DataObj.fecha = fecha),
+      (DataObj.hora = hora),
+      (DataObj.pago = pago),
+      // (DataObj.reserva = true),
+      // (DataObj.medico= medico),
+      //(DataObj.paciente = paciente),
+      // (DataObj.ubicacion= ubicacion),
+      console.log(JSON.stringify(DataObj)),
+      fetch(urlbase, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify(DataObj),
+      })
+        .then((res) => res.json())
+        .then(() => {
+          navigation.navigate("UserLoggued");
+        });
+  }
+
+  // codigo del desplegable
 
   return (
     <View style={styles.flex}>
@@ -242,7 +259,7 @@ const ubicacion= {
                 fontWeight: "bold",
               }}
             >
-             Reserva Completada {" "}
+              Reserva Completada{" "}
             </Dialog.Title>
             {/*             <Text style={styles.title}>Reserva completada</Text>
              */}
@@ -274,21 +291,16 @@ const ubicacion= {
           <Dialog.Button
             label="Cancelar"
             onPress={() => {
-
               navigation.navigate("cita", { navigation, confirmar: false });
             }}
           />
 
-          <Dialog.Button label="ACEPTAR" 
-          onPress={() => {
-
-            
-            reservarCita();
-       
-            
-          }}
-
-       />
+          <Dialog.Button
+            label="ACEPTAR"
+            onPress={() => {
+              reservarCita();
+            }}
+          />
         </Dialog.Container>
       </View>
 
@@ -328,8 +340,9 @@ const ubicacion= {
             }}
           />
 
-          <Text style={{fontWeight: "bold", fontSize: 20, color: "grey",}}> 
-            {restaurant.item.ubicacion.clinica.nombre} - {restaurant.item.ubicacion.distrito}
+          <Text style={{ fontWeight: "bold", fontSize: 20, color: "grey" }}>
+            {restaurant.item.ubicacion.clinica.nombre} -{" "}
+            {restaurant.item.ubicacion.distrito}
           </Text>
 
           <View>
@@ -388,24 +401,17 @@ const ubicacion= {
                 </View>
               </View>
 
-
-            
               <View style={{ height: 200 }}>
                 <MapView navigation={navigation}></MapView>
               </View>
-             
             </ScrollView>
-
-           
           </View>
         </View>
       </View>
     </View>
-  )  
- }
-export default withNavigation (CitaSeleccionada);
-
-
+  );
+}
+export default withNavigation(CitaSeleccionada);
 
 const styles = StyleSheet.create({
   flex: {
@@ -421,7 +427,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
   },
-  dividir: { width: "130%", flexDirection: "row", marginBottom:10, },
+  dividir: { width: "130%", flexDirection: "row", marginBottom: 10 },
 
   selectInput: {
     /*     backgroundColor: "red",
@@ -520,5 +526,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "50%",
   },
-}
-);
+});

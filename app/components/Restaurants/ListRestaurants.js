@@ -33,10 +33,10 @@ export default function ListRestaurants(props, abc) {
   const {
     SearchHora,
     SearchClinica,
-  } = props.navigation.state.params; /*   const searchHora = useRef();
-  onst SearchClinica = useRef();*/ /*   const hideSearch = () => {
+  } = props.navigation.state.params; /*   const hideSearch = () => {
     searchHora.current.hide();
-  }; */
+  }; */ /*   const searchHora = useRef();
+  onst SearchClinica = useRef();*/
   /*   const {} = props.navigation.state.params;
    */ /* console.log("PROPS");
   console.log(props); */ const [
@@ -272,8 +272,7 @@ function Restaurant(props) {
                 alignItems: "flex-end",
               }}
             >
-              {/*               <Text style={styles.rating}>{id}</Text>
-               */}
+              <Text style={styles.rating}>{id}</Text>
             </View>
           </View>
         </View>

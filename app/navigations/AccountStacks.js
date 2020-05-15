@@ -12,11 +12,12 @@ import ModificarDatos from "../screens/Account/ModificarDatos";
 import AgregarPaciente from "../screens/Patients/AgregarPaciente";
 import presentacion from "../screens/Account/LoginBienvenida";
 
-
 import UserLogged from "../screens/Account/UserLogged";
 import { Icon } from "react-native-elements";
-import React from "react";
+import React, { useState } from "react";
+import { AsyncStorage } from "react-native";
 
+var resp = "";
 export const AccountScreenStack = createStackNavigator({
   /* REVISAR EL "MYACCOUNT " */
   MyAccount: {
@@ -227,5 +228,31 @@ export const AccountScreenStack = createStackNavigator({
     },
   },
 });
+
+function storage() {
+  verEstado();
+  console.log("resp");
+  return LoginScreen;
+  /*   if (resp == null) {
+    return LoginScreen;
+  } else return UserLogged; */
+}
+
+async function verEstado() {
+  /*   const a1 = await AsyncStorage.getItem("id");
+
+  resp = JSON.parse(a1);
+  return a1; */
+  const keys = await AsyncStorage.getAllKeys();
+
+  return "holS";
+}
+
+function name() {
+  let x = 0;
+  console.log(verEstado());
+
+  return UserLogged;
+}
 
 export default AccountScreenStack;

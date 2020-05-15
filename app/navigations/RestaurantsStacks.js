@@ -7,7 +7,6 @@ import CitaSeleccionada from "../screens/Restaurants/CitaSeleccionada";
 import CitaConfirmadaDatos from "../screens/Restaurants/CitaConfirmadaDatos";
 import ListRestaurants from "../components/Restaurants/ListRestaurants";
 //le aumento mi headers
-import Header from "../navigations/Header";
 import React, { useRef } from "react";
 import { Text, Icon } from "react-native-elements";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
@@ -15,11 +14,12 @@ import {
   ClassicHeader,
   GorgeousHeader,
 } from "@freakycoder/react-native-header-view";
-import { View } from "react-native";
+import { View, AsyncStorage } from "react-native";
 import MenuListFiltro from "../utils/MenuListFiltro";
 import MenuAdministrador from "../utils/MenuAdministrador";
 import AddRestaurantFormADMIN from "../components/Restaurants/FormAdm";
 import NotificationScreen from "../screens/Restaurants/Notificación";
+
 export const AppointmentScreenStacks = createStackNavigator({
   restaurants: {
     screen: AddAppointmentScreen,
@@ -115,7 +115,7 @@ export const AppointmentScreenStacks = createStackNavigator({
     },
   },
 
-  Notificacion:{
+  Notificacion: {
     screen: NotificationScreen,
     navigationOptions: ({ navigation }) => {
       return {
@@ -127,7 +127,6 @@ export const AppointmentScreenStacks = createStackNavigator({
       };
     },
   },
-  
 
   cita: {
     screen: CitaSeleccionada,
@@ -156,7 +155,10 @@ export const AppointmentScreenStacks = createStackNavigator({
               /*                 cambiarDato();
             console.log("Dato a ");
             console.log(confirmar); */
-              navigation.navigate("cita", { confirmar: true });
+              navigation.navigate("cita", {
+                confirmar: true,
+                iad: ga(),
+              });
             }}
           />
         ),
@@ -178,5 +180,56 @@ export const AppointmentScreenStacks = createStackNavigator({
     },
   },
 });
+
+const idUse = async () => {
+  console.log("nuevo");
+  try {
+    const jsonValue = await AsyncStorage.getItem("id");
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    // error reading value
+  }
+};
+
+async function ga() {
+  console.log("nuevo2");
+  /* try {
+    await AsyncStorage.getAllKeys().then(console.log); // nothing happens
+
+    const jsonValue = await AsyncStorage.getAllKeys();
+    const parsed = JSON.parse(jsonValue);
+    console.log(jsonValue);
+    alert(jsonValue);
+    return jsonValue;
+  } catch (e) {
+    // error reading value
+  } */
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+
+    const itemsArray = await AsyncStorage.multiGet(keys);
+
+    const id = await AsyncStorage.getItem("id");
+
+    let object = {};
+    itemsArray.map((item) => {
+      object[`${item[0]}`] = item[1];
+    });
+    return object;
+  } catch (error) {
+    console.log(error, "error");
+  }
+}
+
+async function data() {
+  let userId = "";
+  try {
+    userId = (await AsyncStorage.getItem("idUser")) || "none";
+  } catch (error) {
+    // Error retrieving data
+    console.log(error.message);
+  }
+  return userId;
+}
 
 export default AppointmentScreenStacks;

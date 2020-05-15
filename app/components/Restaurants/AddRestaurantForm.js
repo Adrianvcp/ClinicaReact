@@ -104,7 +104,7 @@ function AddRestaurantForm(props) {
     const fecha = `&fecha=${fec}`;
     const seguro = `&seguro=${seg}`;
     const url = urlBase + distrito + especialidad + fecha + seguro;
-    console.log(url);
+    /* console.log(url); */
     const searchData = {};
     searchData.especialidad = esp;
     searchData.distrito = dis;
@@ -118,7 +118,7 @@ function AddRestaurantForm(props) {
         Object.values(res).forEach((item) => {
           dataSource = dataSource.concat(item);
         }); */
-        console.log(res);
+        /* console.log(res); */
         navigation.navigate("listaClinicaCitasDisponibles", {
           navigation,
           res,
@@ -153,11 +153,8 @@ function AddRestaurantForm(props) {
    console.log(props);
    */
 
-  /*   const Data = require("../../utils/dat");*/ 
-  
-  
-  
-  
+  /*   const Data = require("../../utils/dat");*/
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <Image
@@ -353,7 +350,7 @@ function AddRestaurantForm(props) {
                 date,
                 segurosOptions[seguro].label
               );
-              console.log(distritoVar);
+              /* console.log(distritoVar); */
 
               /*               navigation.navigate("listaClinicaCitasDisponibles", {
                 navigation,

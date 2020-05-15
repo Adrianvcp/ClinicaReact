@@ -14,7 +14,6 @@ import { withNavigation, DrawerItems } from "react-navigation";
 import CerrarSesion from "../../screens/Account/CerrarSesion";
 
 function UserLogged(props) {
-
   //aumento esto
   const { navigation } = props;
 
@@ -24,15 +23,22 @@ function UserLogged(props) {
   const [textLoading, setTextLoading] = useState("");
   const toastRef = useRef();
 
+  const clearAppData = async function () {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      await AsyncStorage.multiRemove(keys);
+    } catch (error) {
+      console.error("Error clearing app data.");
+    }
+  };
+
   useEffect(() => {
-   (async () => {
+    (async () => {
       /*const user = await firebase.auth().currentUser;
       setUserInfo(user.providerData[0]);*/
     })();
     setReloadData(false);
   }, [reloadData]);
-
-  
 
   return (
     <View style={styles.viewUserInfo}>
@@ -88,22 +94,20 @@ function UserLogged(props) {
         onPress={() => firebase.auth().signOut()}
       />
  */}
-         <Block padding={[30, theme.sizes.base * 3]}> 
-        
-        <Button2 gradient onPress={()=>
-         
-               
-                props.navigation.navigate('MyAccount')
-                
-              }>
+      <Block padding={[30, theme.sizes.base * 3]}>
+        <Button2
+          gradient
+          onPress={() => {
+            /* console.log(await AsyncStorage.getItem("id")); */
+            props.navigation.navigate("MyAccount");
+          }}
+        >
           <Text bold white center>
             Cerrar Sesion
           </Text>
-        </Button2> 
-        
-      </Block> 
- 
-      
+        </Button2>
+      </Block>
+
       <Toast ref={toastRef} position="center" opacity={0.5} />
       <Loading text={textLoading} isVisible={isLoading} />
     </View>
@@ -152,7 +156,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#e3e3e3",
     backgroundColor: "white",
     paddingBottom: 50,
-  
   },
   menuItem2: {
     borderBottomWidth: 1,
