@@ -137,9 +137,14 @@ async function Paci() {
 // para reservar citas
  function reservarCita (){
   const urlbase = `https://backendapplication-1.azurewebsites.net/api/citas/`;
+    
+  
+  
+  
+  
     const cita_id = restaurant.item.id;
-    const url = urlbase + cita_id;
- console.log(url);
+  
+ console.log(urlbase);
 
   const fecha= parametrosBuscados.fecha;
 
@@ -148,7 +153,7 @@ async function Paci() {
    const medico = {
     apellidoMaterno: "string",
     apellidoPaterno: "string",
-    id: 1,
+    id: restaurant.item.medico.id,
     img: "tr",
     nombre: "blabla",
   };
@@ -177,7 +182,7 @@ const pago= 50;
 const ubicacion= {
   clinica:{
     descripcion: "string",
-    id: 1,
+    id: restaurant.item.ubicacion.clinica.id,
     nombre: "string",
     telefono: "string"
   },
@@ -188,17 +193,16 @@ const ubicacion= {
   longitud: "string"
 }
     const DataObj = {};
-   //(DataObj.id = cita_id),
     (DataObj.fecha= fecha),
-    //(DataObj.hora= hora),
-    //(DataObj.pago= pago),
-    (DataObj.reserva = true),
-    //(DataObj.medico= medico),
-    (DataObj.paciente = paciente),
-    //(DataObj.ubicacion= parseInt(1)),
+    (DataObj.hora= hora),
+    (DataObj.pago= pago),
+   // (DataObj.reserva = true),
+   // (DataObj.medico= medico),
+    //(DataObj.paciente = paciente),
+   // (DataObj.ubicacion= ubicacion),
     console.log(JSON.stringify(DataObj)),
-    fetch(url, {
-      method: "PUT",
+    fetch(urlbase, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -280,8 +284,7 @@ const ubicacion= {
 
             
             reservarCita();
-            navigation.navigate("cita", { navigation, confirmar: false });
-            navigation.navigate("restaurants");
+       
             
           }}
 
