@@ -183,10 +183,10 @@ async function registrodatos (nombre, apellidoMaterno, apellidoPaterno, dni, Tel
   };
 
    const DataObj = {};
-    (DataObj.accountManagment = true),
-    (DataObj.apellidoMaterno = apellidoMaterno),
-    (DataObj.apellidoPaterno = apellidoPaterno),
-    (DataObj.correo = "a@a.com"),
+   // (DataObj.accountManagment = true),
+    //(DataObj.apellidoMaterno = apellidoMaterno),
+    //(DataObj.apellidoPaterno = apellidoPaterno),
+    //(DataObj.correo = "a@a.com"),
     (DataObj.dni = dni),
     (DataObj.edad = parseInt(edad)),
     (DataObj.fechaNac = fnacimiento),
