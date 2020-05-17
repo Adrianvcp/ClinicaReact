@@ -33,10 +33,10 @@ export default function ListRestaurants(props, abc) {
   const {
     SearchHora,
     SearchClinica,
-  } = props.navigation.state.params; /*   const hideSearch = () => {
+  } = props.navigation.state.params; /*   const searchHora = useRef();
+  onst SearchClinica = useRef();*/ /*   const hideSearch = () => {
     searchHora.current.hide();
-  }; */ /*   const searchHora = useRef();
-  onst SearchClinica = useRef();*/
+  }; */
   /*   const {} = props.navigation.state.params;
    */ /* console.log("PROPS");
   console.log(props); */ const [
@@ -169,10 +169,15 @@ export default function ListRestaurants(props, abc) {
           <FlatList
             /*             pagingEnabled
             disableScrollViewPanResponder */
-            style={{ overflow: "hidden", height: "100%", marginTop: 15 }}
+            style={{
+              overflow: "hidden",
+              height: 400,
+
+              marginTop: 15,
+            }}
             showsVerticalScrollIndicator={false}
-            decelerationRate={0}
-            snapToAlignment="center"
+            /*             decelerationRate={0}
+           snapToAlignment="center"*/
             data={restaurants}
             renderItem={(restaurant) => (
               <Restaurant restaurant={restaurant} navigation={navigation} />

@@ -15,19 +15,16 @@ import { Label } from "react-native-clean-form";
 import { ScrollView } from "react-native-gesture-handler";
 import Button from "../../components/loginstyle/Button";
 import { AsyncStorage } from "react-native";
-import {isEmpty} from 'lodash';
+import { isEmpty } from "lodash";
 import { registrodatos } from "../../utils/endpoints";
 import { withNavigation } from "react-navigation";
 import Toast from "react-native-easy-toast";
 
 function RegisterForm(props) {
-  
-  const toastRef= useRef();
-  const {navigation}= props;
+  const toastRef = useRef();
+  const { navigation } = props;
 
   console.log(navigation);
-  
-
 
   const idUser = props.navigation.state.params.id;
   const [hidePassword, setHidePassword] = useState(true);
@@ -99,7 +96,6 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 onChange={(e) => setNombre(e.nativeEvent.text)}
-               
               />
 
               <Input
@@ -108,14 +104,12 @@ function RegisterForm(props) {
                 password={true}
                 style={styles.input}
                 onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
-               
               />
               <Input
                 label="Apellido Materno"
                 placeholder=""
                 style={styles.input}
                 onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
-              
               />
               <Input
                 label="DNI"
@@ -167,21 +161,28 @@ function RegisterForm(props) {
                 placeholder="22"
                 style={styles.input}
                 onChange={(e) => setEdad(e.nativeEvent.text)}
-
               />
               <Input
                 label="Telefono"
                 placeholder=""
                 style={styles.input}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
-             
               />
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                  registrodatos(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, edad, fnacimiento,toastRef,navigation);
-                
+                  registrodatos(
+                    nombre,
+                    apellidoMaterno,
+                    apellidoPaterno,
+                    dni,
+                    Telefono,
+                    edad,
+                    fnacimiento,
+                    toastRef,
+                    navigation
+                  );
                 }}
               >
                 <Text bold white center>
@@ -191,10 +192,9 @@ function RegisterForm(props) {
 
               <Loading text="Creando cuenta" isVisible={isVisibleLoading} />
             </View>
-           
           </Block>
         </Block>
-        <Toast ref={toastRef} position="center" opacity={0,9}/>
+        <Toast ref={toastRef} position="center" opacity={(0, 9)} />
       </View>
     </ScrollView>
   );

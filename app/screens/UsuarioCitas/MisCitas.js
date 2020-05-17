@@ -16,131 +16,127 @@ import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { AsyncStorage } from "react-native";
 import { withNavigation } from "react-navigation";
+import { render } from "react-dom";
+import { Alert } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-function ListRestaurants(props) {
-  const restaurants = require("../../utils/dat");
-  console.log(props);
-  const { navigation } = props;
-  const [refresh, setRefresh] = useState(false);
-  const [esp, setesp] = useState("");
-  const [login, setlogin] = useState("false");
-  const [listaCitas, setlistaCitas] = useState();
-  const [idstorage, setidstorage] = useState("");
+export default class ListRestaurants extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const keydata = async () => {
-    setRefresh(false);
-    const lg = await AsyncStorage.getItem("keyuser").then((a) => {
-      /*       console.log(a);
-       */ setlogin(a);
-    });
+    this.state = {
+      navigation: props.navigation,
+      isLoading: false,
+      refreshing: false,
+      login: false,
+      listaCitas: [],
+      id: "",
+      error: null,
+    };
+  }
 
+  keydata = async () => {
     /* ID en el Asyncstorage */
     const id_s = await AsyncStorage.getItem("id").then((a) => {
-      /*       console.log("idStorage");
-      console.log(a); */
-      if (a != "") setlogin("true");
-      setidstorage(a);
+      if (a != "") this.setState({ id: a });
     });
-
-    const id = await AsyncStorage.getItem("id");
 
     /* Traigo la info  */
 
-    const resp = await fetch(
-      "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/citas?id=" +
-        id
-    );
-    const json = await resp.json();
-    /*     console.log(json); */
-    setlistaCitas(json);
-    setRefresh(false);
-    /*     console.log(refresh); */
-    /*       .then((response) => response.json())
-      .then((json) => setOptSeguro(json))
-      .catch((error) => console.error(error)); */
+    if (this.state.id != null) {
+      this.setState({ isLoading: true });
+      const resp = await fetch(
+        "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/citas?id=" +
+          this.state.id
+      );
+      const json = await resp.json();
+
+      this.setState({ listaCitas: json });
+      this.setState({ isLoading: false, refreshing: false });
+    } else {
+      Alert.alert("Sesion", "No inicio sesion");
+    }
   };
 
-  useEffect(() => {
-    console.log("ME EJECUTO ANTES DE TODO - MIS CITAS");
-    /*     const data = async () => {
-      const value = await AsyncStorage.getItem("keyuser").then((a) => {
-        setData(String(a));
-        console.log(a);
-      });
-    };
-    data(); */
-
-    keydata();
-  }, []);
-
-  function onRefresh() {
-    this.setState({ isFetching: true }, function () {
-      this.getApiData();
+  actualizando = () => {
+    this.setState({ refreshing: true }, () => {
+      this.keydata();
     });
-  }
-  return (
-    <View style={{ backgroundColor: "white", padding: 20, height: "100%" }}>
-      {/* LISTA DE CLINICAS */}
-      {/*       {console.log("login " + login)}
-       */}
-      <TouchableOpacity>
-        <Icon
-          name="refresh"
-          type="material-community"
-          color="#1F90FC"
-          onPress={() => {
-            keydata();
-          }}
-        />
-      </TouchableOpacity>
+  };
 
-      {login == "true" ? (
-        <View style={{ backgroundColor: "white" }}>
-          <FlatList
-            data={listaCitas}
-            renderItem={(restaurant) => (
-              <Restaurant restaurant={restaurant} navigation={navigation} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            onEndReachedThreshold={0}
-          />
-        </View>
-      ) : (
-        <View style={{ backgroundColor: "white" }}>
-          <TouchableOpacity>
-            <Icon
-              name="refresh"
-              type="material-community"
-              color="#1F90FC"
-              onPress={() => {
-                keydata();
-              }}
-            />
-          </TouchableOpacity>
+  render() {
+    return (
+      <View style={{ backgroundColor: "white", padding: 20, height: "100%" }}>
+        {this.state.id == null ? (
+          <View style={{ backgroundColor: "white" }}>
+            <TouchableOpacity>
+              <Icon
+                name="refresh"
+                type="material-community"
+                color="#1F90FC"
+                onPress={() => {
+                  this.keydata();
+                }}
+              />
+            </TouchableOpacity>
 
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text>Actualizar</Text>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text>Actualizar</Text>
+            </View>
           </View>
-        </View>
-      )}
-    </View>
-  );
+        ) : (
+          <View style={{ backgroundColor: "white" }}>
+            {this.state.listaCitas.length > 0 ? (
+              <FlatList
+                data={this.state.listaCitas}
+                showsVerticalScrollIndicator={false}
+                renderItem={(restaurant) => (
+                  <Restaurant
+                    restaurant={restaurant}
+                    navigation={this.state.navigation}
+                  />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                onEndReachedThreshold={0}
+                refreshing={this.state.refreshing}
+                onRefresh={this.actualizando}
+              />
+            ) : (
+              <View>
+                <TouchableOpacity>
+                  <Icon
+                    name="refresh"
+                    type="material-community"
+                    color="#1F90FC"
+                    onPress={() => {
+                      this.keydata();
+                    }}
+                  />
+                </TouchableOpacity>
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text>Actualizar</Text>
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+    );
+  }
 }
-
-export default withNavigation(ListRestaurants);
 
 function Restaurant(props) {
   const { restaurant, navigation } = props;
-
   const { path, fecha, hora, url, name_clinic, id, phurl } = restaurant.item;
   let days = ["DOM", "LUN", "MAR", "MIE", "JUE", "VIE", "SAB"];
 
   const { nombre, apellidoPaterno } = restaurant.item.medico;
   let date = new Date(fecha);
-  /*   console.log(days[date.getUTCDay() - 1]);
-   */ const { clinica } = restaurant.item.ubicacion;
+
+  const { clinica } = restaurant.item.ubicacion;
   var meses = [
     "Enero",
     "Febrero",
@@ -158,7 +154,8 @@ function Restaurant(props) {
 
   const [imageRestaurant, setImageRestaurant] = useState(null);
   const fechasepara = fecha.split("-");
-  return (
+  /*   console.log(fecha);
+   */ return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ marginBottom: 10, marginTop: 10 }}
@@ -186,7 +183,7 @@ function Restaurant(props) {
           <View>
             <View>
               <Text style={{ color: "gray" }}>
-                {meses[parseInt(fechasepara[1], 10)]}
+                {meses[parseInt(fechasepara[1] - 1, 10)]}
               </Text>
             </View>
             <View style={{ justifyContent: "center", alignItems: "center" }}>

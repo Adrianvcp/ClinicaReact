@@ -16,10 +16,11 @@ import UserLogged from "../screens/Account/UserLogged";
 import { Icon } from "react-native-elements";
 import React, { useState } from "react";
 import { AsyncStorage } from "react-native";
+import { routeDinamic } from "../utils/endpoints";
 
-var resp = "";
 export const AccountScreenStack = createStackNavigator({
   /* REVISAR EL "MYACCOUNT " */
+
   MyAccount: {
     screen: LoginScreen,
     navigationOptions: ({ navigation }) => {
@@ -228,31 +229,5 @@ export const AccountScreenStack = createStackNavigator({
     },
   },
 });
-
-function storage() {
-  verEstado();
-  console.log("resp");
-  return LoginScreen;
-  /*   if (resp == null) {
-    return LoginScreen;
-  } else return UserLogged; */
-}
-
-async function verEstado() {
-  /*   const a1 = await AsyncStorage.getItem("id");
-
-  resp = JSON.parse(a1);
-  return a1; */
-  const keys = await AsyncStorage.getAllKeys();
-
-  return "holS";
-}
-
-function name() {
-  let x = 0;
-  console.log(verEstado());
-
-  return UserLogged;
-}
 
 export default AccountScreenStack;

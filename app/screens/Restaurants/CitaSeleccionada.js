@@ -138,6 +138,7 @@ function CitaSeleccionada(props) {
     /* pOST */
     /* Armo la info para enviar  */
     ObjPaciente["paciente"] = Object.assign({}, ObjP);
+    ObjPaciente["reserva"] = true;
     ObjPaciente["hora"] = ObjPaciente["fecha"] + "T" + ObjPaciente["hora"];
     console.log(JSON.stringify(ObjPaciente));
 
@@ -155,7 +156,7 @@ function CitaSeleccionada(props) {
       confirmar = false;
       /* Como mejora -> confirmar cambiarlo a Asyncstorage en vez de enviar un paramtro */
     } catch (error) {
-      console.log("error");
+      console.log(error);
     }
   }
 

@@ -80,25 +80,17 @@ function UserLogged(props) {
             size={27}
             color="#ccc"
             iconStyle={{ marginRight: "25%" }}
-            //iconNameRight="chevron-right"
-            //iconColorRight="#ccc"
           />
         }
-        //iconLeft
       />
 
-      {/*       <Button
-        title="Cerrar sesión"
-        buttonStyle={styles.btnCloseSession}
-        titleStyle={styles.btnCloseSessionText}
-        onPress={() => firebase.auth().signOut()}
-      />
- */}
       <Block padding={[30, theme.sizes.base * 3]}>
         <Button2
           gradient
           onPress={() => {
             /* console.log(await AsyncStorage.getItem("id")); */
+
+            AsyncStorage.clear();
             props.navigation.navigate("MyAccount");
           }}
         >

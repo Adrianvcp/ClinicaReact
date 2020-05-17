@@ -15,7 +15,6 @@ import Toast from "react-native-easy-toast";
 import { ep_login } from "../../utils/endpoints";
 
 function LoginForm(props) {
-  console.log(props);
   const { navigation, toastRef } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [email, setEmail] = useState("");
