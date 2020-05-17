@@ -162,23 +162,8 @@ function Restaurant(props) {
       onPress={() => navigation.navigate("MiCitaSeleccionada", { restaurant })}
     >
       <View
-        style={[
-          styles.viewRestaurant,
-          styles.shadow,
-          styles.destinationInfo2,
-          /* { backgroundColor: "yellow" } */
-          ,
-        ]}
+        style={[styles.viewRestaurant, styles.shadow, styles.destinationInfo2]}
       >
-        <View style={styles.viewRestaurantImage}>
-          {/*           <Image
-            resizeMode="cover"
-            source={{ uri: url }}
-            borderRadius={50}
-            style={styles.imageRestaurant}
-            PlaceholderContent={<ActivityIndicator color="fff" />}
-          /> */}
-        </View>
         <View style={{ flexDirection: "row" }}>
           <View>
             <View>

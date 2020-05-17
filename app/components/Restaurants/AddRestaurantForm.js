@@ -27,6 +27,7 @@ import styled from "styled-components";
 import DatePicker from "react-native-datepicker";
 import { funcionA } from "../../utils/endpoints";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Alert } from "react-native";
 
 function AddRestaurantForm(props) {
   const { navigation } = props;
@@ -48,8 +49,6 @@ function AddRestaurantForm(props) {
       .then((response) => response.json())
       .then((json) => setOptEsp(json))
       .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
   }, []);
 
   useEffect(() => {
@@ -57,12 +56,10 @@ function AddRestaurantForm(props) {
       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
       .catch((error) => console.error(error));
-    /*       .finally(() => setLoading(false));
-     */
   }, []);
 
   /* VAR - FECHA */
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date(198051730000));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
@@ -98,36 +95,32 @@ function AddRestaurantForm(props) {
   const busquedaData = (dis, esp, fec, seg) => {
     /* http://localhost:8080/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-01-01&seguro=RIMAC */
     /* https://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-03-04&seguro=Pacifico%20Seguros */
+    console.log("----------------------------------");
     const urlBase = `http://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?`;
     const distrito = `distrito=${dis}`;
     const especialidad = `&especialidad=${esp}`;
     const fecha = `&fecha=${fec}`;
     const seguro = `&seguro=${seg}`;
     const url = urlBase + distrito + especialidad + fecha + seguro;
-    /* console.log(url); */
+    console.log(url);
     const searchData = {};
     searchData.especialidad = esp;
     searchData.distrito = dis;
     searchData.fecha = fec;
     searchData.seguro = seg;
+    console.log("----------------------------------");
 
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        /*         let dataSource = [];
-        Object.values(res).forEach((item) => {
-          dataSource = dataSource.concat(item);
-        }); */
-        /* console.log(res); */
         navigation.navigate("listaClinicaCitasDisponibles", {
           navigation,
           res,
           searchData,
         });
-        /*         setData(res);
-         */
       });
   };
+
   const countryOptions = [{ value: 0, label: "Seleccionar" }];
   const segurosOptions = [{ value: 0, label: "Seleccionar" }];
 
@@ -344,14 +337,21 @@ function AddRestaurantForm(props) {
           <Button
             icon="md-search"
             onPress={() => {
-              busquedaData(
-                distritoVar,
-                countryOptions[esp].label,
-                date,
-                segurosOptions[seguro].label
-              );
-              /* console.log(distritoVar); */
-
+              if (distritoVar == "" || esp == "" || seguro == "") {
+                Alert.alert("Error", "Dato faltante");
+              } else {
+                /* COMO MEJORA SE DEBE COMPARAR CON UN DIA ANTEIOR AL PRESENTE  */
+                if (date == "Sun Apr 11 1976 01:22:10 GMT-0500 (-05)") {
+                  Alert.alert("Error", "Cambie de fecha");
+                } else {
+                  busquedaData(
+                    distritoVar,
+                    countryOptions[esp].label,
+                    date,
+                    segurosOptions[seguro].label
+                  );
+                }
+              }
               /*               navigation.navigate("listaClinicaCitasDisponibles", {
                 navigation,
                 Data,

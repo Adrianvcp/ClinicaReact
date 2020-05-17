@@ -23,12 +23,15 @@ import Dialog from "react-native-dialog";
 import call from "react-native-phone-call";
 
 export default function CitaSeleccionada(props) {
-  console.log(props);
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogVisibleRepro, setdialogVisibleRepro] = useState(false);
 
   const { navigation } = props;
+
   const { restaurant } = navigation.state.params;
+  const { paciente } = restaurant.item;
+  const { medico } = restaurant.item;
+  const { ubicacion } = restaurant.item;
   const data = [
     { label: "Football", value: "football" },
     { label: "Baseball", value: "baseball" },
@@ -42,8 +45,8 @@ export default function CitaSeleccionada(props) {
   ];
   const [esp, setesp] = useState("");
   const args = {
-    number: "986141854", // String value with the number to call
-    prompt: false, // Optional boolean property. Determines if the user should be prompt prior to the call
+    number: restaurant.item.ubicacion.clinica.telefono,
+    prompt: false,
   };
   console.log(restaurant.item);
 
@@ -164,64 +167,18 @@ export default function CitaSeleccionada(props) {
       </View>
 
       <View>
-        <ScrollView
-          horizontal
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: scrollX } } },
-          ])}
-        >
-          <Image
-            source={{
-              uri:
-                "https://www.vesalio.com.pe/wp-content/uploads/2018/04/Oftalmolog%C3%ADa.jpg",
-            }}
-            resizeMode="cover"
-            style={{
-              position: "relative",
-              width,
-              height: width / 2,
-            }}
-          />
-          {/*           <View
-            style={{
-              flexDirection: "column",
-              flex: 1,
-              justifyContent: "center",
-              position: "absolute",
-            }}
-          >
-            <View>
-              <Icon
-                containerStyle={{
-                  marginTop: 70,
-                  marginRight: 20,
-                  marginLeft: 20,
-                }}
-                name="phone"
-                type="material-community"
-                underlayColor="transparent"
-                color="white"
-                size={20}
-              />
-            </View>
-            <View>
-              <Icon
-                containerStyle={{ marginTop: 15 }}
-                name="map-marker"
-                type="material-community"
-                underlayColor="transparent"
-                color="white"
-                size={20}
-              />
-            </View>
-          </View> */}
-        </ScrollView>
+        <Image
+          source={{
+            uri:
+              "https://www.vesalio.com.pe/wp-content/uploads/2018/04/Oftalmolog%C3%ADa.jpg",
+          }}
+          resizeMode="cover"
+          style={{
+            position: "relative",
+            width,
+            height: width / 2,
+          }}
+        />
       </View>
 
       <View style={[styles.flex, styles.content]}>
@@ -315,9 +272,11 @@ export default function CitaSeleccionada(props) {
                     DETALLE DE LA CITA
                   </Text>
                   <View style={{ flex: 1 }}></View>
-                  <Text style={{ fontWeight: "100" }}>Dia: 13/04/20</Text>
+                  <Text style={{ fontWeight: "100" }}>
+                    Dia: {restaurant.item.fecha}
+                  </Text>
                   <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                    {restaurant.item.nombreDoctor}
+                    Doctor: {medico.nombre + " " + medico.apellidoPaterno}
                   </Text>
                   <Text style={{ fontWeight: "100", marginTop: 3 }}>
                     {restaurant.item.path}
@@ -329,7 +288,7 @@ export default function CitaSeleccionada(props) {
                     PACIENTE
                   </Text>
                   <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                    Cesar Castro
+                    {paciente.nombre + " " + paciente.apellidoPaterno}
                   </Text>
                 </View>
               </View>
@@ -368,8 +327,8 @@ export default function CitaSeleccionada(props) {
                 </View>
               </View>
             </View>
-            <View style={{ height: 200 }}>
-              <MapView></MapView>
+            <View style={{ height: 200, marginTop: 15 }}>
+              <MapView navigation={navigation}></MapView>
             </View>
           </ScrollView>
         </View>

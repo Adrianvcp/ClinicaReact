@@ -25,27 +25,15 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const { width, height } = Dimensions.get("window");
 
-export default function ListRestaurants(props, abc) {
+export default function ListRestaurants(props) {
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState("time");
   const { navigation } = props;
   const restaurants = props.navigation.state.params.res;
-  const {
-    SearchHora,
-    SearchClinica,
-  } = props.navigation.state.params; /*   const searchHora = useRef();
-  onst SearchClinica = useRef();*/ /*   const hideSearch = () => {
-    searchHora.current.hide();
-  }; */
-  /*   const {} = props.navigation.state.params;
-   */ /* console.log("PROPS");
-  console.log(props); */ const [
-    esp,
-    setesp,
-  ] = useState("");
+  const { SearchHora, SearchClinica } = props.navigation.state.params;
+  const [esp, setesp] = useState("");
 
-  /*   const show = () => searchHora.current.show();
-   */ const countryOptions = [
+  const countryOptions = [
     { label: "Denmark", value: "Denmark" },
     { label: "Germany", value: "Germany" },
     { label: "United State", value: "United State" },
@@ -53,46 +41,27 @@ export default function ListRestaurants(props, abc) {
 
   const segurosOptions = [{ value: 0, label: "Seleccionar" }];
 
+  /* ENDPOINT CLINICAS */
+  const [opt_ClinicasName, setOpt_ClinicasName] = useState([]);
+  const clinicsOptions = [{ value: 0, label: "Seleccionar" }];
+  useEffect(() => {
+    fetch("https://backendapplication-1.azurewebsites.net/api/clinicas")
+      .then((response) => response.json())
+      .then((json) => setOpt_ClinicasName(json))
+      .catch((error) => console.error(error));
+  }, []);
+  for (let i = 0; i < opt_ClinicasName.length; i++) {
+    const element = opt_ClinicasName[i];
+    const obj = {
+      value: element.id,
+      label: element.nombre,
+    };
+
+    clinicsOptions.push(obj);
+  }
+
   return (
     <View style={{ backgroundColor: "white" }}>
-      {/* FILTRAR POR HORA */}
-      {/*       {console.log("Datos: " + varHora + " " + varClinica)}
-       */}
-      {SearchHora ? (
-        <View /* ref={searchHora} */ style={{ margin: 10, marginBottom: -20 }}>
-          <Fieldset label="Filtrar por Hora" last>
-            <FormGroup>
-              <Label>HORA</Label>
-              <Input placeholder="10:00 PM" />
-            </FormGroup>
-          </Fieldset>
-        </View>
-      ) : (
-        <View></View>
-      )}
-      {/* FILTRAR POR CLINICA */}
-      {SearchClinica ? (
-        <View
-          /* ref={SearchClinica} */ style={{ margin: 10, marginBottom: -20 }}
-        >
-          <Fieldset label="Filtrar por Clinica" last>
-            <FormGroup>
-              <Label>Clinica</Label>
-              <Select
-                name="esp"
-                label="esp"
-                options={countryOptions}
-                placeholder="Sin seleccion"
-                value={esp}
-                onValueChange={(a) => setesp(a)}
-              />
-            </FormGroup>
-          </Fieldset>
-        </View>
-      ) : (
-        <View></View>
-      )}
-
       {/* FILTROS */}
 
       <View>
@@ -104,8 +73,6 @@ export default function ListRestaurants(props, abc) {
                 style={{
                   width: "40%",
                   marginLeft: width / 4,
-                  /*                   backgroundColor: "red",
-                   */
                 }}
                 date={date}
                 mode={mode}
@@ -129,6 +96,8 @@ export default function ListRestaurants(props, abc) {
                   // ... You can check the source to find the other keys.
                 }}
                 onDateChange={(date) => {
+                  console.log("se cambiooo ohhh");
+                  console.log(date);
                   setDate(date);
                 }}
               />
@@ -144,7 +113,7 @@ export default function ListRestaurants(props, abc) {
               <Label>Clinica</Label>
               <SelectInput
                 value={esp ? esp : 0}
-                options={segurosOptions}
+                options={clinicsOptions}
                 onCancelEditing={() => console.log("onCancel")}
                 onSubmitEditing={(a) => setesp(a)}
                 onValueChange={(a) => setesp(a)}
@@ -167,20 +136,20 @@ export default function ListRestaurants(props, abc) {
       {restaurants ? (
         <View>
           <FlatList
-            /*             pagingEnabled
-            disableScrollViewPanResponder */
             style={{
               overflow: "hidden",
               height: 400,
-
               marginTop: 15,
             }}
             showsVerticalScrollIndicator={false}
-            /*             decelerationRate={0}
-           snapToAlignment="center"*/
             data={restaurants}
             renderItem={(restaurant) => (
-              <Restaurant restaurant={restaurant} navigation={navigation} />
+              <Restaurant
+                restaurant={restaurant}
+                navigation={navigation}
+                horaFilt={date}
+                clinicFilt={esp}
+              />
             )}
             keyExtractor={(item, index) => index.toString()}
             onEndReachedThreshold={0}
@@ -207,11 +176,11 @@ async function url(img) {
 } */
 
 function Restaurant(props) {
-  const { restaurant, navigation } = props;
+  const { restaurant, navigation, horaFilt, clinicFilt } = props;
 
   const parametrosBuscados = props.navigation.state.params.searchData;
 
-  const { fecha, hora, id, medico } = restaurant.item;
+  const { fecha, hora, id, medico, reserva } = restaurant.item;
   const { nombre, telefono, descripcion } = restaurant.item.ubicacion.clinica;
 
   const { img } = restaurant.item.ubicacion;
@@ -225,136 +194,291 @@ function Restaurant(props) {
         navigation.navigate("cita", { restaurant, parametrosBuscados })
       }
     >
-      <ImageBackground
-        style={[styles.flex, styles.destination, styles.shadow]}
-        imageStyle={{ borderRadius: clinics.sizes.radius }}
-        source={{
-          uri:
-            "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
-        }}
-      >
-        <View style={{ marginBottom: 50 }}>
-          <View
-            style={[
-              styles.row,
-              {
-                justifyContent: "space-between",
-              },
-            ]}
-          >
-            <View style={{ flex: 0 }}>
-              <Image
-                source={{
-                  uri: "https://randomuser.me/api/portraits/women/44.jpg",
-                }}
-                borderRadius={1000}
-                style={styles.avatar}
-              />
-            </View>
-
-            <View
-              style={[
-                styles.column,
-                { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 },
-              ]}
-            >
-              <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
-                {medico.nombre}
-              </Text>
-              <Text style={{ color: clinics.colors.white, fontWeight: "bold" }}>
-                <Octicons
-                  name="location"
-                  size={clinics.sizes.font * 0.8}
-                  color={clinics.colors.white}
-                />
-                <Text> {nombre}</Text>
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 0,
-                justifyContent: "center",
-                alignItems: "flex-end",
+      {reserva == false ? (
+        horaFilt != "Fri Aug 21 2020 18:15:30 GMT-0500 (-05)" ? (
+          horaFilt + ":00" == hora ? (
+            <ImageBackground
+              style={[styles.flex, styles.destination, styles.shadow]}
+              imageStyle={{ borderRadius: clinics.sizes.radius }}
+              source={{
+                uri:
+                  "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
               }}
             >
-              <Text style={styles.rating}>{id}</Text>
-            </View>
-          </View>
-        </View>
+              <View style={{ marginBottom: 50 }}>
+                <View
+                  style={[
+                    styles.row,
+                    {
+                      justifyContent: "space-between",
+                    },
+                  ]}
+                >
+                  <View style={{ flex: 0 }}>
+                    <Image
+                      source={{
+                        uri: "https://randomuser.me/api/portraits/women/44.jpg",
+                      }}
+                      borderRadius={1000}
+                      style={styles.avatar}
+                    />
+                  </View>
 
-        <View
-          style={[
-            styles.row,
-            styles.destinationInfo,
-            styles.shadow,
+                  <View
+                    style={[
+                      styles.column,
+                      { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 },
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        color: clinics.colors.white,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {medico.nombre}
+                    </Text>
+                    <Text
+                      style={{
+                        color: clinics.colors.white,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <Octicons
+                        name="location"
+                        size={clinics.sizes.font * 0.8}
+                        color={clinics.colors.white}
+                      />
+                      <Text> {nombre}</Text>
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 0,
+                      justifyContent: "center",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Text style={styles.rating}>{id}</Text>
+                  </View>
+                </View>
+              </View>
 
-            { paddingTop: -30 },
-          ]}
-        >
-          <View
-            style={{
-              marginTop: 5,
-              marginLeft: -25,
-              marginRight: 5,
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
-          </View>
-          <View
-            style={{
-              marginTop: 5,
-              flexDirection: "column",
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  fontSize: clinics.sizes.font * 1.05,
-                  fontWeight: "500",
-                  marginTop: 5,
-                }}
+              <View
+                style={[
+                  styles.row,
+                  styles.destinationInfo,
+                  styles.shadow,
+
+                  { paddingTop: -30 },
+                ]}
               >
-                {fecha}
-              </Text>
+                <View
+                  style={{
+                    marginTop: 5,
+                    marginLeft: -25,
+                    marginRight: 5,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
+                </View>
+                <View
+                  style={{
+                    marginTop: 5,
+                    flexDirection: "column",
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: clinics.sizes.font * 1.05,
+                        fontWeight: "500",
+                        marginTop: 5,
+                      }}
+                    >
+                      {fecha}
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.row,
+                      {
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                      },
+                    ]}
+                  >
+                    {/*               <Text style={{ color: "black" }}>{hora}</Text>
+                     */}
+                    <Text
+                      onPress={() =>
+                        navigation.navigate("cita", {
+                          restaurant,
+                          parametrosBuscados,
+                        })
+                      }
+                      style={{ textAlign: "right" }}
+                    >
+                      Ver info
+                    </Text>
+                    <FontAwesome
+                      onPress={() =>
+                        navigation.navigate("cita", {
+                          restaurant,
+                          parametrosBuscados,
+                        })
+                      }
+                      name="chevron-right"
+                      size={clinics.sizes.font * 0.75}
+                      color={clinics.colors.caption}
+                    />
+                  </View>
+                </View>
+              </View>
+            </ImageBackground>
+          ) : (
+            console.log("dasd")
+          )
+        ) : (
+          <ImageBackground
+            style={[styles.flex, styles.destination, styles.shadow]}
+            imageStyle={{ borderRadius: clinics.sizes.radius }}
+            source={{
+              uri:
+                "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
+            }}
+          >
+            <View style={{ marginBottom: 50 }}>
+              <View
+                style={[
+                  styles.row,
+                  {
+                    justifyContent: "space-between",
+                  },
+                ]}
+              >
+                <View style={{ flex: 0 }}>
+                  <Image
+                    source={{
+                      uri: "https://randomuser.me/api/portraits/women/44.jpg",
+                    }}
+                    borderRadius={1000}
+                    style={styles.avatar}
+                  />
+                </View>
+
+                <View
+                  style={[
+                    styles.column,
+                    { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 },
+                  ]}
+                >
+                  <Text
+                    style={{ color: clinics.colors.white, fontWeight: "bold" }}
+                  >
+                    {medico.nombre}
+                  </Text>
+                  <Text
+                    style={{ color: clinics.colors.white, fontWeight: "bold" }}
+                  >
+                    <Octicons
+                      name="location"
+                      size={clinics.sizes.font * 0.8}
+                      color={clinics.colors.white}
+                    />
+                    <Text> {nombre}</Text>
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0,
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <Text style={styles.rating}>{id}</Text>
+                </View>
+              </View>
             </View>
+
             <View
               style={[
                 styles.row,
-                {
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                },
+                styles.destinationInfo,
+                styles.shadow,
+
+                { paddingTop: -30 },
               ]}
             >
-              {/*               <Text style={{ color: "black" }}>{hora}</Text>
-               */}
-              <Text
-                onPress={() =>
-                  navigation.navigate("cita", {
-                    restaurant,
-                    parametrosBuscados,
-                  })
-                }
-                style={{ textAlign: "right" }}
+              <View
+                style={{
+                  marginTop: 5,
+                  marginLeft: -25,
+                  marginRight: 5,
+                  justifyContent: "center",
+                }}
               >
-                Ver info
-              </Text>
-              <FontAwesome
-                onPress={() =>
-                  navigation.navigate("cita", {
-                    restaurant,
-                    parametrosBuscados,
-                  })
-                }
-                name="chevron-right"
-                size={clinics.sizes.font * 0.75}
-                color={clinics.colors.caption}
-              />
+                <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
+              </View>
+              <View
+                style={{
+                  marginTop: 5,
+                  flexDirection: "column",
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontSize: clinics.sizes.font * 1.05,
+                      fontWeight: "500",
+                      marginTop: 5,
+                    }}
+                  >
+                    {fecha}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.row,
+                    {
+                      justifyContent: "space-between",
+                      alignItems: "flex-end",
+                    },
+                  ]}
+                >
+                  {/*               <Text style={{ color: "black" }}>{hora}</Text>
+                   */}
+                  <Text
+                    onPress={() =>
+                      navigation.navigate("cita", {
+                        restaurant,
+                        parametrosBuscados,
+                      })
+                    }
+                    style={{ textAlign: "right" }}
+                  >
+                    Ver info
+                  </Text>
+                  <FontAwesome
+                    onPress={() =>
+                      navigation.navigate("cita", {
+                        restaurant,
+                        parametrosBuscados,
+                      })
+                    }
+                    name="chevron-right"
+                    size={clinics.sizes.font * 0.75}
+                    color={clinics.colors.caption}
+                  />
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </ImageBackground>
+          </ImageBackground>
+        )
+      ) : (
+        console.log("reservado")
+      )}
     </TouchableOpacity>
   );
 }
