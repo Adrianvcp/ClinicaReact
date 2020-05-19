@@ -207,7 +207,7 @@ function AddRestaurantForm(props) {
                 placeholder="select date"
                 format="YYYY-MM-DD"
                 minDate="2006-05-01"
-                maxDate="2026-06-01"
+                maxDate="2021-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
@@ -342,7 +342,7 @@ function AddRestaurantForm(props) {
               } else {
                 /* COMO MEJORA SE DEBE COMPARAR CON UN DIA ANTEIOR AL PRESENTE  */
                 if (date == "Sun Apr 11 1976 01:22:10 GMT-0500 (-05)") {
-                  Alert.alert("Error", "Cambie de fecha");
+                  Alert.alert("Error", "Ingrese una fecha válida");
                 } else {
                   busquedaData(
                     distritoVar,

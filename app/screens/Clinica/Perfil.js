@@ -155,7 +155,7 @@ export default function CitaSeleccionada(props) {
                     textAlign: "justify",
                   }}
                 >
-                  {restaurant.item.ubicacion.distrito}
+                 Sede: {restaurant.item.ubicacion.distrito}
                 </Text>
 
 

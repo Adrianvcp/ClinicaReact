@@ -135,7 +135,6 @@ function Restaurant(props) {
 
   const { nombre, apellidoPaterno } = restaurant.item.medico;
   let date = new Date(fecha);
-
   const { clinica } = restaurant.item.ubicacion;
   var meses = [
     "Enero",
@@ -206,6 +205,7 @@ function Restaurant(props) {
             <View style={styles.lineHor}></View>
             <Text style={styles.restaurantAddress}>{clinica.telefono}</Text>
             <Text style={styles.restaurantAddress}>{clinica.nombre} </Text>
+            
           </View>
         </View>
       </View>

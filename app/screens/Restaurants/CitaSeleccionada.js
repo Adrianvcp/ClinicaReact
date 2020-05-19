@@ -158,6 +158,7 @@ function CitaSeleccionada(props) {
 
       //Alert.alert("Reserva", "Cita reservada correctamente");
       confirmar = false;
+      //navigation.navigate("UserLoggued");
       /* Como mejora -> confirmar cambiarlo a Asyncstorage en vez de enviar un paramtro */
     } catch (error) {
       console.log(error);
@@ -228,7 +229,8 @@ function CitaSeleccionada(props) {
             label="ACEPTAR"
             onPress={() => {
               
-              navigation.navigate("UserLoggued");
+              navigation.navigate("cita",{ navigation,confirmar:false});
+              navigation.navigate("restaurants");
             }}
           />
         </Dialog.Container>

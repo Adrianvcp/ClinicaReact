@@ -116,6 +116,41 @@ async function ep_login(email, password, navigation, toastRef) {
   }
 }
 
+async function ep_login2(email, password, navigation, toastRef) {
+  console.log("funcion login");
+  console.log(email, password);
+  const urlbase = `http://backendapplication-1.azurewebsites.net/api/usuarios/login?`;
+  const correo = `correo=${email.trim()}`;
+  const pass = `&password=${password}`;
+  const url = urlbase + correo + pass;
+  var json;
+  console.log(url);
+  try {
+    const respuesta = await fetch(url);
+    json = await respuesta.json();
+
+    /* guardar en Asynstorage */
+    console.log("aqii?");
+    const keyUser = async () => {
+      try {
+        console.log("intentando");
+
+        await AsyncStorage.setItem("keyuser", "true");
+        await AsyncStorage.setItem("id", String(json.id));
+        console.log("paso a guardarlo");
+      } catch (error) {
+        console.log("error");
+      }
+    };
+
+    keyUser();
+  } catch (error) {
+  //  toastRef.current.show("Usuario y/o contraseña incorrecta", 1000);
+  }
+  /* ANTES WELCOME */
+  navigation.navigate("formuDatos", { user: json.id });
+}
+
 function routeDinamic() {
   try {
     const keyUser = async () => {
@@ -289,7 +324,7 @@ async function añadirpaciente(
       .then((res) => res.json())
       .then(() => {
         toastRef.current.show("¡Paciente añadido!", 10000),
-          navigation.navigate("UserLoggued");
+          navigation.navigate("GestFamiliar");
 
         console.log(navigation);
 
@@ -398,7 +433,7 @@ async function ep_primeraVez(v_id) {
 module.exports = {
   funcionA,
   ep_login,
-
+  ep_login2,
   ep_listUsuarios,
   ep_primeraVez,
   registrodatos,

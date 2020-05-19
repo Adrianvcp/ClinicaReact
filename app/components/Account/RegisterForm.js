@@ -11,7 +11,8 @@ import Button from "../../components/loginstyle/Button";
 import { theme } from "../../constants";
 import Toast, { DURATION } from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
-import { ep_login, ep_login2 } from "../../utils/endpoints";
+import { ep_login, ep_login2} from "../../utils/endpoints";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
@@ -91,7 +92,7 @@ function RegisterForm(props) {
       });
   }; */
   return (
-    <View style={{ flex: 1, marginTop: -20 }}>
+    <KeyboardAwareScrollView style={{ flex: 1, marginTop: -20 }}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
         <Block center middle>
           <View
@@ -179,7 +180,8 @@ function RegisterForm(props) {
           </View>
         </Block>
       </Block>
-    </View>
+    
+    </KeyboardAwareScrollView>
   );
 }
 

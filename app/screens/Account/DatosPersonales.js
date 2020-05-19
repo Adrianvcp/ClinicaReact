@@ -3,7 +3,7 @@ import { StyleSheet, View, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
-
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import Loading from "../../components/Loading";
 import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
@@ -79,7 +79,7 @@ function RegisterForm(props) {
   }  */
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
+    <KeyboardAwareScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
@@ -130,8 +130,8 @@ function RegisterForm(props) {
                 containerStyle={""}
                 placeholder="select date"
                 format="YYYY-MM-DD"
-                minDate="1970-05-01"
-                maxDate="2026-06-01"
+                minDate="1900-05-01"
+                maxDate="2021-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
@@ -196,7 +196,7 @@ function RegisterForm(props) {
         </Block>
         <Toast ref={toastRef} position="center" opacity={(0, 9)} />
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 

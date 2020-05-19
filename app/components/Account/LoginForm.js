@@ -5,6 +5,7 @@ import { validateEmail } from "../../utils/Validation";
 import { withNavigation } from "react-navigation";
 import * as firebase from "firebase";
 import Loading from "../Loading";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 import Text from "../../components/loginstyle/Text";
 import Button from "../../components/loginstyle/Button";
@@ -30,7 +31,7 @@ function LoginForm(props) {
   const [userObj, setuserObj] = useState();
 
   return (
-    <View style={styles.formContainer}>
+    <KeyboardAwareScrollView style={styles.formContainer}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
         <Block center middle>
           <View
@@ -106,7 +107,7 @@ function LoginForm(props) {
       </Block>
 
       <Loading isVisible={isVisibleLoading} text="Iniciando sesión" />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 export default withNavigation(LoginForm);
