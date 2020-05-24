@@ -12,7 +12,7 @@ import { theme } from "../../constants";
 import Toast, { DURATION } from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
 import { ep_login, ep_login2 } from "../../utils/endpoints";
-import { maxCaracter } from "../../utils/other";
+import { maxCaracter, maxCaracter1 } from "../../utils/other";
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
@@ -98,7 +98,7 @@ function RegisterForm(props) {
               style={styles.input}
               maxLength={30}
               onChange={(e) => setEmail(e.nativeEvent.text)}
-              onKeyPress={maxCaracter(email, 30)}
+              //onKeyPress={maxCaracter(email, 30)}
               rightIcon={
                 <Icon
                   type="material-community"
@@ -116,7 +116,7 @@ function RegisterForm(props) {
               style={styles.input}
               maxLength={8}
               onChange={(e) => setPassword(e.nativeEvent.text)}
-              onKeyPress={maxCaracter(password, 8)}
+              //onKeyPress={maxCaracter(password, 8)}
               rightIcon={
                 <Icon
                   type="material-community"
@@ -128,13 +128,13 @@ function RegisterForm(props) {
             />
             <Input
               label="Repetir contraseña"
-              placeholder="******"
+              placeholder="*****"
               password={true}
-              secureTextEntry={true}
+              secureTextEntry={hideRepPassword}
               style={styles.input}
               maxLength={8}
               onChange={(e) => setRePassword(e.nativeEvent.text)}
-              onKeyPress={maxCaracter(RePassword, 8)}
+              //onKeyPress={maxCaracter1(RePassword, 8)}
               rightIcon={
                 <Icon
                   type="material-community"

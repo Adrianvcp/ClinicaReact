@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TextInput } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
@@ -39,7 +40,7 @@ function RegisterForm(props) {
 
   return (
 
-<ScrollView style={{ backgroundColor: "white" }}>
+<KeyboardAwareScrollView style={{ backgroundColor: "white" }} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
@@ -54,6 +55,7 @@ function RegisterForm(props) {
               <Input
                 label="Nombres"
                 placeholder=""
+                maxLength={20}
                 style={styles.input}
                 onChange={(e) => setNombre(e.nativeEvent.text)}
                
@@ -62,6 +64,7 @@ function RegisterForm(props) {
               <Input
                 label="Apellido Paterno"
                 placeholder=""
+                maxLength={30}
                 style={styles.input}
                 onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
                
@@ -69,6 +72,7 @@ function RegisterForm(props) {
               <Input
                 label="Apellido Materno"
                 placeholder=""
+                maxLength={30}
                 style={styles.input}
                 onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
               
@@ -76,7 +80,9 @@ function RegisterForm(props) {
               <Input
                 label="DNI"
                 placeholder=""
+                maxLength={8}
                 style={styles.input}
+                keyboardType={'numeric'}
                 onChange={(e) => setDni(e.nativeEvent.text)}
               />
 
@@ -118,28 +124,26 @@ function RegisterForm(props) {
                   setFnacimiento(fnacimiento);
                 }}
               />
-              <Input
-                label="Edad"
-                placeholder=""
-                style={styles.input}
-                onChange={(e) => setEdad(e.nativeEvent.text)}
-              />
                 <Input
                 label="Parentesco"
                 placeholder=""
+                maxLength={20}
                 style={styles.input}
                 onChange={(e) => setParentesco(e.nativeEvent.text)}
               />    
                <Input
                 label="Correo"
                 placeholder=""
+                maxLength={40}
                 style={styles.input}
                 onChange={(e) => setCorreo(e.nativeEvent.text)}
               />
               <Input
                 label="Telefono"
                 placeholder=""
+                maxLength={9}
                 style={styles.input}
+                keyboardType={'numeric'}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
               />
 
@@ -147,7 +151,7 @@ function RegisterForm(props) {
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                  añadirpaciente(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, edad, fnacimiento,parentesco,correo,toastRef,navigation);
+                  añadirpaciente(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, fnacimiento,parentesco,correo,toastRef,navigation);
                 }}
               >
                 <Text bold white center>
@@ -162,7 +166,7 @@ function RegisterForm(props) {
           </Block>
         </Block>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
 
   )
 }

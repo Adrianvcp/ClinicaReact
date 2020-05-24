@@ -273,15 +273,15 @@ function AddRestaurantForm(props) {
               </View>
 
               <View style={{ paddingTop: 5 }}>
-                <Icon
+       {/*         <Icon
                   name="map-marker"
                   type="material-community"
                   color="#1F90FC"
                   onPress={async () => {
                     await funcionA();
                     await navigation.navigate("map");
-                  }}
-                />
+                  }} 
+                />*/}
               </View>
             </View>
           </FormGroup>

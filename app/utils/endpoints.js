@@ -192,7 +192,6 @@ async function registrodatos(
   apellidoPaterno,
   dni,
   Telefono,
-  edad,
   fnacimiento,
   toastRef,
   navigation
@@ -206,8 +205,7 @@ async function registrodatos(
     isEmpty(apellidoMaterno) ||
     isEmpty(apellidoPaterno) ||
     isEmpty(dni) ||
-    isEmpty(Telefono) ||
-    isEmpty(edad)
+    isEmpty(Telefono)
   ) {
     toastRef.current.show("Todos los campos son obligatorios", 5000);
   } else {
@@ -229,7 +227,7 @@ async function registrodatos(
       (DataObj.apellidoPaterno = apellidoPaterno),
       (DataObj.correo = "a@a.com"),
       (DataObj.dni = dni),
-      (DataObj.edad = parseInt(edad)),
+      (DataObj.edad = "30"),
       (DataObj.fechaNac = fnacimiento),
       (DataObj.nombre = nombre),
       (DataObj.parentesco = "Yo"),
@@ -263,7 +261,6 @@ async function añadirpaciente(
   apellidoPaterno,
   dni,
   Telefono,
-  edad,
   fnacimiento,
   parentesco,
   correo,
@@ -280,7 +277,6 @@ async function añadirpaciente(
     isEmpty(apellidoPaterno) ||
     isEmpty(dni) ||
     isEmpty(Telefono) ||
-    isEmpty(edad) ||
     isEmpty(correo) ||
     isEmpty(parentesco)
   ) {
@@ -304,7 +300,7 @@ async function añadirpaciente(
       (DataObj.apellidoPaterno = apellidoPaterno),
       (DataObj.correo = correo),
       (DataObj.dni = dni),
-      (DataObj.edad = parseInt(edad)),
+      (DataObj.edad = "30"),
       (DataObj.fechaNac = fnacimiento),
       (DataObj.nombre = nombre),
       (DataObj.parentesco = parentesco),
@@ -339,7 +335,6 @@ async function modificardatos(
   apellidoPaterno,
   dni,
   Telefono,
-  edad,
   fnacimiento,
   toastRef,
   navigation
@@ -353,8 +348,7 @@ async function modificardatos(
     isEmpty(apellidoMaterno) ||
     isEmpty(apellidoPaterno) ||
     isEmpty(dni) ||
-    isEmpty(Telefono) ||
-    isEmpty(edad)
+    isEmpty(Telefono)
   ) {
     toastRef.current.show("Todos los campos son obligatorios", 4000);
   } else {
@@ -382,7 +376,7 @@ async function modificardatos(
       (DataObj.apellidoPaterno = apellidoPaterno),
       (DataObj.correo = "aea@a.com"),
       (DataObj.dni = dni),
-      (DataObj.edad = parseInt(edad)),
+      (DataObj.edad = "30" ),
       (DataObj.fechaNac = fnacimiento),
       (DataObj.nombre = nombre),
       (DataObj.parentesco = "yo"),

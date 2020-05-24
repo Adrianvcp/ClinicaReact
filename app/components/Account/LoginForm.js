@@ -69,7 +69,7 @@ function LoginForm(props) {
             maxLength={30}
             /*             onChangeText={(text) => setEmail(text)}*/
             onChange={(e) => setEmail(e.nativeEvent.text)}
-            onKeyPress={maxCaracter(email, 30)}
+            //onKeyPress={maxCaracter(email, 30)}
             placeholder={VALID_EMAIL}
           />
           <Input
@@ -81,7 +81,7 @@ function LoginForm(props) {
             defaultValue={VALID_PASSWORD}
             /* onChangeText={(text) => setPassword(tex)} */
             onChange={(e) => setPassword(e.nativeEvent.text)}
-            onKeyPress={maxCaracter(password, 8)}
+            //onKeyPress={maxCaracter(password, 8)}
           />
 
           <Button

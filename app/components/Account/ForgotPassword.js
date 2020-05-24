@@ -84,9 +84,10 @@ function RegisterForm(props) {
         <Block middle>
           <View>
             <Input
-              label="Correo electronico"
+              label="Correo electrónico"
               placeholder="abc@easy.com"
               style={styles.input}
+              maxLength={30}
               onChange={(e) => setEmail(e.nativeEvent.text)}
               rightIcon={
                 <Icon
@@ -98,11 +99,12 @@ function RegisterForm(props) {
             />
 
             <Input
-              label="Nueva Contraseña"
+              label="Nueva contraseña"
               placeholder="*****"
               password={true}
               secureTextEntry={hidePassword}
               style={styles.input}
+              maxLength={8}
               onChange={(e) => setPassword(e.nativeEvent.text)}
               rightIcon={
                 <Icon
@@ -115,10 +117,11 @@ function RegisterForm(props) {
             />
             <Input
               label="Repetir nueva contraseña"
-              placeholder="******"
+              placeholder="*****"
               password={true}
               secureTextEntry={true}
               style={styles.input}
+              maxLength={8}
               onChange={(e) => setRePassword(e.nativeEvent.text)}
               rightIcon={
                 <Icon

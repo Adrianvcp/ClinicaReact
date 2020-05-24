@@ -316,7 +316,13 @@ const styles = StyleSheet.create({
 //Maxima cantidad de caracteres
 function maxCaracter(dato, max) {
   console.log("entro-------------");
-  dato.length == max
+  dato.length == max 
+    ? Alert.alert("Aviso", "Limite de digitos alcanzado")
+    : console.log("todo bien,todo correcto");
+}
+
+function maxCaracter1 (dato1,max1) {
+  dato1.length == max1 
     ? Alert.alert("Aviso", "Limite de digitos alcanzado")
     : console.log("todo bien,todo correcto");
 }
@@ -329,5 +335,6 @@ module.exports = {
   Restaurant,
   districtData,
   maxCaracter,
+  maxCaracter1,
   holi,
 };

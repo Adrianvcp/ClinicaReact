@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TextInput } from "react-native";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
@@ -20,6 +20,7 @@ import { registrodatos } from "../../utils/endpoints";
 import { withNavigation } from "react-navigation";
 import Toast from "react-native-easy-toast";
 import { maxCaracter } from "../../utils/other";
+import LetrasValidation from "../../utils/Letras";
 
 function RegisterForm(props) {
   const toastRef = useRef();
@@ -73,7 +74,6 @@ function RegisterForm(props) {
     }
     setIsVisibleLoading(false);
   };
-
   /*   return fetch('/appointments/get_appos', data)
           .then(response => response.json())  // promise
           .then(json => dispatch(receiveAppos(json)))
@@ -93,6 +93,8 @@ function RegisterForm(props) {
                 Informacion Basica:
               </Text>
               <Input
+              
+              
                 label="Nombres"
                 placeholder=""
                 style={styles.input}
@@ -126,6 +128,7 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={8}
+                keyboardType={'numeric'}
                 onChange={(e) => setDni(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(dni, 8)}
                  */
@@ -176,6 +179,7 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={9}
+                keyboardType={'numeric'}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(Telefono, 9)}
                  */
@@ -190,7 +194,6 @@ function RegisterForm(props) {
                     apellidoPaterno,
                     dni,
                     Telefono,
-                    18,
                     fnacimiento,
                     toastRef,
                     navigation

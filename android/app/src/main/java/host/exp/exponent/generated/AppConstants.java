@@ -37,6 +37,8 @@ public class AppConstants {
       
       
       
+      
+      
       // ADD EMBEDDED RESPONSES HERE
       // START EMBEDDED RESPONSES
       embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@hollyxda/5-tenedores", "assets://shell-app-manifest.json", "application/json"));

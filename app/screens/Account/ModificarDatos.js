@@ -33,7 +33,7 @@ function RegisterForm(props) {
   const [Telefono, setTelefono] = useState("");
 
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "white" }}>
+    <KeyboardAwareScrollView style={{ backgroundColor: "white" }} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
