@@ -205,7 +205,6 @@ function Restaurant(props) {
             <View style={styles.lineHor}></View>
             <Text style={styles.restaurantAddress}>{clinica.telefono}</Text>
             <Text style={styles.restaurantAddress}>{clinica.nombre} </Text>
-            
           </View>
         </View>
       </View>

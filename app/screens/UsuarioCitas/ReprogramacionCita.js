@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Image,
   Text,
-  ScrollView,
-  Animated,
   Dimensions,
-  TouchableOpacity,
+  FlatList,
+  TextInput,
 } from "react-native";
-import { Icon } from "react-native-elements";
-import { Label, Select } from "react-native-clean-form";
-import { Ionicons } from "@expo/vector-icons";
 
 import * as theme from "../../../themes/clinics";
 const { width } = Dimensions.get("window");
@@ -19,37 +14,33 @@ const { width } = Dimensions.get("window");
 /*----------- CUADRO DE DIALOGO - ACEPTAR O DECLINAR SOLICITUD -----------*/
 import Dialog from "react-native-dialog";
 
-import call from "react-native-phone-call";
 import DatePicker from "react-native-datepicker";
 import ListaReproClinicas from "../../components/Restaurants/ListaReproClinicas";
+import { Restaurant } from "../../utils/other";
+
 export default function CitaSeleccionada(props) {
-  console.log("Repro");
+  console.log("-----------------------Repro------------------");
 
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogVisibleRepro, setdialogVisibleRepro] = useState(false);
-
+  const { width, height } = Dimensions.get("window");
+  const [data, setData] = useState([]);
   const { navigation } = props;
-  console.log(navigation.state.params.navigation.state.params.restaurant);
+  console.log("PROPS: ");
+
   const { restaurant } = navigation.state.params.navigation.state.params;
-  const [date, setDate] = useState(new Date(1598051730000));
+  console.log(restaurant.item.fecha.split("-"));
+  const fechaarreglo = restaurant.item.fecha.split("-");
+  const [date, setDate] = useState(
+    new Date(fechaarreglo[0], fechaarreglo[1] - 1, fechaarreglo[2])
+  );
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const data = [
-    { label: "Football", value: "football" },
-    { label: "Baseball", value: "baseball" },
-    { label: "Hockey", value: "hockey" },
-  ];
-  const scrollX = new Animated.Value(0);
-  const seguroData = [
-    { label: "Pacifico Seguro", value: "Pacifico Seguro" },
-    { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
-    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
-  ];
+  const [distritoVar, setdistritoVar] = useState(
+    restaurant.item.ubicacion.distrito
+  );
+  var distritoSinCambiar = restaurant.item.ubicacion.distrito;
   const [esp, setesp] = useState("");
-  const args = {
-    number: "986141854", // String value with the number to call
-    prompt: false, // Optional boolean property. Determines if the user should be prompt prior to the call
-  };
 
   /* FUNCIONES ANULAR */
   const showDialog = () => {
@@ -59,8 +50,6 @@ export default function CitaSeleccionada(props) {
     setdialogVisible(false);
   };
   const handleOK = () => {
-    // The user has pressed the "Delete" button, so here you can do your own logic.
-    // ...Your logic
     setdialogVisible(false);
     navigation.navigate("restaurants");
   };
@@ -77,16 +66,19 @@ export default function CitaSeleccionada(props) {
   };
   const Datito = require("../../utils/dat");
 
+  useEffect(() => {
+    fetch("https://backendapplication-1.azurewebsites.net/api/citas/{reserva}")
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <View style={styles.flex}>
       <View style={[styles.flex, styles.content]}>
         {/* INFO  -- DETALLE DE LAS CITAS*/}
         <View style={[styles.flex, styles.contentHeader]}>
-          {/*           <Image
-            style={[styles.avatar, styles.shadow]}
-            source={{ uri: restaurant.item.phurl }}
-          /> */}
-          <View style={{ flexDirection: "row", paddingTop: 10 }}>
+          {/*           <View style={{ flexDirection: "row", paddingTop: 10 }}>
             <View>
               <Text style={styles.title}>Oftalmologia</Text>
             </View>
@@ -100,15 +92,14 @@ export default function CitaSeleccionada(props) {
               marginBottom: 10,
               marginTop: 10,
             }}
-          ></View>
+          ></View> */}
 
           <View
             style={{
               flexDirection: "row",
-              marginTop: 10,
             }}
           >
-            <View>
+            <View style={{ flexDirection: "row" }}>
               <View>
                 {/* MODIFICAR DATOS DE CITA */}
 
@@ -136,6 +127,8 @@ export default function CitaSeleccionada(props) {
                     maxDate="2020-06-06"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
+                    showIcon={false}
+                    containerStyle={""}
                     customStyles={{
                       dateIcon: {
                         position: "absolute",
@@ -144,10 +137,10 @@ export default function CitaSeleccionada(props) {
                         marginLeft: 0,
                       },
                       dateInput: {
+                        borderWidth: 0,
                         marginLeft: 0,
                         marginRight: 10,
                       },
-                      // ... You can check the source to find the other keys.
                     }}
                     onDateChange={(date) => {
                       setDate(date);
@@ -155,18 +148,41 @@ export default function CitaSeleccionada(props) {
                   />
                 </View>
               </View>
-              {/* LISTA */}
-              <View style={{ paddingLeft: -100 }}></View>
+              <View>
+                <View style={{ flex: 1 }}></View>
+                <View>
+                  <Text style={{ fontWeight: "100" }}>Ubicacion:</Text>
+
+                  <TextInput
+                    style={{ height: 40, fontSize: 14 }}
+                    onChangeText={(text) => setdistritoVar(text)}
+                    placeholder={distritoSinCambiar}
+                  />
+                </View>
+              </View>
             </View>
           </View>
         </View>
       </View>
 
       <View style={{ marginTop: -40 }}>
-        <ListaReproClinicas
-          info={Datito}
-          navigation={navigation}
-        ></ListaReproClinicas>
+        <View>
+          <FlatList
+            style={{ overflow: "hidden", height: height + 50, marginTop: 15 }}
+            showsVerticalScrollIndicator={true}
+            decelerationRate={0}
+            data={data}
+            renderItem={(restaurant) => (
+              <Restaurant
+                restaurant={restaurant}
+                navigation={navigation}
+                horaFilt={date}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            onEndReachedThreshold={0}
+          />
+        </View>
       </View>
     </View>
   );
@@ -181,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "flex-start", // if you want to fill rows left to right
+    alignItems: "flex-start",
   },
   def: {
     backgroundColor: "red",

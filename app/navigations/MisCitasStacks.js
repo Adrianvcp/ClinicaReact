@@ -96,10 +96,10 @@ export const AppointmentScreenStacks = createStackNavigator({
   Repro: {
     screen: ReprogramacionCita,
     navigationOptions: ({ navigation }) => {
+      //title: "Restaurantes"
       return {
-        headerTitle: () => (
-          <Header navigation={navigation} title="Buscar Ubicacion" />
-        ),
+        headerTitle: "Mis Citas",
+        headerTitleAlign: "left",
       };
     },
   },

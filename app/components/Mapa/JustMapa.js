@@ -51,9 +51,13 @@ class MapScreen extends Component {
       longitud,
     } = this.props.navigation.state.params.restaurant.item.ubicacion;
     /*     console.log(latitud, longitud);
-     */ const Objcorr = {
-      latitude: parseFloat(-12.058229),
-      longitude: parseFloat(-77.038408),
+     */
+
+    console.log("Coordenadas a mostrarse ");
+    console.log(parseFloat(latitud));
+    const Objcorr = {
+      latitude: parseFloat(latitud),
+      longitude: parseFloat(longitud),
     };
     return (
       <View style={styles.container}>

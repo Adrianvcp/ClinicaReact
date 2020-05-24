@@ -19,7 +19,7 @@ import {
 } from "react-native-clean-form";
 import DatePicker from "react-native-datepicker";
 import SelectInput from "react-native-select-input-ios";
-
+import base64 from "react-native-base64";
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -201,8 +201,7 @@ function Restaurant(props) {
               style={[styles.flex, styles.destination, styles.shadow]}
               imageStyle={{ borderRadius: clinics.sizes.radius }}
               source={{
-                uri:
-                  "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
+                uri: base64.decode(img),
               }}
             >
               <View style={{ marginBottom: 50 }}>
@@ -217,7 +216,7 @@ function Restaurant(props) {
                   <View style={{ flex: 0 }}>
                     <Image
                       source={{
-                        uri: "https://randomuser.me/api/portraits/women/44.jpg",
+                        uri: base64.decode(restaurant.item.medico.img),
                       }}
                       borderRadius={1000}
                       style={styles.avatar}

@@ -5364,6 +5364,11 @@ react-native-animatable@1.3.3, react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-base64@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.0.2.tgz#c28463c2c6779ac3ec5fdd12979ebc8c5f9b410a"
+  integrity sha512-Fu/J1a2y0X22EJDWqJR2oEa1fpP4gTFjYxk8ElJdt1Yak3HOXmFJ7EohLVHU2DaQkgmKfw8qb7u/48gpzveRbg==
+
 react-native-calendar-picker@^6.0.6:
   version "6.0.6"
   resolved "https://registry.yarnpkg.com/react-native-calendar-picker/-/react-native-calendar-picker-6.0.6.tgz#d9273616b0fd7cb0450f8833e315f1b032a0266b"

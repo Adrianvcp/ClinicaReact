@@ -5,7 +5,7 @@ import { validateEmail } from "../../utils/Validation";
 import { withNavigation } from "react-navigation";
 import * as firebase from "firebase";
 import Loading from "../Loading";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Text from "../../components/loginstyle/Text";
 import Button from "../../components/loginstyle/Button";
@@ -14,6 +14,7 @@ import Block from "../../components/loginstyle/Block";
 import { theme } from "../../constants";
 import Toast from "react-native-easy-toast";
 import { ep_login } from "../../utils/endpoints";
+import { maxCaracter } from "../../utils/other";
 
 function LoginForm(props) {
   const { navigation, toastRef } = props;
@@ -66,8 +67,10 @@ function LoginForm(props) {
             label="Correo Electrónico"
             error={hasErrors("email")}
             style={[styles.input, hasErrors("email")]}
+            maxLength={30}
             /*             onChangeText={(text) => setEmail(text)}*/
             onChange={(e) => setEmail(e.nativeEvent.text)}
+            onKeyPress={maxCaracter(email, 30)}
             placeholder={VALID_EMAIL}
           />
           <Input
@@ -75,9 +78,11 @@ function LoginForm(props) {
             label="Contraseña"
             error={hasErrors("password")}
             style={[styles.input, hasErrors("password")]}
+            maxLength={8}
             defaultValue={VALID_PASSWORD}
             /* onChangeText={(text) => setPassword(tex)} */
             onChange={(e) => setPassword(e.nativeEvent.text)}
+            onKeyPress={maxCaracter(password, 8)}
           />
 
           <Button

@@ -11,8 +11,9 @@ import Button from "../../components/loginstyle/Button";
 import { theme } from "../../constants";
 import Toast, { DURATION } from "react-native-easy-toast";
 import Input from "../../components/loginstyle/Input";
-import { ep_login, ep_login2} from "../../utils/endpoints";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import { ep_login, ep_login2 } from "../../utils/endpoints";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { maxCaracter } from "../../utils/other";
 
 function RegisterForm(props) {
   const { toastRef, navigation } = props;
@@ -23,12 +24,6 @@ function RegisterForm(props) {
   const [password, setPassword] = useState("");
   const [RePassword, setRePassword] = useState("");
   const url = "http://backendapplication-1.azurewebsites.net/api/usuarios";
-  /*   {
-    "correo": "p@p.com",
-    "enable": true,
-    "id": 0,
-    "password": "holi"
-  } */
 
   const register2 = async () => {
     const ObjData = {};
@@ -53,8 +48,11 @@ function RegisterForm(props) {
         })
           .then((res) => res.json())
           .then(() => {
-            toastRef.current.show("Usuario registrado Satisfactoriamente!", 5000);
-            
+            toastRef.current.show(
+              "Usuario registrado Satisfactoriamente!",
+              5000
+            );
+
             /*ep_login(ObjData.correo, ObjData.password, navigation);*/
             ep_login2(ObjData.correo, ObjData.password, navigation);
           });
@@ -62,35 +60,6 @@ function RegisterForm(props) {
     }
   };
 
-  /*   const registroDatos = () => {
-
-    const urlbase = `http://192.168.100.2:8080/api/usuarios/`;
-    const id = idUser;
-    const url = urlbase + id + "/paciente";
-
-    const DataObj = {};
-    (DataObj.apellidoMaterno = apellidoMaterno),
-      (DataObj.apellidoPaterno = apellidoPaterno),
-      (DataObj.correo = "a@a.com"),
-      (DataObj.dni = dni),
-      (DataObj.edad = parseInt(edad)),
-      (DataObj.fechaNac = date),
-      (DataObj.nombre = nombre),
-      (DataObj.parentesco = "otro weon"),
-      (DataObj.telefono = Telefono),
-      console.log(JSON.stringify(DataObj));
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(DataObj),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        navigation.navigate("UserLoggued");
-      });
-  }; */
   return (
     <KeyboardAwareScrollView style={{ flex: 1, marginTop: -20 }}>
       <Block padding={[0, theme.sizes.base * 0.1]}>
@@ -128,7 +97,9 @@ function RegisterForm(props) {
               label="Correo electronico"
               placeholder="abc@easy.com"
               style={styles.input}
+              maxLength={30}
               onChange={(e) => setEmail(e.nativeEvent.text)}
+              onKeyPress={maxCaracter(email, 30)}
               rightIcon={
                 <Icon
                   type="material-community"
@@ -144,7 +115,9 @@ function RegisterForm(props) {
               password={true}
               secureTextEntry={hidePassword}
               style={styles.input}
+              maxLength={8}
               onChange={(e) => setPassword(e.nativeEvent.text)}
+              onKeyPress={maxCaracter(password, 8)}
               rightIcon={
                 <Icon
                   type="material-community"
@@ -160,7 +133,9 @@ function RegisterForm(props) {
               password={true}
               secureTextEntry={true}
               style={styles.input}
+              maxLength={8}
               onChange={(e) => setRePassword(e.nativeEvent.text)}
+              onKeyPress={maxCaracter(RePassword, 8)}
               rightIcon={
                 <Icon
                   type="material-community"
@@ -180,7 +155,6 @@ function RegisterForm(props) {
           </View>
         </Block>
       </Block>
-    
     </KeyboardAwareScrollView>
   );
 }

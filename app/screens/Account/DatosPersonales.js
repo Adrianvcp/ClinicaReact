@@ -3,7 +3,7 @@ import { StyleSheet, View, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Loading from "../../components/Loading";
 import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
@@ -19,6 +19,7 @@ import { isEmpty } from "lodash";
 import { registrodatos } from "../../utils/endpoints";
 import { withNavigation } from "react-navigation";
 import Toast from "react-native-easy-toast";
+import { maxCaracter } from "../../utils/other";
 
 function RegisterForm(props) {
   const toastRef = useRef();
@@ -41,7 +42,7 @@ function RegisterForm(props) {
   const [apellidoPaterno, setapellidoPaterno] = useState("");
   const [apellidoMaterno, setapellidoMaterno] = useState("");
   const [dni, setDni] = useState("");
-  const [fnacimiento, setFnacimiento] = useState(new Date(1598051730000));
+  const [fnacimiento, setFnacimiento] = useState("");
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
 
@@ -95,7 +96,10 @@ function RegisterForm(props) {
                 label="Nombres"
                 placeholder=""
                 style={styles.input}
+                maxLength={20}
                 onChange={(e) => setNombre(e.nativeEvent.text)}
+                /*                 onKeyPress={maxCaracter(nombre, 20)}
+                 */
               />
 
               <Input
@@ -103,22 +107,32 @@ function RegisterForm(props) {
                 placeholder=""
                 password={true}
                 style={styles.input}
+                maxLength={30}
                 onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
+                /*                 onKeyPress={maxCaracter(apellidoPaterno, 30)}
+                 */
               />
               <Input
                 label="Apellido Materno"
                 placeholder=""
                 style={styles.input}
+                maxLength={30}
                 onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
+                /*                 onKeyPress={maxCaracter(apellidoMaterno, 30)}
+                 */
               />
               <Input
                 label="DNI"
                 placeholder=""
                 style={styles.input}
+                maxLength={8}
                 onChange={(e) => setDni(e.nativeEvent.text)}
+                /*                 onKeyPress={maxCaracter(dni, 8)}
+                 */
               />
 
               <Label style={styles.input}>Fecha Nacimiento</Label>
+
               <DatePicker
                 style={{
                   width: "100%",
@@ -128,7 +142,7 @@ function RegisterForm(props) {
                 date={fnacimiento}
                 mode={mode}
                 containerStyle={""}
-                placeholder="select date"
+                placeholder="seleccionar fecha"
                 format="YYYY-MM-DD"
                 minDate="1900-05-01"
                 maxDate="2021-06-01"
@@ -156,17 +170,15 @@ function RegisterForm(props) {
                   setFnacimiento(fnacimiento);
                 }}
               />
-              <Input
-                label="Edad"
-                placeholder="22"
-                style={styles.input}
-                onChange={(e) => setEdad(e.nativeEvent.text)}
-              />
+
               <Input
                 label="Telefono"
                 placeholder=""
                 style={styles.input}
+                maxLength={9}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
+                /*                 onKeyPress={maxCaracter(Telefono, 9)}
+                 */
               />
               <Button
                 gradient
@@ -178,7 +190,7 @@ function RegisterForm(props) {
                     apellidoPaterno,
                     dni,
                     Telefono,
-                    edad,
+                    18,
                     fnacimiento,
                     toastRef,
                     navigation

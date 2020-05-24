@@ -28,8 +28,10 @@ import DatePicker from "react-native-datepicker";
 import { funcionA } from "../../utils/endpoints";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
+import { maxCaracter } from "../../utils/other";
 
 function AddRestaurantForm(props) {
+  const fechaActual = new Date();
   const { navigation } = props;
   const parametros = props.navigation.state.params;
 
@@ -49,9 +51,7 @@ function AddRestaurantForm(props) {
       .then((response) => response.json())
       .then((json) => setOptEsp(json))
       .catch((error) => console.error(error));
-  }, []);
 
-  useEffect(() => {
     fetch("https://backendapplication-1.azurewebsites.net/api/seguros")
       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
@@ -59,7 +59,7 @@ function AddRestaurantForm(props) {
   }, []);
 
   /* VAR - FECHA */
-  const [date, setDate] = useState(new Date(198051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   /* VAR - LISTAS SELECTORAS : ESPECIADLIDAD Y SEGURO */
@@ -67,6 +67,11 @@ function AddRestaurantForm(props) {
   const [seguro, setseguro] = useState("");
   const [Data, setData] = useState("");
 
+  var mes = fechaActual.getMonth() + 1;
+  var dia = fechaActual.getDate();
+  var anio = fechaActual.getFullYear();
+  const minfecha = String(anio + "-" + mes + "-" + dia);
+  console.log(minfecha);
   const [distritoVar, setdistritoVar] = useState("");
 
   /* METODOS CALENDARIO - FECHA */
@@ -102,7 +107,7 @@ function AddRestaurantForm(props) {
     const fecha = `&fecha=${fec}`;
     const seguro = `&seguro=${seg}`;
     const url = urlBase + distrito + especialidad + fecha + seguro;
-    console.log(url);
+
     const searchData = {};
     searchData.especialidad = esp;
     searchData.distrito = dis;
@@ -206,7 +211,7 @@ function AddRestaurantForm(props) {
                 containerStyle={""}
                 placeholder="select date"
                 format="YYYY-MM-DD"
-                minDate="2006-05-01"
+                minDate={minfecha}
                 maxDate="2021-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -258,8 +263,10 @@ function AddRestaurantForm(props) {
 
                 <TextInput
                   style={{ height: 40, fontSize: 14 }}
+                  maxLength={30}
                   onChangeText={(text) => setdistritoVar(text)}
                   placeholder="Ingresa distrito"
+                  onKeyPress={maxCaracter(distritoVar, 30)}
                 />
               </View>
 
@@ -279,7 +286,7 @@ function AddRestaurantForm(props) {
         </Fieldset>
 
         {/* CALENDARIO */}
-        <View>
+        {/*         <View>
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
@@ -298,7 +305,7 @@ function AddRestaurantForm(props) {
               }}
             />
           )}
-        </View>
+        </View> */}
 
         {/* SEGURO */}
         <Fieldset label="Seleccione su Seguro" last>

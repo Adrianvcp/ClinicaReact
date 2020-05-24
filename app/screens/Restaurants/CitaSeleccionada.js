@@ -31,223 +31,143 @@ import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 import { withNavigation } from "react-navigation";
 import { AsyncStorage, Alert } from "react-native";
+import base64 from "react-native-base64";
+import { render } from "react-dom";
 
+export default class CitaSeleccionada extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+    this.state = {
+      navigation: props.navigation,
+      confirmar: props.navigation.state.params.confirmar,
+      parametrosBuscados: props.navigation.state.params.parametrosBuscados,
+      restaurant: props.navigation.state.params.restaurant,
+      item: props.navigation.state.params.restaurant.item,
+      esp: "",
+      sinSeleccion: "",
+      login: false,
+      opt_pac: [],
+      patientsOptions: [{ value: 0, label: "Seleccionar" }],
+      pacienteSeleccionado: {},
+      checkedvar: false,
+    };
+  } // para listar pacientes x usuario
+  /* var ObjP = {};
+   */
 
-
-function CitaSeleccionada(props) {
-  const parametrosBuscados = props.navigation.state.params.parametrosBuscados;
-  const confirmar = props.navigation.state.params.confirmar;
-
-  const [checkedvar, setchecked] = useState(false);
-  const { navigation, alerta } = props;
-  const { restaurant } = navigation.state.params;
-  const { item } = navigation.state.params.restaurant;
-
-  const data = [
-    { label: "Football", value: "football" },
-    { label: "Baseball", value: "baseball" },
-    { label: "Hockey", value: "hockey" },
-  ];
-  const scrollX = new Animated.Value(0);
-  const [esp, setesp] = useState("");
-  const [sinSeleccion, setsinSeleccion] = useState("Sinseleccion");
-  const [login, setlogin] = useState("false");
-  var ObjP = {};
-  // para listar pacientes x usuario
-
-  async function Paci() {
-    // para listar pacientes x usuario
-    await AsyncStorage.getItem("id").then((v) => console.log("jiji:" + v));
-    const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
-    const id = await AsyncStorage.getItem("id");
-    const url = urlbase + id + "/pacientes?id=" + id;
-
-    console.log(url);
-
-    return url;
-  }
-
-  const [opt_pac, setOptPac] = useState([]);
-  useEffect(() => {
-    Paci().then((url) => {
+  componentDidMount() {
+    console.log("DIDMOUNT");
+    /* Guardo los pacientes  */
+    var Paci = async () => {
+      const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
+      const id = await AsyncStorage.getItem("id");
+      const url = urlbase + id + "/pacientes?id=" + id;
+      console.log(url);
       fetch(url)
-        .then((response) => response.json())
-        .then((json) => setOptPac(json))
-        .catch((error) => console.error(error));
-    });
-  }, []);
+        .then((r) => r.json())
+        .then((json) => {
+          this.setState({ opt_pac: json });
+          console.log(this.state.opt_pac);
+          var ObjOpciones = [{ value: 0, label: "Seleccionar" }];
+          for (let i = 0; i < this.state.opt_pac.length; i++) {
+            const element = this.state.opt_pac[i];
+            const obj = {
+              value: element.id,
+              label: element.nombre,
+            };
+            ObjOpciones.push(obj);
+          }
 
-  const patientsOptions = [{ value: 0, label: "Seleccionar" }];
+          this.setState({ patientsOptions: ObjOpciones });
+          console.log(this.state.patientsOptions);
+        });
 
-  for (let i = 0; i < opt_pac.length; i++) {
-    const element = opt_pac[i];
-    const obj = {
-      value: element.id,
-      label: element.nombre,
+      if (id != null) {
+        this.setState({ login: true });
+      }
+      return url;
     };
 
-    patientsOptions.push(obj);
+    Paci();
+
+    //CUANDO DA CLICK EN CHECK
+    console.log("check");
+    console.log(this.state.confirmar);
+    console.log("LOGIN DID MOUNT: " + this.state.login);
   }
 
-  //
-
-  const keydata = async () => {
-    const lg = await AsyncStorage.getItem("keyuser").then((a) => {
-      console.log("asd");
-      console.log(a);
-      setlogin(a);
-    });
-  };
-
-  const menu = useRef();
-  /* FUNCIONES ANULAR */
-  const showDialog = () => {
-    setdialogVisible(true);
-  };
-  const handleCancel = () => {
-    confirmar === false;
-  };
-  const handleOK = () => {
-    // The user has pressed the "Delete" button, so here you can do your own logic.
-    // ...Your logic
-    confirmar === false;
-  };
-
-  const showMenu = () => menu.current.show();
-  /* const blabla = () => {
-    keydata();
-    if (login != "true") {
-      alert("No inicio sesion");
-    }
-  };
-*/
-  {
-    confirmar ? console.log(objPaciente()) : console.log("nada");
-  }
-
-  function objPaciente() {
-    for (let i = 0; i < opt_pac.length; i++) {
-      if (parseInt(opt_pac[i].id) == parseInt(esp)) {
-        ObjP = opt_pac[i];
-        break;
+  componentWillReceiveProps() {
+    console.log("will");
+    var verificarlogin = async () => {
+      const id = await AsyncStorage.getItem("id");
+      if (id != null) {
+        this.setState({ login: true });
       }
-      console.log("No se encontro el paciente en el arreglo obtenido");
-            
+    };
 
-    }
+    verificarlogin();
 
-    console.log(ObjP);
-    const ObjPaciente = Object.assign({}, item);
+    //si se encuentra logeado
+    if (this.state.login == false) {
+      Alert.alert("Error", "Debe iniciar sesion");
+    } else {
+      //verifico si se selecciono un paciente
+      var patiseleccionado = {};
+      const verificar = (index) => {
+        //condicion
+        if (
+          parseInt(this.state.opt_pac[index].id) == parseInt(this.state.esp)
+        ) {
+          patiseleccionado = Object.assign({}, this.state.opt_pac[index]);
+          console.log(patiseleccionado);
+          return true;
+        }
+        if (
+          index == 0 &&
+          parseInt(this.state.opt_pac[index].id) != parseInt(this.state.esp)
+        )
+          return false;
+        //denuevo
+        return verificar(index - 1);
+      };
+      var respuesta = verificar(this.state.opt_pac.length - 1);
 
-    /* pOST */
-    /* Armo la info para enviar  */
-    ObjPaciente["paciente"] = Object.assign({}, ObjP);
-    ObjPaciente["reserva"] = true;
-    ObjPaciente["hora"] = ObjPaciente["fecha"] + "T" + ObjPaciente["hora"];
-    console.log(JSON.stringify(ObjPaciente));
+      if (respuesta == true) {
+        const ObjPaciente = Object.assign({}, this.state.item);
+        ObjPaciente["paciente"] = Object.assign({}, patiseleccionado);
+        ObjPaciente["reserva"] = true;
+        ObjPaciente["hora"] = ObjPaciente["fecha"] + "T" + ObjPaciente["hora"];
 
-    try {
-      fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ObjPaciente),
-      });
+        try {
+          fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(ObjPaciente),
+          });
 
-      //Alert.alert("Reserva", "Cita reservada correctamente");
-      confirmar = false;
-      //navigation.navigate("UserLoggued");
-      /* Como mejora -> confirmar cambiarlo a Asyncstorage en vez de enviar un paramtro */
-    } catch (error) {
-      console.log(error);
-      
+          console.log(JSON.stringify(ObjPaciente));
+
+          Alert.alert("Reserva", "Reserva completada con exito");
+          this.state.navigation.navigate("restaurants");
+        } catch (error) {
+          console.log(error);
+          return;
+        }
+      } else {
+        Alert.alert("Error", "Falta seleccionar paciente");
+      }
     }
   }
 
- return (
-<View style={styles.flex}>
-     
-      <View>
-        <Dialog.Container visible={login && confirmar}>
-          <View>
-            <Icon
-              name="calendar-clock"
-              type="material-community"
-              underlayColor="transparent"
-              iconStyle={styles.collegeIcon}
-              color="gray"
-              size={60}
-            />
-          </View>
-
-          <View>
-            <Dialog.Title
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              Reserva Completada{" "}
-            </Dialog.Title>
-                
-             
-            <Dialog.Description style={styles.textoMenu}>
-              Especialidad: {parametrosBuscados.especialidad}
-            </Dialog.Description>
-            <Dialog.Description style={styles.textoMenu}>
-              Dia: {parametrosBuscados.fecha}
-            </Dialog.Description>
-            <Dialog.Description style={styles.textoMenu}>
-              Horario:{restaurant.item.hora}
-            </Dialog.Description>
-            <Dialog.Description style={styles.textoMenu}>
-              {restaurant.item.ubicacion.clinica.nombre}
-            </Dialog.Description>
-            <Dialog.Description style={styles.textoMenu}>
-              Sede:{restaurant.item.ubicacion.distrito}
-            </Dialog.Description>
-
-            <CheckBox
-              title="Notificar cita medica"
-              checked={checkedvar}
-              onPress={() => {
-                setchecked(!checkedvar);
-              }}
-            />
-          </View>
-
-          <Dialog.Button
-            label="Cancelar"
-            onPress={() => {
-              navigation.navigate("cita", { navigation, confirmar: false });
-            }}
-          />
-
-          <Dialog.Button
-            label="ACEPTAR"
-            onPress={() => {
-              
-              navigation.navigate("cita",{ navigation,confirmar:false});
-              navigation.navigate("restaurants");
-            }}
-          />
-        </Dialog.Container>
-      </View>
-      <View style={[styles.flexa]}>
-        <ScrollView
-          horizontal
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: scrollX } } },
-          ])}
-        >
+  render() {
+    return (
+      <View style={styles.flex}>
+        <Text>{String(this.state.login)}</Text>
+        <View style={[styles.flexa]}>
           <Image
             source={{
               uri:
@@ -256,96 +176,91 @@ function CitaSeleccionada(props) {
             resizeMode="cover"
             style={{ width, height: width / 2 }}
           />
-        </ScrollView>
-      </View>
+        </View>
 
-      <View style={[styles.flex, styles.content]}>
-        {/* INFO  */}
-        <View style={[styles.flex, styles.contentHeader]}>
-          <Image
-            style={[styles.avatar, styles.shadow]}
-            source={{
-              uri:
+        <View style={[styles.flex, styles.content]}>
+          {/* INFO  */}
+          <View style={[styles.flex, styles.contentHeader]}>
+            <Image
+              style={[styles.avatar, styles.shadow]}
+              source={{
+                uri: base64.decode(this.state.item.medico.img),
                 /* restaurant.item.phurl  */
-                "https://randomuser.me/api/portraits/women/44.jpg",
-            }}
-          />
+              }}
+            />
 
-          <Text style={{ fontWeight: "bold", fontSize: 20, color: "grey" }}>
-            {restaurant.item.ubicacion.clinica.nombre} -{" "}
-            {restaurant.item.ubicacion.distrito}
-          </Text>
+            <Text style={{ fontWeight: "bold", fontSize: 20, color: "grey" }}>
+              {this.state.restaurant.item.ubicacion.clinica.nombre} -{" "}
+              {this.state.restaurant.item.ubicacion.distrito}
+            </Text>
 
-          <View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View>
-                <Text
-                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
-                >
-                  ESPECIALIDAD
-                </Text>
-                <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  {parametrosBuscados.especialidad}
-                </Text>
-                {/* DETALLE CITA */}
-                <Text
-                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
-                >
-                  DETALLE DE LA CITA
-                </Text>
-                <View style={{ flex: 1 }}></View>
-                <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  Dia: {parametrosBuscados.fecha}
-                </Text>
-                <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  Doctor:{" "}
-                  {restaurant.item.medico.nombre +
-                    " " +
-                    restaurant.item.medico.apellidoPaterno}
-                </Text>
-                <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                  Hora: {restaurant.item.hora}
-                </Text>
-                <Text
-                  style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
-                >
-                  PACIENTE
-                </Text>
+            <View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View>
+                  <Text
+                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                  >
+                    ESPECIALIDAD
+                  </Text>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    {this.state.parametrosBuscados.especialidad}
+                  </Text>
+                  {/* DETALLE CITA */}
+                  <Text
+                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                  >
+                    DETALLE DE LA CITA
+                  </Text>
+                  <View style={{ flex: 1 }}></View>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    Dia: {this.state.parametrosBuscados.fecha}
+                  </Text>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    Doctor:{" "}
+                    {this.state.restaurant.item.medico.nombre +
+                      " " +
+                      this.state.restaurant.item.medico.apellidoPaterno}
+                  </Text>
+                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
+                    Hora: {this.state.restaurant.item.hora}
+                  </Text>
+                  <Text
+                    style={{ fontWeight: "bold", marginTop: 10, color: "grey" }}
+                  >
+                    PACIENTE
+                  </Text>
 
-                <View style={styles.dividir}>
-                  <SelectInput
-                    value={esp ? esp : 0}
-                    options={patientsOptions}
-                    onCancelEditing={() => console.log("onCancel")}
-                    onSubmitEditing={(a) => setesp(a)}
-                    onValueChange={(a) => setesp(a)}
-                    style={[styles.selectInput, styles.selectInputLarge]}
-                    labelStyle={styles.selectInputInner}
-                  />
-                  {Platform.OS === "ios" ? (
-                    <View style={{ borderBottomWidth: 0.3 }}>
-                      <Icon name="menu-down" type="material-community" />
-                    </View>
-                  ) : (
-                    <View></View>
-                  )}
+                  <View style={styles.dividir}>
+                    <SelectInput
+                      value={this.state.esp ? this.state.esp : 0}
+                      options={this.state.patientsOptions}
+                      onCancelEditing={() => console.log("onCancel")}
+                      onSubmitEditing={(a) => this.setState({ esp: a })}
+                      onValueChange={(a) => this.setState({ esp: a })}
+                      style={[styles.selectInput, styles.selectInputLarge]}
+                      labelStyle={styles.selectInputInner}
+                    />
+                    {Platform.OS === "ios" ? (
+                      <View style={{ borderBottomWidth: 0.3 }}>
+                        <Icon name="menu-down" type="material-community" />
+                      </View>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
                 </View>
-              </View>
 
-              <View style={{ height: 200 }}>
-                <MapView navigation={navigation}></MapView>
-              </View>
-            </ScrollView>
+                <View style={{ height: 200 }}>
+                  <MapView navigation={this.state.navigation}></MapView>
+                </View>
+              </ScrollView>
+            </View>
           </View>
         </View>
       </View>
-    </View>
     );
-    
+  }
 }
-
-export default withNavigation(CitaSeleccionada);
-
 
 const styles = StyleSheet.create({
   flex: {

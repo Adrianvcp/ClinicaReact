@@ -16,11 +16,12 @@ import MapView from "../../components/Mapa/JustMapa";
 import Ubicacion from "../../screens/Restaurants/Ubicacion";
 import * as theme from "../../../themes/clinics";
 const { width } = Dimensions.get("window");
-
+import { anularMiCita } from "../../utils/endpoints";
 /*----------- CUADRO DE DIALOGO - ACEPTAR O DECLINAR SOLICITUD -----------*/
 import Dialog from "react-native-dialog";
 
 import call from "react-native-phone-call";
+import { Alert } from "react-native";
 
 export default function CitaSeleccionada(props) {
   const [dialogVisible, setdialogVisible] = useState(false);
@@ -48,7 +49,6 @@ export default function CitaSeleccionada(props) {
     number: restaurant.item.ubicacion.clinica.telefono,
     prompt: false,
   };
-  console.log(restaurant.item);
 
   /* FUNCIONES ANULAR */
   const showDialog = () => {
@@ -58,10 +58,15 @@ export default function CitaSeleccionada(props) {
     setdialogVisible(false);
   };
   const handleOK = () => {
-    // The user has pressed the "Delete" button, so here you can do your own logic.
-    // ...Your logic
+    /*UTILIZAR POST PARA ANULAR LA CITA*/
     setdialogVisible(false);
-    navigation.navigate("restaurants");
+    try {
+      anularMiCita(restaurant.item, navigation);
+      navigation.navigate("restaurants");
+      Alert.alert("Se elimino la cita.");
+    } catch (error) {
+      console.log(error);
+    }
   };
   /* FUNCIONES REPROGRAMAR */
   const showDialogRepro = () => {
@@ -71,7 +76,10 @@ export default function CitaSeleccionada(props) {
     setdialogVisibleRepro(false);
   };
   const handleOKRepro = () => {
+    /*     navigation.navigate("Repro", { navigation });
+     */
     navigation.navigate("Repro", { navigation });
+
     setdialogVisibleRepro(false);
   };
 
@@ -108,7 +116,7 @@ export default function CitaSeleccionada(props) {
               OFTAMOLOGIA
             </Dialog.Description>
             <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
-              DIA:11/11/1996 - {restaurant.item.hora}
+              DIA: {restaurant.item.fecha} - {restaurant.item.hora}
             </Dialog.Description>
             <Dialog.Description
               style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
@@ -153,7 +161,7 @@ export default function CitaSeleccionada(props) {
               OFTAMOLOGIA
             </Dialog.Description>
             <Dialog.Description style={{ marginTop: -1, textAlign: "center" }}>
-              DIA:11/11/1996 - {restaurant.item.hora}
+              DIA: {restaurant.item.fecha} - {restaurant.item.hora}
             </Dialog.Description>
             <Dialog.Description
               style={{ marginTop: -1, textAlign: "center", marginBottom: 15 }}
@@ -190,7 +198,7 @@ export default function CitaSeleccionada(props) {
           />
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "60%" }}>
-        <Text style={styles.title}>Oftalmologia</Text>
+              <Text style={styles.title}>Oftalmologia</Text>
               <TouchableOpacity>
                 <Text
                   style={{ paddingTop: -100, color: "#007BFA" }}

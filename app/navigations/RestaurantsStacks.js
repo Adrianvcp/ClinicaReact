@@ -103,12 +103,12 @@ export const AppointmentScreenStacks = createStackNavigator({
             onPress={() => navigation.navigate("restaurants")}
           />
         ),
-      /*  headerRight: (
+        /*  headerRight: (
           <View>
       <MenuListFiltro navigation={navigation} />
            <MenuAdministrador navigation={navigation} /> 
           </View> ),*/
-        
+
         headerTitleAlign: "left",
         headerTitle: "Citas disponibles",
       };
@@ -145,19 +145,23 @@ export const AppointmentScreenStacks = createStackNavigator({
         ),
         headerRight: (
           <Icon
-            containerStyle={{ margin: 10 }}
+            containerStyle={{
+              marginRight: 20,
+              backgroundColor: "red",
+              height: "100%",
+              justifyContent: "center",
+            }}
             name={"check"}
             type="material-community"
             underlayColor="transparent"
             color="black"
-            size={20}
+            size={30}
             onPress={() => {
               /*                 cambiarDato();
             console.log("Dato a ");
             console.log(confirmar); */
               navigation.navigate("cita", {
                 confirmar: true,
-                iad: ga(),
               });
             }}
           />
@@ -176,6 +180,25 @@ export const AppointmentScreenStacks = createStackNavigator({
           /*           <Header navigation={navigation} title="Reservar cita" />
            */
         ),
+      };
+    },
+  },
+  repro: {
+    screen: AddAppointmentScreen,
+    navigationOptions: ({ navigation }) => {
+      //title: "Restaurantes"
+      return {
+        headerTitle: "Buscar Cita",
+        /*         headerRight: (
+          <Icon
+            containerStyle={{ margin: 5 }}
+            name={"home"}
+            type="material-community"
+            underlayColor="transparent"
+            color="black"
+            size={20}
+          />
+        ), */
       };
     },
   },

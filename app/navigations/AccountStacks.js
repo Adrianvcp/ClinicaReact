@@ -181,7 +181,7 @@ export const AccountScreenStack = createStackNavigator({
             underlayColor="transparent"
             color="black"
             size={30}
-            onPress={() => navigation.navigate("GestFamiliar")}
+            onPress={() => navigation.navigate("InfoUser")}
           />
         ),
         headerTitle: "Modificar datos personales",

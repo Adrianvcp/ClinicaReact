@@ -145,7 +145,7 @@ async function ep_login2(email, password, navigation, toastRef) {
 
     keyUser();
   } catch (error) {
-  //  toastRef.current.show("Usuario y/o contraseña incorrecta", 1000);
+    //  toastRef.current.show("Usuario y/o contraseña incorrecta", 1000);
   }
   /* ANTES WELCOME */
   navigation.navigate("formuDatos", { user: json.id });
@@ -430,6 +430,25 @@ async function ep_primeraVez(v_id) {
   }
 }
 
+function anularMiCita(ObjetoCita, navigation) {
+  var nuevoObjeto = Object.assign({}, ObjetoCita);
+  nuevoObjeto.paciente = null;
+  nuevoObjeto.reserva = false;
+  nuevoObjeto.hora = nuevoObjeto.fecha + "T" + nuevoObjeto.hora;
+  console.log(JSON.stringify(nuevoObjeto));
+  try {
+    fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(nuevoObjeto),
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log(Alert.alert("Tenemos inconvenientes,alaos"));
+  }
+}
+
 module.exports = {
   funcionA,
   ep_login,
@@ -440,4 +459,5 @@ module.exports = {
   añadirpaciente,
   modificardatos,
   routeDinamic,
+  anularMiCita,
 };
