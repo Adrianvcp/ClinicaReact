@@ -376,7 +376,7 @@ async function modificardatos(
       (DataObj.apellidoPaterno = apellidoPaterno),
       (DataObj.correo = "aea@a.com"),
       (DataObj.dni = dni),
-      (DataObj.edad = "30" ),
+      (DataObj.edad = "30"),
       (DataObj.fechaNac = fnacimiento),
       (DataObj.nombre = nombre),
       (DataObj.parentesco = "yo"),
@@ -424,7 +424,7 @@ async function ep_primeraVez(v_id) {
   }
 }
 
-function anularMiCita(ObjetoCita, navigation) {
+function anularMiCita(ObjetoCita) {
   var nuevoObjeto = Object.assign({}, ObjetoCita);
   nuevoObjeto.paciente = null;
   nuevoObjeto.reserva = false;

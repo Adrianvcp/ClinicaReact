@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, View, Image, TextInput } from "react-native";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
@@ -80,7 +80,12 @@ function RegisterForm(props) {
   }  */
 
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "white" }} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: "white" }}
+      extraScrollHeight={100}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
@@ -93,8 +98,6 @@ function RegisterForm(props) {
                 Informacion Basica:
               </Text>
               <Input
-              
-              
                 label="Nombres"
                 placeholder=""
                 style={styles.input}
@@ -128,7 +131,7 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={8}
-                keyboardType={'numeric'}
+                keyboardType={"numeric"}
                 onChange={(e) => setDni(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(dni, 8)}
                  */
@@ -179,7 +182,7 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={9}
-                keyboardType={'numeric'}
+                keyboardType={"numeric"}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(Telefono, 9)}
                  */

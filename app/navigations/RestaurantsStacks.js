@@ -1,6 +1,8 @@
 import { createStackNavigator, HeaderTitle } from "react-navigation-stack";
 import AppointmentScreen from "../screens/Restaurants/Appointments";
 import AddAppointmentScreen from "../screens/Restaurants/AddAppointment";
+
+import ReprogramarForm from "../components/Restaurants/ReprogramarForm";
 import AppointmentListScreen from "../screens/Restaurants/AppointmentList";
 import Ubicacion from "../screens/Restaurants/Ubicacion";
 import CitaSeleccionada from "../screens/Restaurants/CitaSeleccionada";
@@ -184,11 +186,11 @@ export const AppointmentScreenStacks = createStackNavigator({
     },
   },
   repro: {
-    screen: AddAppointmentScreen,
+    screen: ReprogramarForm,
     navigationOptions: ({ navigation }) => {
       //title: "Restaurantes"
       return {
-        headerTitle: "Buscar Cita",
+        headerTitle: "Reprogramar Cita",
         /*         headerRight: (
           <Icon
             containerStyle={{ margin: 5 }}

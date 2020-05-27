@@ -16,8 +16,12 @@ import { Label } from "react-native-clean-form";
 import { ScrollView } from "react-native-gesture-handler";
 import Button from "../../components/loginstyle/Button";
 import { modificardatos } from "../../utils/endpoints";
+import { Alert } from "react-native";
 
 function RegisterForm(props) {
+  console.log("PROPS");
+  console.log(props.navigation.state.params);
+  var { userInfo } = props.navigation.state.params;
   const { toastRef, navigation } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepPassword, setHideRepPassword] = useState(true);
@@ -28,12 +32,60 @@ function RegisterForm(props) {
   const [apellidoPaterno, setapellidoPaterno] = useState("");
   const [apellidoMaterno, setapellidoMaterno] = useState("");
   const [dni, setDni] = useState("");
-  const [fnacimiento, setFnacimiento] = useState(new Date(1598051730000));
+  const [fnacimiento, setFnacimiento] = useState("");
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
 
+  function changeDataUser() {
+    var obj = Object.assign({}, userInfo);
+    console.log(obj);
+    console.log("------------------");
+    if (apellidoMaterno != "") {
+      obj.apellidoMaterno = apellidoMaterno;
+    }
+    if (apellidoPaterno != "") {
+      obj.apellidoPaterno = apellidoPaterno;
+    }
+    if (nombre != "") {
+      obj.nombre = nombre;
+    }
+    if (dni != "") {
+      obj.dni = dni;
+    }
+
+    if (fnacimiento != "") {
+      obj.fechaNac = fnacimiento;
+    }
+    if (Telefono != "") {
+      obj.telefono = Telefono;
+    }
+
+    try {
+      var url = "https://backendapplication-1.azurewebsites.net/api/pacientes";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify(obj),
+      })
+        .then((res) => res.json())
+        .then(() => {
+          navigation.navigate("UserLoggued");
+        });
+    } catch (error) {
+      Alert.alert("Error", "Ocurrio un error, no se pudo actualizar los datos");
+      navigation.navigate("UserLoggued");
+    }
+  }
+
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "white" }} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: "white" }}
+      extraScrollHeight={100}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
@@ -47,7 +99,7 @@ function RegisterForm(props) {
               </Text>
               <Input
                 label="Nombres"
-                placeholder="Pedro Adrian"
+                placeholder={userInfo.nombre}
                 style={styles.input}
                 onChange={(e) => setNombre(e.nativeEvent.text)}
                 rightIcon={
@@ -61,19 +113,19 @@ function RegisterForm(props) {
 
               <Input
                 label="Apellido Paterno"
-                placeholder="Vela"
+                placeholder={userInfo.apellidoPaterno}
                 style={styles.input}
                 onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
               />
               <Input
                 label="Apellido Materno"
-                placeholder="Cruz"
+                placeholder={userInfo.apellidoMaterno}
                 style={styles.input}
                 onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
               />
               <Input
                 label="DNI"
-                placeholder="12345678"
+                placeholder={userInfo.dni}
                 style={styles.input}
                 onChange={(e) => setDni(e.nativeEvent.text)}
               />
@@ -88,7 +140,7 @@ function RegisterForm(props) {
                 date={fnacimiento}
                 mode={mode}
                 containerStyle={""}
-                placeholder="select date"
+                placeholder={userInfo.fechaNac}
                 format="YYYY-MM-DD"
                 minDate="1900-05-01"
                 maxDate="2026-05-01"
@@ -113,26 +165,29 @@ function RegisterForm(props) {
                   // ... You can check the source to find the other keys.
                 }}
                 onDateChange={(fnacimiento) => {
-                  setDate(fnacimiento);
+                  setFnacimiento(fnacimiento);
                 }}
               />
-              <Input
+              {/*               <Input
                 label="Edad"
                 placeholder="22"
                 style={styles.input}
                 onChange={(e) => setEdad(e.nativeEvent.text)}
-              />
+              /> */}
               <Input
                 label="Telefono"
-                placeholder="134235346"
+                placeholder={userInfo.telefono}
                 style={styles.input}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
               />
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
-                onPress={() =>// {modificardatos(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, edad, fnacimiento,toastRef,navigation),
-                  navigation.navigate("InfoUser")}
+                onPress={() => {
+                  changeDataUser();
+                  // {modificardatos(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, edad, fnacimiento,toastRef,navigation),
+                  navigation.navigate("InfoUser");
+                }}
               >
                 <Text bold white center>
                   Modificar datos

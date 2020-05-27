@@ -3,12 +3,16 @@ import {
   StyleSheet,
   View,
   Text,
+  TouchableOpacity,
   Dimensions,
   FlatList,
   TextInput,
+  ImageBackground,
+  Alert,
 } from "react-native";
 
 import * as theme from "../../../themes/clinics";
+
 const { width } = Dimensions.get("window");
 
 /*----------- CUADRO DE DIALOGO - ACEPTAR O DECLINAR SOLICITUD -----------*/
@@ -16,8 +20,11 @@ import Dialog from "react-native-dialog";
 
 import DatePicker from "react-native-datepicker";
 import ListaReproClinicas from "../../components/Restaurants/ListaReproClinicas";
-import { Restaurant } from "../../utils/other";
+import base64 from "react-native-base64";
+import Octicons from "react-native-vector-icons/Octicons";
+import { Image, Icon } from "react-native-elements";
 
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function CitaSeleccionada(props) {
   console.log("-----------------------Repro------------------");
 
@@ -78,22 +85,6 @@ export default function CitaSeleccionada(props) {
       <View style={[styles.flex, styles.content]}>
         {/* INFO  -- DETALLE DE LAS CITAS*/}
         <View style={[styles.flex, styles.contentHeader]}>
-          {/*           <View style={{ flexDirection: "row", paddingTop: 10 }}>
-            <View>
-              <Text style={styles.title}>Oftalmologia</Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              width: "100%",
-              borderWidth: 0.5,
-              borderColor: "black",
-              marginBottom: 10,
-              marginTop: 10,
-            }}
-          ></View> */}
-
           <View
             style={{
               flexDirection: "row",
@@ -171,7 +162,6 @@ export default function CitaSeleccionada(props) {
             style={{ overflow: "hidden", height: height + 50, marginTop: 15 }}
             showsVerticalScrollIndicator={true}
             decelerationRate={0}
-            data={data}
             renderItem={(restaurant) => (
               <Restaurant
                 restaurant={restaurant}
@@ -184,6 +174,167 @@ export default function CitaSeleccionada(props) {
           />
         </View>
       </View>
+    </View>
+  );
+}
+
+function Restaurant(props) {
+  console.log("-----------------");
+  console.log(props);
+  const { restaurant, navigation, horaFilt, clinicFilt } = props;
+  const { fecha, hora, id, medico, reserva } = restaurant.item;
+  const { nombre, telefono, descripcion } = restaurant.item.ubicacion.clinica;
+  console.log(fecha);
+  const { img } = restaurant.item.ubicacion;
+  const [imageRestaurant, setImageRestaurant] = useState(null);
+
+  return (
+    <View>
+      {fecha == "2020-05-26" ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{ marginBottom: 20, backgroundColor: "red" }}
+          onPress={() => navigation.navigate("cita", { restaurant })}
+        >
+          <ImageBackground
+            style={[styles.flex, styles.destination, styles.shadow]}
+            imageStyle={{ borderRadius: theme.sizes.radius }}
+            source={{
+              uri: base64.decode(img),
+            }}
+          >
+            <View style={{ marginBottom: 50 }}>
+              <View
+                style={[
+                  styles.row,
+                  {
+                    justifyContent: "space-between",
+                  },
+                ]}
+              >
+                <View style={{ flex: 0 }}>
+                  <Image
+                    source={{
+                      uri: base64.decode(restaurant.item.medico.img),
+                    }}
+                    borderRadius={1000}
+                    style={styles.avatar}
+                  />
+                </View>
+
+                <View
+                  style={[
+                    styles.column,
+                    { flex: 2, paddingHorizontal: theme.sizes.padding / 2 },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      color: theme.colors.white,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {medico.nombre}
+                  </Text>
+                  <Text
+                    style={{
+                      color: theme.colors.white,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Octicons
+                      name="location"
+                      size={theme.sizes.font * 0.8}
+                      color={theme.colors.white}
+                    />
+                    <Text> {nombre}</Text>
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0,
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <Text style={styles.rating}>{id}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View
+              style={[
+                styles.row,
+                styles.destinationInfo,
+                styles.shadow,
+
+                { paddingTop: -30 },
+              ]}
+            >
+              <View
+                style={{
+                  marginTop: 5,
+                  marginLeft: -25,
+                  marginRight: 5,
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
+              </View>
+              <View
+                style={{
+                  marginTop: 5,
+                  flexDirection: "column",
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontSize: theme.sizes.font * 1.05,
+                      fontWeight: "500",
+                      marginTop: 5,
+                    }}
+                  >
+                    {fecha}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.row,
+                    {
+                      justifyContent: "space-between",
+                      alignItems: "flex-end",
+                    },
+                  ]}
+                >
+                  <Text
+                    onPress={() =>
+                      navigation.navigate("cita", {
+                        restaurant,
+                      })
+                    }
+                    style={{ textAlign: "right" }}
+                  >
+                    Ver info
+                  </Text>
+                  <FontAwesome
+                    onPress={() =>
+                      navigation.navigate("cita", {
+                        restaurant,
+                      })
+                    }
+                    name="chevron-right"
+                    size={theme.sizes.font * 0.75}
+                    color={theme.colors.caption}
+                  />
+                </View>
+              </View>
+            </View>
+          </ImageBackground>
+        </TouchableOpacity>
+      ) : (
+        console.log("nop")
+      )}
     </View>
   );
 }

@@ -24,6 +24,7 @@ import call from "react-native-phone-call";
 import { Alert } from "react-native";
 
 export default function CitaSeleccionada(props) {
+  console.log(props);
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogVisibleRepro, setdialogVisibleRepro] = useState(false);
 
@@ -61,7 +62,7 @@ export default function CitaSeleccionada(props) {
     /*UTILIZAR POST PARA ANULAR LA CITA*/
     setdialogVisible(false);
     try {
-      anularMiCita(restaurant.item, navigation);
+      anularMiCita(restaurant.item);
       navigation.navigate("restaurants");
       Alert.alert("Se elimino la cita.");
     } catch (error) {
@@ -78,9 +79,11 @@ export default function CitaSeleccionada(props) {
   const handleOKRepro = () => {
     /*     navigation.navigate("Repro", { navigation });
      */
-    navigation.navigate("Repro", { navigation });
-
+    /*     navigation.navigate("Repro", { navigation });
+     */
     setdialogVisibleRepro(false);
+
+    navigation.navigate("Repro", { seleccionada: restaurant.item });
   };
 
   return (

@@ -177,9 +177,26 @@ async function url(img) {
 
 function Restaurant(props) {
   const { restaurant, navigation, horaFilt, clinicFilt } = props;
+  const [seleccionado, setseleccionado] = useState(false);
+  var acc = false;
+  try {
+    if (
+      props.navigation.state.params.navigation.state.params.seleccionada !=
+      undefined
+    ) {
+      console.log("si existe");
+      console.log(
+        props.navigation.state.params.navigation.state.params.seleccionada
+      );
+      acc = true;
+    }
+  } catch (error) {
+    console.log("no existe");
+  }
 
+  console.log("-------------------------");
   const parametrosBuscados = props.navigation.state.params.searchData;
-
+  console.log("Respuesta: " + acc);
   const { fecha, hora, id, medico, reserva } = restaurant.item;
   const { nombre, telefono, descripcion } = restaurant.item.ubicacion.clinica;
 
@@ -190,9 +207,17 @@ function Restaurant(props) {
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ marginBottom: 20 }}
-      onPress={() =>
-        navigation.navigate("cita", { restaurant, parametrosBuscados })
-      }
+      onPress={() => {
+        acc
+          ? navigation.navigate("cita", {
+              restaurant,
+              parametrosBuscados,
+              seleccionado:
+                props.navigation.state.params.navigation.state.params
+                  .seleccionada,
+            })
+          : navigation.navigate("cita", { restaurant, parametrosBuscados });
+      }}
     >
       {reserva == false ? (
         horaFilt != "Fri Aug 21 2020 18:15:30 GMT-0500 (-05)" ? (

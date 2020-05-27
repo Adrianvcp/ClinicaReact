@@ -31,14 +31,31 @@ function UserLogged(props) {
       console.error("Error clearing app data.");
     }
   };
-
   useEffect(() => {
-    (async () => {
-      /*const user = await firebase.auth().currentUser;
-      setUserInfo(user.providerData[0]);*/
-    })();
-    setReloadData(false);
-  }, [reloadData]);
+    //GET USER ID
+    async function getID() {
+      var id = await AsyncStorage.getItem("id");
+      console.log(id);
+      try {
+        //GET DATA USER
+        var url =
+          "https://backendapplication-1.azurewebsites.net/api/pacientes/" +
+          id +
+          "/poseedor";
+        var responseURL = await fetch(url);
+        var json = await responseURL.json();
+
+        //SEND THE INFO TO THE VARAIBLES
+        setUserInfo(json);
+      } catch (error) {
+        Alert.alert("Error", "No se encontraron datos");
+        console.log(error);
+      }
+    }
+    //start function getID
+    getID();
+    //get Data User
+  }, []);
 
   return (
     <View style={styles.viewUserInfo}>

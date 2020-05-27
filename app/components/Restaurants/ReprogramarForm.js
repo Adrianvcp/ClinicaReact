@@ -34,6 +34,7 @@ import { maxCaracter } from "../../utils/other";
 function AddRestaurantForm(props) {
   const fechaActual = new Date();
   const { navigation } = props;
+  console.log(props);
   const parametros = props.navigation.state.params;
 
   /* VAR - DATA(JSONFAKE) */
@@ -215,7 +216,7 @@ function AddRestaurantForm(props) {
                 date={date}
                 mode={mode}
                 containerStyle={""}
-                placeholder="selecciona la fecha"
+                placeholder="seleccione la fecha"
                 format="YYYY-MM-DD"
                 minDate={minfecha}
                 maxDate="2021-06-01"

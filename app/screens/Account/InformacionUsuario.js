@@ -11,6 +11,9 @@ import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
 
 import { withNavigation } from "react-navigation";
+import { Alert } from "react-native";
+import { AsyncStorage } from "react-native";
+import { getEdad } from "../../utils/other";
 
 function UserLogged(props) {
   //aumento esto
@@ -23,12 +26,30 @@ function UserLogged(props) {
   const toastRef = useRef();
 
   useEffect(() => {
-    (async () => {
-      const user = await firebase.auth().currentUser;
-      setUserInfo(user.providerData[0]);
-    })();
-    setReloadData(false);
-  }, [reloadData]);
+    //GET USER ID
+    async function getID() {
+      var id = await AsyncStorage.getItem("id");
+      console.log(id);
+      try {
+        //GET DATA USER
+        var url =
+          "https://backendapplication-1.azurewebsites.net/api/pacientes/" +
+          id +
+          "/poseedor";
+        var responseURL = await fetch(url);
+        var json = await responseURL.json();
+
+        //SEND THE INFO TO THE VARAIBLES
+        setUserInfo(json);
+      } catch (error) {
+        Alert.alert("Error", "No se encontraron datos");
+        console.log(error);
+      }
+    }
+    //start function getID
+    getID();
+    //get Data User
+  }, []);
 
   return (
     <View style={styles.viewUserInfo}>
@@ -71,7 +92,7 @@ function UserLogged(props) {
                   width: "100%",
                 }}
                 onPress={() => {
-                  navigation.navigate("Mofificar");
+                  navigation.navigate("Mofificar", { userInfo: userInfo });
                 }}
               />
             </TouchableOpacity>
@@ -104,17 +125,19 @@ function UserLogged(props) {
               marginLeft: "2%",
             }}
           >
-            <Text style={styles.tam}>Cesar Castro</Text>
+            <Text style={styles.tam}>{userInfo.nombre}</Text>
 
-            <Text style={styles.tam}>Castro Velasquez</Text>
+            <Text style={styles.tam}>
+              {userInfo.apellidoPaterno + " " + userInfo.apellidoMaterno}
+            </Text>
 
-            <Text style={styles.tam}>02/02/1996</Text>
+            <Text style={styles.tam}>{userInfo.fechaNac}</Text>
 
-            <Text style={styles.tam}>70497654</Text>
+            <Text style={styles.tam}>{userInfo.dni}</Text>
 
-            <Text style={styles.tam}>989300393:</Text>
+            <Text style={styles.tam}>{userInfo.telefono}</Text>
 
-            <Text style={styles.tam}>22 años</Text>
+            <Text style={styles.tam}>{getEdad(userInfo.fechaNac)} años</Text>
           </View>
         </View>
         <View style={styles.linea}></View>

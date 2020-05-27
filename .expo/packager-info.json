@@ -1,10 +1,10 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 7944,
-  "expoServerNgrokUrl": "https://eb-6zf.hollyxda.clinicareact-ver4-2.exp.direct",
-  "packagerNgrokUrl": "https://packager.eb-6zf.hollyxda.clinicareact-ver4-2.exp.direct",
-  "ngrokPid": 15188,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002,
   "webpackServerPort": null
 }

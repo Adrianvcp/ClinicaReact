@@ -33,13 +33,16 @@ import { withNavigation } from "react-navigation";
 import { AsyncStorage, Alert } from "react-native";
 import base64 from "react-native-base64";
 import { render } from "react-dom";
+import { anularMiCita } from "../../utils/endpoints";
 
 export default class CitaSeleccionada extends React.Component {
   constructor(props) {
     super(props);
+    console.log("CITA SELECCIONADA");
     console.log(props);
     this.state = {
       navigation: props.navigation,
+      boolReprogramar: props.navigation.state.params.seleccionado,
       confirmar: props.navigation.state.params.confirmar,
       parametrosBuscados: props.navigation.state.params.parametrosBuscados,
       restaurant: props.navigation.state.params.restaurant,
@@ -120,8 +123,8 @@ export default class CitaSeleccionada extends React.Component {
           parseInt(this.state.opt_pac[index].id) == parseInt(this.state.esp)
         ) {
           patiseleccionado = Object.assign({}, this.state.opt_pac[index]);
-          console.log(patiseleccionado);
-          return true;
+          /*           console.log(patiseleccionado);
+           */ return true;
         }
         if (
           index == 0 &&
@@ -139,7 +142,17 @@ export default class CitaSeleccionada extends React.Component {
         ObjPaciente["reserva"] = true;
         ObjPaciente["hora"] = ObjPaciente["fecha"] + "T" + ObjPaciente["hora"];
 
+        //checking if this is for reprogramming
+        console.log("uuulllaaaa");
+
         try {
+          if (this.state.boolReprogramar != undefined) {
+            //delete
+            console.log(this.state.boolReprogramar);
+            anularMiCita(this.state.boolReprogramar);
+          }
+
+          //save
           fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
             method: "POST",
             headers: {
@@ -149,10 +162,13 @@ export default class CitaSeleccionada extends React.Component {
             body: JSON.stringify(ObjPaciente),
           });
 
-          console.log(JSON.stringify(ObjPaciente));
-
-          Alert.alert("Reserva", "Reserva completada con exito");
-          this.state.navigation.navigate("restaurants");
+          if (this.state.boolReprogramar != undefined) {
+            Alert.alert("Reserva", "Se Reprogramo la cita con exito");
+            this.state.navigation.navigate("restaurants");
+          } else {
+            Alert.alert("Reserva", "Reserva completada con exito");
+            this.state.navigation.navigate("restaurants");
+          }
         } catch (error) {
           console.log(error);
           return;
