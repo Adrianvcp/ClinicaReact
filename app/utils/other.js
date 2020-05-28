@@ -26,11 +26,9 @@ function districtData(texto) {
 
 /* MOSTRAR DATOS PARA REPROGRAMAR CITA  */
 function Restaurant(props) {
-  console.log("1");
   const { restaurant, navigation, horaFilt, clinicFilt } = props;
   const { fecha, hora, id, medico, reserva } = restaurant.item;
   const { nombre, telefono, descripcion } = restaurant.item.ubicacion.clinica;
-  console.log(fecha);
   const { img } = restaurant.item.ubicacion;
   const [imageRestaurant, setImageRestaurant] = useState(null);
 

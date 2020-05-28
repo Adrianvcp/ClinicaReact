@@ -53,8 +53,8 @@ class MapScreen extends Component {
     /*     console.log(latitud, longitud);
      */
 
-    console.log("Coordenadas a mostrarse ");
-    console.log(parseFloat(latitud));
+    /*     console.log("Coordenadas a mostrarse ");
+    console.log(parseFloat(latitud)); */
     const Objcorr = {
       latitude: parseFloat(latitud),
       longitude: parseFloat(longitud),

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Image, TextInput } from "react-native";
+import { StyleSheet, View, Image, TextInput, Alert } from "react-native";
 import { Icon } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
@@ -46,6 +46,32 @@ function RegisterForm(props) {
   const [fnacimiento, setFnacimiento] = useState("");
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
+
+  //check letter
+  var inputValueLetter1 = (d) => {
+    const isValid = /^[A-Za-z]+$/.test(d);
+    if (isValid || d == "") {
+      setNombre(d);
+    } else {
+      Alert.alert("Alerta", "Solo letras.");
+    }
+  };
+  var inputValueLetter2 = (d) => {
+    const isValid = /^[A-Za-z]+$/.test(d);
+    if (isValid || d == "") {
+      setapellidoPaterno(d);
+    } else {
+      Alert.alert("Alerta", "Solo letras.");
+    }
+  };
+  var inputValueLetter3 = (d) => {
+    const isValid = /^[A-Za-z]+$/.test(d);
+    if (isValid || d == "") {
+      setapellidoMaterno(d);
+    } else {
+      Alert.alert("Alerta", "Solo letras.");
+    }
+  };
 
   const register = async () => {
     setIsVisibleLoading(true);
@@ -102,7 +128,8 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={20}
-                onChange={(e) => setNombre(e.nativeEvent.text)}
+                value={nombre}
+                onChange={(e) => inputValueLetter1(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(nombre, 20)}
                  */
               />
@@ -113,7 +140,8 @@ function RegisterForm(props) {
                 password={true}
                 style={styles.input}
                 maxLength={30}
-                onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
+                value={apellidoPaterno}
+                onChange={(e) => inputValueLetter2(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(apellidoPaterno, 30)}
                  */
               />
@@ -122,7 +150,8 @@ function RegisterForm(props) {
                 placeholder=""
                 style={styles.input}
                 maxLength={30}
-                onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
+                value={apellidoMaterno}
+                onChange={(e) => inputValueLetter3(e.nativeEvent.text)}
                 /*                 onKeyPress={maxCaracter(apellidoMaterno, 30)}
                  */
               />

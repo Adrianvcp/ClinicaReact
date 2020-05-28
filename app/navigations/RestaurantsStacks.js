@@ -149,7 +149,6 @@ export const AppointmentScreenStacks = createStackNavigator({
           <Icon
             containerStyle={{
               marginRight: 20,
-              backgroundColor: "red",
               height: "100%",
               justifyContent: "center",
             }}

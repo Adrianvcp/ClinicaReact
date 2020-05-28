@@ -30,16 +30,19 @@ import SelectInput from "react-native-select-input-ios";
 import * as theme from "../../../themes/clinics";
 const { width, height } = Dimensions.get("window");
 import { withNavigation } from "react-navigation";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage, Alert, Vibration, Platform } from "react-native";
 import base64 from "react-native-base64";
 import { render } from "react-dom";
 import { anularMiCita } from "../../utils/endpoints";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
 
 export default class CitaSeleccionada extends React.Component {
   constructor(props) {
     super(props);
-    console.log("CITA SELECCIONADA");
-    console.log(props);
+    /*     console.log("CITA SELECCIONADA");
+    console.log(props); */
     this.state = {
       navigation: props.navigation,
       boolReprogramar: props.navigation.state.params.seleccionado,
@@ -54,17 +57,51 @@ export default class CitaSeleccionada extends React.Component {
       patientsOptions: [{ value: 0, label: "Seleccionar" }],
       pacienteSeleccionado: {},
       checkedvar: false,
+      dialogVisible: false,
+      expoPushToken: "",
+      notification: {},
     };
-  } // para listar pacientes x usuario
-  /* var ObjP = {};
-   */
+  }
+
+  registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync();
+    console.log("TOKEN");
+    console.log(token);
+    this.setState({ expoPushToken: token });
+
+    if (Platform.OS === "android") {
+      Notifications.createChannelAndroidAsync("default", {
+        name: "default",
+        sound: true,
+        priority: "max",
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
 
   componentDidMount() {
-    console.log("DIDMOUNT");
+    console.log("-------------");
+    this.registerForPushNotificationsAsync();
+
     /* Guardo los pacientes  */
     var Paci = async () => {
       const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
       const id = await AsyncStorage.getItem("id");
+      if (id != null) {
+        this.setState({ login: true });
+      }
       const url = urlbase + id + "/pacientes?id=" + id;
       console.log(url);
       fetch(url)
@@ -86,19 +123,26 @@ export default class CitaSeleccionada extends React.Component {
           console.log(this.state.patientsOptions);
         });
 
-      if (id != null) {
-        this.setState({ login: true });
-      }
       return url;
     };
 
     Paci();
 
-    //CUANDO DA CLICK EN CHECK
+    //CUANDO DA CLICKEN  CHECK
     console.log("check");
     console.log(this.state.confirmar);
     console.log("LOGIN DID MOUNT: " + this.state.login);
+
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
   }
+
+  _handleNotification = (notification) => {
+    Vibration.vibrate();
+    console.log(notification);
+    this.setState({ notification: notification });
+  };
 
   componentWillReceiveProps() {
     console.log("will");
@@ -134,7 +178,13 @@ export default class CitaSeleccionada extends React.Component {
         //denuevo
         return verificar(index - 1);
       };
-      var respuesta = verificar(this.state.opt_pac.length - 1);
+      console.log("STADOO");
+      console.log(this.state.opt_pac);
+
+      //Hay pacientes a seleccionar
+      if (this.state.opt_pac.length != 0) {
+        var respuesta = verificar(this.state.opt_pac.length - 1);
+      }
 
       if (respuesta == true) {
         const ObjPaciente = Object.assign({}, this.state.item);
@@ -166,8 +216,10 @@ export default class CitaSeleccionada extends React.Component {
             Alert.alert("Reserva", "Se Reprogramo la cita con exito");
             this.state.navigation.navigate("restaurants");
           } else {
-            Alert.alert("Reserva", "Reserva completada con exito");
-            this.state.navigation.navigate("restaurants");
+            /*             Alert.alert("Reserva", "Reserva completada con exito");
+             */
+
+            this.setState({ dialogVisible: true });
           }
         } catch (error) {
           console.log(error);
@@ -179,10 +231,95 @@ export default class CitaSeleccionada extends React.Component {
     }
   }
 
+  sendPushNotification = async () => {
+    const message = {
+      to: this.state.expoPushToken,
+      sound: "default",
+      title: "EasyAppointment",
+      body: "Se registro la cita con exito!",
+      data: { data: "goes here" },
+      _displayInForeground: true,
+    };
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+    console.log(this.state.notification.origin);
+    console.log(JSON.stringify(this.state.notification.data));
+  };
+
   render() {
     return (
       <View style={styles.flex}>
-        <Text>{String(this.state.login)}</Text>
+        {/* DIAlOG - CHECK */}
+        <View>
+          <Dialog.Container visible={this.state.dialogVisible}>
+            <View>
+              <Icon
+                name="calendar-clock"
+                type="material-community"
+                underlayColor="transparent"
+                iconStyle={styles.collegeIcon}
+                color="gray"
+                size={60}
+              />
+            </View>
+
+            <View>
+              <Dialog.Title
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                Reserva Completada{" "}
+              </Dialog.Title>
+
+              <Dialog.Description style={styles.textoMenu}>
+                Especialidad: {this.state.parametrosBuscados.especialidad}
+              </Dialog.Description>
+              <Dialog.Description style={styles.textoMenu}>
+                Dia: {this.state.parametrosBuscados.fecha}
+              </Dialog.Description>
+              <Dialog.Description style={styles.textoMenu}>
+                Horario:{this.state.restaurant.item.hora}
+              </Dialog.Description>
+              <Dialog.Description style={styles.textoMenu}>
+                {this.state.restaurant.item.ubicacion.clinica.nombre}
+              </Dialog.Description>
+              <Dialog.Description style={styles.textoMenu}>
+                Sede:{this.state.restaurant.item.ubicacion.distrito}
+              </Dialog.Description>
+
+              <CheckBox
+                title="Notificar cita medica"
+                checked={this.state.checkedvar}
+                onPress={() => {
+                  this.setState({ checkedvar: !this.state.checkedvar });
+                  console.log(this.state.checkedvar);
+                }}
+              />
+            </View>
+
+            <Dialog.Button
+              label="ACEPTAR"
+              onPress={() => {
+                if (this.state.checkedvar == true) {
+                  // notificacion push
+                  this.sendPushNotification();
+                }
+                this.setState({ dialogVisible: false });
+                this.state.navigation.navigate("restaurants");
+              }}
+            />
+          </Dialog.Container>
+        </View>
+
         <View style={[styles.flexa]}>
           <Image
             source={{

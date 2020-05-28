@@ -34,7 +34,8 @@
                 "permissions": [
                     "CAMERA_ROLL",
                     "ACCESS_COARSE_LOCATION",
-                    "ACCESS_FINE_LOCATION"
+                    "ACCESS_FINE_LOCATION",
+                    "NOTIFICATIONS"
                 ],
                 "config": {
                     "googleMaps": { "apiKey": "AIzaSyDfufIc7bjAp40d5LYtexhIW__3Yr-2Nrs" }

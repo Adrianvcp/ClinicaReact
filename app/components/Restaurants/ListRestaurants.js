@@ -22,7 +22,7 @@ import SelectInput from "react-native-select-input-ios";
 import base64 from "react-native-base64";
 import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { size } from "lodash";
 const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props) {
@@ -50,6 +50,7 @@ export default function ListRestaurants(props) {
       .then((json) => setOpt_ClinicasName(json))
       .catch((error) => console.error(error));
   }, []);
+
   for (let i = 0; i < opt_ClinicasName.length; i++) {
     const element = opt_ClinicasName[i];
     const obj = {
@@ -77,7 +78,7 @@ export default function ListRestaurants(props) {
                 date={date}
                 mode={mode}
                 containerStyle={""}
-                confirmBtnText="Confirm"
+                confirmBtnText="Aceptar"
                 cancelBtnText="Cancel"
                 showIcon={false}
                 customStyles={{
@@ -133,7 +134,9 @@ export default function ListRestaurants(props) {
       </View>
 
       {/* LISTA DE CLINICAS */}
-      {restaurants ? (
+      {console.log("RESTAURANTS")}
+      {console.log(restaurants)}
+      {size(restaurants) > 0 ? (
         <View>
           <FlatList
             style={{
@@ -143,7 +146,7 @@ export default function ListRestaurants(props) {
             }}
             showsVerticalScrollIndicator={false}
             data={restaurants}
-            renderItem={(restaurant) => (
+            renderItem={(restaurant, index) => (
               <Restaurant
                 restaurant={restaurant}
                 navigation={navigation}
@@ -164,16 +167,6 @@ export default function ListRestaurants(props) {
     </View>
   );
 }
-/* 
-async function url(img) {
-  const rpp = await fetch(img);
-  const blob = await FileReader();
-  var reader = new FileReader();
-  reader.onload = () => {
-    console.log(reader.result);
-  };
-  reader.readAsDataURL(blob);
-} */
 
 function Restaurant(props) {
   const { restaurant, navigation, horaFilt, clinicFilt } = props;
@@ -204,24 +197,193 @@ function Restaurant(props) {
   const [imageRestaurant, setImageRestaurant] = useState(null);
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={{ marginBottom: 20 }}
-      onPress={() => {
-        acc
-          ? navigation.navigate("cita", {
-              restaurant,
-              parametrosBuscados,
-              seleccionado:
-                props.navigation.state.params.navigation.state.params
-                  .seleccionada,
-            })
-          : navigation.navigate("cita", { restaurant, parametrosBuscados });
-      }}
-    >
+    <View>
       {reserva == false ? (
         horaFilt != "Fri Aug 21 2020 18:15:30 GMT-0500 (-05)" ? (
           horaFilt + ":00" == hora ? (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{ marginBottom: 20 }}
+              onPress={() => {
+                acc
+                  ? navigation.navigate("cita", {
+                      restaurant,
+                      parametrosBuscados,
+                      seleccionado:
+                        props.navigation.state.params.navigation.state.params
+                          .seleccionada,
+                    })
+                  : navigation.navigate("cita", {
+                      restaurant,
+                      parametrosBuscados,
+                    });
+              }}
+            >
+              <ImageBackground
+                style={[styles.flex, styles.destination, styles.shadow]}
+                imageStyle={{ borderRadius: clinics.sizes.radius }}
+                source={{
+                  uri: base64.decode(img),
+                }}
+              >
+                <View style={{ marginBottom: 50 }}>
+                  <View
+                    style={[
+                      styles.row,
+                      {
+                        justifyContent: "space-between",
+                      },
+                    ]}
+                  >
+                    <View style={{ flex: 0 }}>
+                      <Image
+                        source={{
+                          uri: base64.decode(restaurant.item.medico.img),
+                        }}
+                        borderRadius={1000}
+                        style={styles.avatar}
+                      />
+                    </View>
+
+                    <View
+                      style={[
+                        styles.column,
+                        {
+                          flex: 2,
+                          paddingHorizontal: clinics.sizes.padding / 2,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          color: clinics.colors.white,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {medico.nombre}
+                      </Text>
+                      <Text
+                        style={{
+                          color: clinics.colors.white,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Octicons
+                          name="location"
+                          size={clinics.sizes.font * 0.8}
+                          color={clinics.colors.white}
+                        />
+                        <Text> {nombre}</Text>
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flex: 0,
+                        justifyContent: "center",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Text style={styles.rating}>{id}</Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View
+                  style={[
+                    styles.row,
+                    styles.destinationInfo,
+                    styles.shadow,
+
+                    { paddingTop: -30 },
+                  ]}
+                >
+                  <View
+                    style={{
+                      marginTop: 5,
+                      marginLeft: -25,
+                      marginRight: 5,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 5,
+                      flexDirection: "column",
+                    }}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: clinics.sizes.font * 1.05,
+                          fontWeight: "500",
+                          marginTop: 5,
+                        }}
+                      >
+                        {fecha}
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.row,
+                        {
+                          justifyContent: "space-between",
+                          alignItems: "flex-end",
+                        },
+                      ]}
+                    >
+                      {/*               <Text style={{ color: "black" }}>{hora}</Text>
+                       */}
+                      <Text
+                        onPress={() =>
+                          navigation.navigate("cita", {
+                            restaurant,
+                            parametrosBuscados,
+                          })
+                        }
+                        style={{ textAlign: "right" }}
+                      >
+                        Ver info
+                      </Text>
+                      <FontAwesome
+                        onPress={() =>
+                          navigation.navigate("cita", {
+                            restaurant,
+                            parametrosBuscados,
+                          })
+                        }
+                        name="chevron-right"
+                        size={clinics.sizes.font * 0.75}
+                        color={clinics.colors.caption}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          ) : (
+            console.log("dasd")
+          )
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ marginBottom: 20 }}
+            onPress={() => {
+              acc
+                ? navigation.navigate("cita", {
+                    restaurant,
+                    parametrosBuscados,
+                    seleccionado:
+                      props.navigation.state.params.navigation.state.params
+                        .seleccionada,
+                  })
+                : navigation.navigate("cita", {
+                    restaurant,
+                    parametrosBuscados,
+                  });
+            }}
+          >
             <ImageBackground
               style={[styles.flex, styles.destination, styles.shadow]}
               imageStyle={{ borderRadius: clinics.sizes.radius }}
@@ -361,149 +523,12 @@ function Restaurant(props) {
                 </View>
               </View>
             </ImageBackground>
-          ) : (
-            console.log("dasd")
-          )
-        ) : (
-          <ImageBackground
-            style={[styles.flex, styles.destination, styles.shadow]}
-            imageStyle={{ borderRadius: clinics.sizes.radius }}
-            source={{
-              uri:
-                "https://www.clinicainternacional.com.pe/blog/wp-content/uploads/2018/07/clinica-internacional-crecimiento-anual.jpg",
-            }}
-          >
-            <View style={{ marginBottom: 50 }}>
-              <View
-                style={[
-                  styles.row,
-                  {
-                    justifyContent: "space-between",
-                  },
-                ]}
-              >
-                <View style={{ flex: 0 }}>
-                  <Image
-                    source={{
-                      uri: "https://randomuser.me/api/portraits/women/44.jpg",
-                    }}
-                    borderRadius={1000}
-                    style={styles.avatar}
-                  />
-                </View>
-
-                <View
-                  style={[
-                    styles.column,
-                    { flex: 2, paddingHorizontal: clinics.sizes.padding / 2 },
-                  ]}
-                >
-                  <Text
-                    style={{ color: clinics.colors.white, fontWeight: "bold" }}
-                  >
-                    {medico.nombre}
-                  </Text>
-                  <Text
-                    style={{ color: clinics.colors.white, fontWeight: "bold" }}
-                  >
-                    <Octicons
-                      name="location"
-                      size={clinics.sizes.font * 0.8}
-                      color={clinics.colors.white}
-                    />
-                    <Text> {nombre}</Text>
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flex: 0,
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <Text style={styles.rating}>{id}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View
-              style={[
-                styles.row,
-                styles.destinationInfo,
-                styles.shadow,
-
-                { paddingTop: -30 },
-              ]}
-            >
-              <View
-                style={{
-                  marginTop: 5,
-                  marginLeft: -25,
-                  marginRight: 5,
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ fontSize: 20, color: "green" }}>{hora}</Text>
-              </View>
-              <View
-                style={{
-                  marginTop: 5,
-                  flexDirection: "column",
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      fontSize: clinics.sizes.font * 1.05,
-                      fontWeight: "500",
-                      marginTop: 5,
-                    }}
-                  >
-                    {fecha}
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.row,
-                    {
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                    },
-                  ]}
-                >
-                  {/*               <Text style={{ color: "black" }}>{hora}</Text>
-                   */}
-                  <Text
-                    onPress={() =>
-                      navigation.navigate("cita", {
-                        restaurant,
-                        parametrosBuscados,
-                      })
-                    }
-                    style={{ textAlign: "right" }}
-                  >
-                    Ver info
-                  </Text>
-                  <FontAwesome
-                    onPress={() =>
-                      navigation.navigate("cita", {
-                        restaurant,
-                        parametrosBuscados,
-                      })
-                    }
-                    name="chevron-right"
-                    size={clinics.sizes.font * 0.75}
-                    color={clinics.colors.caption}
-                  />
-                </View>
-              </View>
-            </View>
-          </ImageBackground>
+          </TouchableOpacity>
         )
       ) : (
-        console.log("reservado")
+        console.log(".")
       )}
-    </TouchableOpacity>
+    </View>
   );
 }
 

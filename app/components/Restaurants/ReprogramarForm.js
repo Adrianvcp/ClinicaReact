@@ -42,12 +42,6 @@ function AddRestaurantForm(props) {
 
   const [opt_seguro, setOptSeguro] = useState([]);
 
-  const seguroData = [
-    { label: "Pacifico Seguro", value: "Pacifico Seguro" },
-    { label: "Pacifico Seguro 2", value: "Pacifico Seguro 2" },
-    { label: "Pacifico Seguro 3", value: "Pacifico Seguro 3" },
-  ];
-
   useEffect(() => {
     fetch("https://backendapplication-1.azurewebsites.net/api/especialidades")
       .then((response) => response.json())

@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Icon, Image } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "react-navigation";
+import Loading from "../Loading";
 
 import {
   Input,
@@ -30,12 +31,13 @@ import { funcionA } from "../../utils/endpoints";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { maxCaracter } from "../../utils/other";
+import { Value } from "react-native-reanimated";
 
 function AddRestaurantForm(props) {
   const fechaActual = new Date();
   const { navigation } = props;
   const parametros = props.navigation.state.params;
-
+  const loading = false;
   /* VAR - DATA(JSONFAKE) */
   const [opt_esp, setOptEsp] = useState([]);
 
@@ -127,6 +129,16 @@ function AddRestaurantForm(props) {
       });
   };
 
+  //check letter
+  var inputValueLetter = (d) => {
+    const isValid = /^[A-Za-z ]+$/.test(d);
+    if (isValid || d == "") {
+      setdistritoVar(d);
+    } else {
+      Alert.alert("Alerta", "Solo letras.");
+    }
+  };
+
   const countryOptions = [{ value: 0, label: "Seleccionar" }];
   const segurosOptions = [{ value: 0, label: "Seleccionar" }];
 
@@ -148,11 +160,7 @@ function AddRestaurantForm(props) {
     };
 
     segurosOptions.push(obj);
-  } /*   console.log("VEAMOS");
-   console.log(props);
-   */
-
-  /*   const Data = require("../../utils/dat");*/
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -270,9 +278,10 @@ function AddRestaurantForm(props) {
                 <TextInput
                   style={{ height: 40, fontSize: 14 }}
                   maxLength={30}
-                  onChangeText={(text) => setdistritoVar(text)}
+                  onChangeText={(text) => inputValueLetter(text)}
                   placeholder="Ingresa distrito"
-                  onKeyPress={maxCaracter(distritoVar, 30)}
+                  /* onKeyPress={maxCaracter(distritoVar, 30)} */
+                  value={distritoVar}
                 />
               </View>
 
@@ -374,6 +383,8 @@ function AddRestaurantForm(props) {
             Buscar Cita
           </Button>
         </ActionsContainer>
+
+        <Loading isVisible={false} text="Cargando Datos..." />
       </View>
     </KeyboardAwareScrollView>
   );

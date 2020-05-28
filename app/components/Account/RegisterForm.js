@@ -93,6 +93,12 @@ function RegisterForm(props) {
         <Block middle>
           <View>
             <Input
+              onKeyPress={(event) => {
+                const keyCode = event.nativeEvent;
+
+                console.log(keyCode.key);
+              }}
+              keyboardType="numbers-and-punctuation"
               label="Correo electronico"
               placeholder="abc@easy.com"
               style={styles.input}
