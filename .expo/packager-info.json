@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 14720,
+  "expoServerNgrokUrl": "https://eb-6zf.adrianvcp.5-tenedores.exp.direct",
+  "packagerNgrokUrl": "https://packager.eb-6zf.adrianvcp.5-tenedores.exp.direct",
+  "ngrokPid": 9964,
   "devToolsPort": 19002,
   "webpackServerPort": null
 }

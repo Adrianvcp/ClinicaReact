@@ -73,12 +73,11 @@ export default class CitaSeleccionada extends React.Component {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
+      alert("falla en el token!");
       return;
     }
     token = await Notifications.getExpoPushTokenAsync();
-    console.log("TOKEN");
-    console.log(token);
+
     this.setState({ expoPushToken: token });
 
     if (Platform.OS === "android") {
@@ -92,7 +91,6 @@ export default class CitaSeleccionada extends React.Component {
   };
 
   componentDidMount() {
-    console.log("-------------");
     this.registerForPushNotificationsAsync();
 
     /* Guardo los pacientes  */
@@ -129,20 +127,7 @@ export default class CitaSeleccionada extends React.Component {
     Paci();
 
     //CUANDO DA CLICKEN  CHECK
-    console.log("check");
-    console.log(this.state.confirmar);
-    console.log("LOGIN DID MOUNT: " + this.state.login);
-
-    this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
-    );
   }
-
-  _handleNotification = (notification) => {
-    Vibration.vibrate();
-    console.log(notification);
-    this.setState({ notification: notification });
-  };
 
   componentWillReceiveProps() {
     console.log("will");
@@ -249,8 +234,6 @@ export default class CitaSeleccionada extends React.Component {
       },
       body: JSON.stringify(message),
     });
-    console.log(this.state.notification.origin);
-    console.log(JSON.stringify(this.state.notification.data));
   };
 
   render() {

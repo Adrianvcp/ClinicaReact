@@ -30,6 +30,7 @@
             },
             "android": {
                 "package": "com.adrianvcp.tenedores",
+                "googleServicesFile": "./google-services.json",
                 "versionCode": 2,
                 "permissions": [
                     "CAMERA_ROLL",

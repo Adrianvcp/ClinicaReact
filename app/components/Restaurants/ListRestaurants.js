@@ -27,6 +27,8 @@ const { width, height } = Dimensions.get("window");
 
 export default function ListRestaurants(props) {
   const [date, setDate] = useState(new Date(1598051730000));
+  console.log("DATE");
+  console.log(date);
   const [mode, setMode] = useState("time");
   const { navigation } = props;
   const restaurants = props.navigation.state.params.res;
@@ -195,11 +197,12 @@ function Restaurant(props) {
 
   const { img } = restaurant.item.ubicacion;
   const [imageRestaurant, setImageRestaurant] = useState(null);
-
+  console.log("HPRA FILTRADA");
+  console.log(horaFilt);
   return (
     <View>
       {reserva == false ? (
-        horaFilt != "Fri Aug 21 2020 18:15:30 GMT-0500 (-05)" ? (
+        horaFilt == "2020-08-21T23:15:30.000Z" ? (
           horaFilt + ":00" == hora ? (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -526,7 +529,7 @@ function Restaurant(props) {
           </TouchableOpacity>
         )
       ) : (
-        console.log(".")
+        console.log("reserva == false")
       )}
     </View>
   );
