@@ -95,7 +95,7 @@ export default class CitaSeleccionada extends React.Component {
 
     /* Guardo los pacientes  */
     var Paci = async () => {
-      const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
+      const urlbase = `https://easyappointment.azurewebsites.net/api/usuarios/`;
       const id = await AsyncStorage.getItem("id");
       if (id != null) {
         this.setState({ login: true });
@@ -188,7 +188,7 @@ export default class CitaSeleccionada extends React.Component {
           }
 
           //save
-          fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
+          fetch("https://easyappointment.azurewebsites.net/api/citas", {
             method: "POST",
             headers: {
               Accept: "application/json",

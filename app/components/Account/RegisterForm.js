@@ -22,7 +22,7 @@ function RegisterForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [RePassword, setRePassword] = useState("");
-  const url = "http://backendapplication-1.azurewebsites.net/api/usuarios";
+  const url = "http://easyappointment.azurewebsites.net/api/usuarios";
 
   const register2 = async () => {
     const ObjData = {};

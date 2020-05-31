@@ -43,12 +43,12 @@ function AddRestaurantForm(props) {
   const [opt_seguro, setOptSeguro] = useState([]);
 
   useEffect(() => {
-    fetch("https://backendapplication-1.azurewebsites.net/api/especialidades")
+    fetch("https://easyappointment.azurewebsites.net/api/especialidades")
       .then((response) => response.json())
       .then((json) => setOptEsp(json))
       .catch((error) => console.error(error));
 
-    fetch("https://backendapplication-1.azurewebsites.net/api/seguros")
+    fetch("https://easyappointment.azurewebsites.net/api/seguros")
       .then((response) => response.json())
       .then((json) => setOptSeguro(json))
       .catch((error) => console.error(error));
@@ -97,7 +97,7 @@ function AddRestaurantForm(props) {
     /* http://localhost:8080/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-01-01&seguro=RIMAC */
     /* https://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?distrito=San%20Miguel&especialidad=Odontologia&fecha=2020-03-04&seguro=Pacifico%20Seguros */
     console.log("----------------------------------");
-    const urlBase = `http://backendapplication-1.azurewebsites.net/api/citas/citaIdeal?`;
+    const urlBase = `http://easyappointment.azurewebsites.net/api/citas/citaIdeal?`;
     const distrito = `distrito=${dis}`;
     const especialidad = `&especialidad=${esp}`;
     const fecha = `&fecha=${fec}`;

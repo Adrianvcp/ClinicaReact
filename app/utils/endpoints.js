@@ -35,7 +35,7 @@ async function ep_listUsuarios(
     } else {
       try {
         const resp = await fetch(
-          "http://backendapplication-1.azurewebsites.net/api/usuarios"
+          "http://easyappointment.azurewebsites.net/api/usuarios"
         );
         json = await resp.json();
         for (var i = 0; i < json.length; ++i) {
@@ -50,7 +50,7 @@ async function ep_listUsuarios(
                 (ObjData.password = new_pass);
 
               const resp = await fetch(
-                "http://backendapplication-1.azurewebsites.net/api/usuarios/" +
+                "http://easyappointment.azurewebsites.net/api/usuarios/" +
                   json[i].id,
                 {
                   method: "PUT",
@@ -85,7 +85,7 @@ async function ep_login(email, password, navigation, toastRef) {
   } else if (isEmpty(password)) {
     toastRef.current.show("Por favor, ingrese su contraseña", 5000);
   } else {
-    const urlbase = `http://backendapplication-1.azurewebsites.net/api/usuarios/login?`;
+    const urlbase = `http://easyappointment.azurewebsites.net/api/usuarios/login?`;
     const correo = `correo=${email.trim()}`;
     const pass = `&password=${password}`;
     const url = urlbase + correo + pass;
@@ -119,7 +119,7 @@ async function ep_login(email, password, navigation, toastRef) {
 async function ep_login2(email, password, navigation, toastRef) {
   console.log("funcion login");
   console.log(email, password);
-  const urlbase = `http://backendapplication-1.azurewebsites.net/api/usuarios/login?`;
+  const urlbase = `http://easyappointment.azurewebsites.net/api/usuarios/login?`;
   const correo = `correo=${email.trim()}`;
   const pass = `&password=${password}`;
   const url = urlbase + correo + pass;
@@ -157,7 +157,7 @@ function routeDinamic() {
       console.log("open keyuser");
       try {
         const urlbase =
-          "https://backendapplication-1.azurewebsites.net/api/usuarios/";
+          "https://easyappointment.azurewebsites.net/api/usuarios/";
         const id = await AsyncStorage.getItem("id");
         const url = urlbase + id;
         console.log(url);
@@ -209,7 +209,7 @@ async function registrodatos(
   ) {
     toastRef.current.show("Todos los campos son obligatorios", 5000);
   } else {
-    const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
+    const urlbase = `https://easyappointment.azurewebsites.net/api/usuarios/`;
     const id = await AsyncStorage.getItem("id");
     const url = urlbase + id + "/paciente";
 
@@ -282,7 +282,7 @@ async function añadirpaciente(
   ) {
     toastRef.current.show("Todos los campos son obligatorios", 4000);
   } else {
-    const urlbase = `https://backendapplication-1.azurewebsites.net/api/usuarios/`;
+    const urlbase = `https://easyappointment.azurewebsites.net/api/usuarios/`;
     const id = await AsyncStorage.getItem("id");
     const url = urlbase + id + "/paciente";
 
@@ -357,7 +357,7 @@ async function modificardatos(
    const url = urlbase + id + "/paciente";
  */
 
-    const urlbase = `https://backendapplication-1.azurewebsites.net/api/pacientes/`;
+    const urlbase = `https://easyappointment.azurewebsites.net/api/pacientes/`;
     const id = 2;
     const url = urlbase + id;
 
@@ -410,7 +410,7 @@ async function ep_primeraVez(v_id) {
   var json;
   try {
     const resp = await fetch(
-      "https://backendapplication-1.azurewebsites.net/api/pacientes"
+      "https://easyappointment.azurewebsites.net/api/pacientes"
     );
     json = await resp.json();
     for (var i = 0; i < json.length; ++i) {
@@ -431,7 +431,7 @@ function anularMiCita(ObjetoCita) {
   nuevoObjeto.hora = nuevoObjeto.fecha + "T" + nuevoObjeto.hora;
   console.log(JSON.stringify(nuevoObjeto));
   try {
-    fetch("https://backendapplication-1.azurewebsites.net/api/citas", {
+    fetch("https://easyappointment.azurewebsites.net/api/citas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=UTF-8",

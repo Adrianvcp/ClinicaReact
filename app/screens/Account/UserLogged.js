@@ -39,7 +39,7 @@ function UserLogged(props) {
       try {
         //GET DATA USER
         var url =
-          "https://backendapplication-1.azurewebsites.net/api/pacientes/" +
+          "https://easyappointment.azurewebsites.net/api/pacientes/" +
           id +
           "/poseedor";
         var responseURL = await fetch(url);

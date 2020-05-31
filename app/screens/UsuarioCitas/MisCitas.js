@@ -47,7 +47,7 @@ export default class ListRestaurants extends React.Component {
     if (this.state.id != null) {
       this.setState({ isLoading: true });
       const resp = await fetch(
-        "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/citas?id=" +
+        "https://easyappointment.azurewebsites.net/api/usuarios/{id}/citas?id=" +
           this.state.id
       );
       const json = await resp.json();

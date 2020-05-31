@@ -74,7 +74,7 @@ export default function CitaSeleccionada(props) {
   const Datito = require("../../utils/dat");
 
   useEffect(() => {
-    fetch("https://backendapplication-1.azurewebsites.net/api/citas/{reserva}")
+    fetch("https://easyappointment.azurewebsites.net/api/citas/{reserva}")
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error));

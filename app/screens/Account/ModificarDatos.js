@@ -61,7 +61,7 @@ function RegisterForm(props) {
     }
 
     try {
-      var url = "https://backendapplication-1.azurewebsites.net/api/pacientes";
+      var url = "https://easyappointment.azurewebsites.net/api/pacientes";
       fetch(url, {
         method: "POST",
         headers: {

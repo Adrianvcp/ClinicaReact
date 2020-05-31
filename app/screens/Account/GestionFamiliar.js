@@ -35,7 +35,7 @@ export default class NuevoPaciente extends React.Component {
     var id = await AsyncStorage.getItem("id");
 
     const resp = await fetch(
-      "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/pacientes?id=" +
+      "https://easyappointment.azurewebsites.net/api/usuarios/{id}/pacientes?id=" +
         id
     );
 
@@ -54,7 +54,7 @@ export default class NuevoPaciente extends React.Component {
     var keys = async () => {
       var id = await AsyncStorage.getItem("id");
       var res = await fetch(
-        "https://backendapplication-1.azurewebsites.net/api/usuarios/{id}/pacientes?id=" +
+        "https://easyappointment.azurewebsites.net/api/usuarios/{id}/pacientes?id=" +
           id
       );
       var res2 = await res.json();

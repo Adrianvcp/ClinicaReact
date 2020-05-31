@@ -47,7 +47,7 @@ export default function ListRestaurants(props) {
   const [opt_ClinicasName, setOpt_ClinicasName] = useState([]);
   const clinicsOptions = [{ value: 0, label: "Seleccionar" }];
   useEffect(() => {
-    fetch("https://backendapplication-1.azurewebsites.net/api/clinicas")
+    fetch("https://easyappointment.azurewebsites.net/api/clinicas")
       .then((response) => response.json())
       .then((json) => setOpt_ClinicasName(json))
       .catch((error) => console.error(error));
