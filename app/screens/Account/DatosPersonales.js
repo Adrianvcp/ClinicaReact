@@ -159,6 +159,13 @@ function RegisterForm(props) {
                 label="DNI"
                 placeholder=""
                 style={styles.input}
+                onBlur={(e) => {
+                  {
+                    dni.length < 8
+                      ? Alert.alert("Aviso", "DNI debe contar con 8 digitos.")
+                      : console.log("wi");
+                  }
+                }}
                 maxLength={8}
                 keyboardType={"numeric"}
                 onChange={(e) => setDni(e.nativeEvent.text)}
@@ -180,7 +187,7 @@ function RegisterForm(props) {
                 placeholder="seleccionar fecha"
                 format="YYYY-MM-DD"
                 minDate="1900-05-01"
-                maxDate="2021-06-01"
+                maxDate={new Date()}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
@@ -220,16 +227,20 @@ function RegisterForm(props) {
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                  registrodatos(
-                    nombre,
-                    apellidoMaterno,
-                    apellidoPaterno,
-                    dni,
-                    Telefono,
-                    fnacimiento,
-                    toastRef,
-                    navigation
-                  );
+                  {
+                    dni.length < 8
+                      ? Alert.alert("Aviso", "DNI debe contar con 8 digitos.")
+                      : registrodatos(
+                          nombre,
+                          apellidoMaterno,
+                          apellidoPaterno,
+                          dni,
+                          Telefono,
+                          fnacimiento,
+                          toastRef,
+                          navigation
+                        );
+                  }
                 }}
               >
                 <Text bold white center>

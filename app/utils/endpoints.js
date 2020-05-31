@@ -1,4 +1,4 @@
-import Toast from "react-native-easy-toast";
+import Toast, { DURATION } from "react-native-easy-toast";
 import { AsyncStorage } from "react-native";
 import { withNavigation } from "react-navigation";
 import { isEmpty } from "lodash";
@@ -207,7 +207,10 @@ async function registrodatos(
     isEmpty(dni) ||
     isEmpty(Telefono)
   ) {
-    toastRef.current.show("Todos los campos son obligatorios", 5000);
+    toastRef.current.show(
+      "Todos los campos son obligatorios",
+      DURATION.LENGTH_LONG
+    );
   } else {
     const urlbase = `https://easyappointment.azurewebsites.net/api/usuarios/`;
     const id = await AsyncStorage.getItem("id");
@@ -246,12 +249,16 @@ async function registrodatos(
     })
       .then((res) => res.json())
       .then(() => {
-        toastRef.current.show("¡Datos personales grabados!", 5000),
-          console.log(navigation);
+        console.log(navigation);
         navigation.navigate("UserLoggued");
 
         //navigation.navigate("Login");
+      })
+      .catch((e) => {
+        Alert.alert("Error", "Ocurrio un error");
       });
+
+    toastRef.current.show("¡Datos personales grabados!", DURATION.LENGTH_LONG);
   }
 }
 
