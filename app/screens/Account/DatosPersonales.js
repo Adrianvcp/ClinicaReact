@@ -159,13 +159,6 @@ function RegisterForm(props) {
                 label="DNI"
                 placeholder=""
                 style={styles.input}
-                onBlur={(e) => {
-                  {
-                    dni.length < 8
-                      ? Alert.alert("Aviso", "DNI debe contar con 8 digitos.")
-                      : console.log("wi");
-                  }
-                }}
                 maxLength={8}
                 keyboardType={"numeric"}
                 onChange={(e) => setDni(e.nativeEvent.text)}
@@ -217,13 +210,6 @@ function RegisterForm(props) {
                 label="Telefono"
                 placeholder=""
                 style={styles.input}
-                onBlur={(e) => {
-                  {
-                    Telefono.length < 9
-                      ? Alert.alert("Aviso", "Telefono debe contar con 9 digitos.")
-                      : console.log("wi");
-                  }
-                }}
                 maxLength={9}
                 keyboardType={"numeric"}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
@@ -235,9 +221,7 @@ function RegisterForm(props) {
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                  {dni.length < 8 ? Alert.alert("Aviso", "DNI debe contar con 8 digitos.") :
-                  Telefono.length < 9 ? Alert.alert("Aviso", "Telefono debe contar con 9 digitos")
-                      : registrodatos(
+                   registrodatos(
                           nombre,
                           apellidoMaterno,
                           apellidoPaterno,
@@ -248,7 +232,7 @@ function RegisterForm(props) {
                           navigation
                         );
                   }
-                }}
+                }
               >
                 <Text bold white center>
                   Guardar
