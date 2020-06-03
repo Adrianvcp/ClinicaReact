@@ -3,6 +3,7 @@ import { AsyncStorage } from "react-native";
 import { withNavigation } from "react-navigation";
 import { isEmpty } from "lodash";
 import { Alert } from "react-native";
+import { reload } from "expo/build/Updates/Updates";
 async function funcionA() {
   const dato = {};
   await navigator.geolocation.getCurrentPosition((position) => {
@@ -106,11 +107,14 @@ async function ep_login(email, password, navigation, toastRef) {
         }
       };
 
-      keyUser();
+      keyUser().then(() => {
+        if (email.trim() == "admin01@easyAppointme.com.pe") {
+          reload();
+        }
+      });
     } catch (error) {
       toastRef.current.show("Correo y/o contraseña incorrecta", 5000);
     }
-    /* ANTES WELCOME */
 
     navigation.navigate("Welcome", { user: json.id });
   }

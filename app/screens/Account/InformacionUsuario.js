@@ -27,22 +27,45 @@ function UserLogged(props) {
 
   useEffect(() => {
     //GET USER ID
+    console.log("HOLi");
     async function getID() {
       var id = await AsyncStorage.getItem("id");
       console.log(id);
       try {
         //GET DATA USER
         var url =
-          "https://easyappointment.azurewebsites.net/api/pacientes/" +
-          id +
-          "/poseedor";
+          "https://easyappointment.azurewebsites.net/api/usuarios/{id}/pacientes/poseedor?id=" +
+          id;
+
+        console.log(url);
         var responseURL = await fetch(url);
         var json = await responseURL.json();
 
         //SEND THE INFO TO THE VARAIBLES
         setUserInfo(json);
+        console.log("DATOS JSON:");
+        console.log(json);
       } catch (error) {
-        Alert.alert("Error", "No se encontraron datos");
+        var Objid = await fetch(
+          "https://easyappointment.azurewebsites.net/api/usuarios/" + id
+        );
+        var jsonID = await Objid.json();
+        console.log(jsonID);
+        var Obj = {
+          nombre: "sin dato",
+          apellidoPaterno: "sin",
+          apellidoMaterno: "dato",
+          dni: "sin dato",
+          telefono: "sin dato",
+          parentesco: "sin dato",
+          edad: 30,
+          correo: "sin dato",
+          fechaNac: "sin dato",
+          accountManagment: true,
+          usuario: jsonID,
+        };
+        setUserInfo(Obj);
+        Alert.alert("Error", "Todavia no se agregaron datos");
         console.log(error);
       }
     }
@@ -116,8 +139,6 @@ function UserLogged(props) {
             <Text style={styles.tam}>DNI:</Text>
 
             <Text style={styles.tam}>Telefono:</Text>
-
-            <Text style={styles.tam}>Edad:</Text>
           </View>
           <View
             style={{
@@ -136,8 +157,6 @@ function UserLogged(props) {
             <Text style={styles.tam}>{userInfo.dni}</Text>
 
             <Text style={styles.tam}>{userInfo.telefono}</Text>
-
-            <Text style={styles.tam}>{getEdad(userInfo.fechaNac)} años</Text>
           </View>
         </View>
         <View style={styles.linea}></View>

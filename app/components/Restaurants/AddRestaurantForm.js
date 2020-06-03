@@ -131,10 +131,11 @@ function AddRestaurantForm(props) {
 
   //check letter
   var inputValueLetter = (d) => {
-    const isValid = /^[A-Za-z ]+$/.test(d);
+    const isValid = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/.test(d);
     if (isValid || d == "") {
       setdistritoVar(d);
     } else {
+      setdistritoVar("");
       Alert.alert("Alerta", "Solo letras.");
     }
   };
@@ -226,7 +227,7 @@ function AddRestaurantForm(props) {
                 placeholder="selecciona la fecha"
                 format="YYYY-MM-DD"
                 minDate={minfecha}
-                maxDate= {new Date('2020-06-04')}
+                maxDate={new Date("2020-06-04")}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}

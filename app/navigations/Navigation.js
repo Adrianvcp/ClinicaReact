@@ -10,6 +10,7 @@ import AccountScreenStack from "./AccountStacks";
 import MisCitasStacks from "./MisCitasStacks";
 
 const adminVar = false;
+const TabBarComponent = (props) => console.log(props);
 
 const NavigationStacks = createBottomTabNavigator(
   {
@@ -58,7 +59,7 @@ const NavigationStacks = createBottomTabNavigator(
       }),
     },
     hasdhasd: {
-      screen: AccountScreenStack,
+      screen: RestaurantScreenStacks,
     },
   },
   {

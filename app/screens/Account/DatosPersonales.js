@@ -47,29 +47,34 @@ function RegisterForm(props) {
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
 
+  var filt = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/;
   //check letter
   var inputValueLetter1 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = filt.test(d);
     if (isValid || d == "") {
+      console.log("entro");
       setNombre(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setNombre("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
   var inputValueLetter2 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = filt.test(d);
     if (isValid || d == "") {
       setapellidoPaterno(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setapellidoMaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
   var inputValueLetter3 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = filt.test(d);
     if (isValid || d == "") {
       setapellidoMaterno(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setapellidoMaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
 
@@ -130,6 +135,7 @@ function RegisterForm(props) {
                 maxLength={20}
                 value={nombre}
                 onChange={(e) => inputValueLetter1(e.nativeEvent.text)}
+                onKeyPress={(e) => console.log(e)}
                 /*                 onKeyPress={maxCaracter(nombre, 20)}
                  */
               />
@@ -221,18 +227,17 @@ function RegisterForm(props) {
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                   registrodatos(
-                          nombre,
-                          apellidoMaterno,
-                          apellidoPaterno,
-                          dni,
-                          Telefono,
-                          fnacimiento,
-                          toastRef,
-                          navigation
-                        );
-                  }
-                }
+                  registrodatos(
+                    nombre,
+                    apellidoMaterno,
+                    apellidoPaterno,
+                    dni,
+                    Telefono,
+                    fnacimiento,
+                    toastRef,
+                    navigation
+                  );
+                }}
               >
                 <Text bold white center>
                   Guardar
