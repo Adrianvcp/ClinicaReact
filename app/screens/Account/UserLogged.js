@@ -32,6 +32,7 @@ function UserLogged(props) {
     }
   };
   useEffect(() => {
+    console.log("userloggued");
     //GET USER ID
     async function getID() {
       var id = await AsyncStorage.getItem("id");
@@ -66,24 +67,23 @@ function UserLogged(props) {
         setIsLoading={setIsLoading}
         setTextLoading={setTextLoading}
       />
-      <View style={{ marginTop: 30 }}>
-        <Button
-          title="Datos Personales"
-          buttonStyle={styles.menuItem2}
-          titleStyle={styles.text}
-          onPress={() => navigation.navigate("InfoUser")}
-          iconRight={true}
-          icon={
-            <Icon
-              type="material-community"
-              name="arrow-right-drop-circle"
-              size={27}
-              color="#ccc"
-              iconStyle={{ marginRight: "25%" }}
-            />
-          }
-        />
-      </View>
+      <View style={{ marginTop: 30 }}></View>
+      <Button
+        title="Datos Personales"
+        buttonStyle={styles.menuItem2}
+        titleStyle={styles.text}
+        onPress={() => navigation.navigate("InfoUser", { act: "a" })}
+        iconRight={true}
+        icon={
+          <Icon
+            type="material-community"
+            name="arrow-right-drop-circle"
+            size={27}
+            color="#ccc"
+            iconStyle={{ marginRight: "25%" }}
+          />
+        }
+      />
       <Button
         title="Gestión Familiar"
         buttonStyle={styles.menuItem2}

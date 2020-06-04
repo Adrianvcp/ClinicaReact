@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon } from "react-native-elements";
@@ -9,7 +9,8 @@ import Loading from "../../components/Loading";
 import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
 import { theme } from "../../constants";
-import Toast from "react-native-easy-toast";
+import Toast, { DURATION } from "react-native-easy-toast";
+
 import Input from "../../components/loginstyle/Input";
 import DatePicker from "react-native-datepicker";
 import { Label } from "react-native-clean-form";
@@ -22,7 +23,7 @@ function RegisterForm(props) {
   console.log("PROPS");
   console.log(props.navigation.state.params);
   var { userInfo } = props.navigation.state.params;
-  const { toastRef, navigation } = props;
+  const { navigation } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepPassword, setHideRepPassword] = useState(true);
   const [isVisibleLoading, setIsVisibleLoading] = useState(false);
@@ -35,6 +36,7 @@ function RegisterForm(props) {
   const [fnacimiento, setFnacimiento] = useState("");
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
+  const toastRef = useRef();
 
   function changeDataUser() {
     var obj = Object.assign({}, userInfo);
@@ -71,13 +73,48 @@ function RegisterForm(props) {
       })
         .then((res) => res.json())
         .then(() => {
-          navigation.navigate("UserLoggued");
-        });
+          toastRef.current.show(
+            "Se modificaron los datos correctamente",
+            DURATION.LENGTH_LONG
+          );
+        })
+        .finally(() => navigation.navigate("UserLoggued"));
     } catch (error) {
       Alert.alert("Error", "Ocurrio un error, no se pudo actualizar los datos");
       navigation.navigate("UserLoggued");
     }
   }
+
+  var filt = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/;
+  //check letter
+  var inputNombre = (d) => {
+    const isValid = filt.test(d);
+    if (isValid || d == "") {
+      console.log("entro");
+      setNombre(d);
+    } else {
+      setNombre("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
+    }
+  };
+  var inputApellidoPaterno = (d) => {
+    const isValid = filt.test(d);
+    if (isValid || d == "") {
+      setapellidoPaterno(d);
+    } else {
+      setapellidoPaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
+    }
+  };
+  var inputApellidoMaterno = (d) => {
+    const isValid = filt.test(d);
+    if (isValid || d == "") {
+      setapellidoMaterno(d);
+    } else {
+      setapellidoMaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
+    }
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -99,9 +136,10 @@ function RegisterForm(props) {
               </Text>
               <Input
                 label="Nombres"
+                value={nombre}
                 placeholder={userInfo.nombre}
                 style={styles.input}
-                onChange={(e) => setNombre(e.nativeEvent.text)}
+                onChange={(e) => inputNombre(e.nativeEvent.text)}
                 rightIcon={
                   <Icon
                     type="material-community"
@@ -115,18 +153,21 @@ function RegisterForm(props) {
                 label="Apellido Paterno"
                 placeholder={userInfo.apellidoPaterno}
                 style={styles.input}
-                onChange={(e) => setapellidoPaterno(e.nativeEvent.text)}
+                value={apellidoPaterno}
+                onChange={(e) => inputApellidoPaterno(e.nativeEvent.text)}
               />
               <Input
                 label="Apellido Materno"
                 placeholder={userInfo.apellidoMaterno}
                 style={styles.input}
-                onChange={(e) => setapellidoMaterno(e.nativeEvent.text)}
+                value={apellidoMaterno}
+                onChange={(e) => inputApellidoMaterno(e.nativeEvent.text)}
               />
               <Input
                 label="DNI"
                 placeholder={userInfo.dni}
                 style={styles.input}
+                keyboardType={"numeric"}
                 onChange={(e) => setDni(e.nativeEvent.text)}
               />
 
@@ -143,7 +184,7 @@ function RegisterForm(props) {
                 placeholder={userInfo.fechaNac}
                 format="YYYY-MM-DD"
                 minDate="1900-05-01"
-                maxDate="2026-05-01"
+                maxDate={new Date()}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
@@ -168,18 +209,15 @@ function RegisterForm(props) {
                   setFnacimiento(fnacimiento);
                 }}
               />
-              {/*               <Input
-                label="Edad"
-                placeholder="22"
-                style={styles.input}
-                onChange={(e) => setEdad(e.nativeEvent.text)}
-              /> */}
+
               <Input
                 label="Telefono"
                 placeholder={userInfo.telefono}
                 style={styles.input}
+                keyboardType={"numeric"}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
               />
+
               <Button
                 gradient
                 containerStyle={styles.btnContainerNext}
@@ -199,6 +237,7 @@ function RegisterForm(props) {
           </Block>
         </Block>
       </View>
+      <Toast ref={toastRef} position="center" opacity={(0, 5)} />
     </KeyboardAwareScrollView>
   );
 }

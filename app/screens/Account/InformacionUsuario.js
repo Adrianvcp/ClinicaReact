@@ -10,162 +10,175 @@ import Button2 from "../../components/loginstyle/Button";
 import Text from "../../components/loginstyle/Text";
 import Block from "../../components/loginstyle/Block";
 
-import { withNavigation } from "react-navigation";
 import { Alert } from "react-native";
 import { AsyncStorage } from "react-native";
-import { getEdad } from "../../utils/other";
 
-function UserLogged(props) {
-  //aumento esto
-  const { navigation } = props;
+export default class UserLoggued extends React.Component {
+  constructor(props) {
+    console.log("cont");
+    super(props);
 
-  const [userInfo, setUserInfo] = useState({});
-  const [reloadData, setReloadData] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [textLoading, setTextLoading] = useState("");
-  const toastRef = useRef();
+    this.state = {
+      navigation: props.navigation,
+      userInfo: {},
+      reloadData: false,
+      isLoading: false,
+      textLoading: "",
+    };
 
-  useEffect(() => {
-    //GET USER ID
-    console.log("HOLi");
-    async function getID() {
-      var id = await AsyncStorage.getItem("id");
-      console.log(id);
-      try {
-        //GET DATA USER
-        var url =
-          "https://easyappointment.azurewebsites.net/api/usuarios/{id}/pacientes/poseedor?id=" +
-          id;
+    this.getID();
+  }
 
-        console.log(url);
-        var responseURL = await fetch(url);
-        var json = await responseURL.json();
+  getID = async () => {
+    var id = await AsyncStorage.getItem("id");
+    console.log(id);
+    try {
+      //GET DATA USER
+      var url =
+        "https://easyappointment.azurewebsites.net/api/usuarios/{id}/pacientes/poseedor?id=" +
+        id;
 
-        //SEND THE INFO TO THE VARAIBLES
-        setUserInfo(json);
-        console.log("DATOS JSON:");
-        console.log(json);
-      } catch (error) {
-        var Objid = await fetch(
-          "https://easyappointment.azurewebsites.net/api/usuarios/" + id
-        );
-        var jsonID = await Objid.json();
-        console.log(jsonID);
-        var Obj = {
-          nombre: "sin dato",
-          apellidoPaterno: "sin",
-          apellidoMaterno: "dato",
-          dni: "sin dato",
-          telefono: "sin dato",
-          parentesco: "sin dato",
-          edad: 30,
-          correo: "sin dato",
-          fechaNac: "sin dato",
-          accountManagment: true,
-          usuario: jsonID,
-        };
-        setUserInfo(Obj);
-        Alert.alert("Error", "Todavia no se agregaron datos");
-        console.log(error);
-      }
+      console.log(url);
+      var responseURL = await fetch(url);
+      var json = await responseURL.json();
+
+      //SEND THE INFO TO THE VARAIBLES
+      console.log(json);
+      this.setState({ userInfo: json });
+    } catch (error) {
+      var Objid = await fetch(
+        "https://easyappointment.azurewebsites.net/api/usuarios/" + id
+      );
+      var jsonID = await Objid.json();
+      console.log(jsonID);
+      var Obj = {
+        nombre: "sin dato",
+        apellidoPaterno: "sin",
+        apellidoMaterno: "dato",
+        dni: "sin dato",
+        telefono: "sin dato",
+        parentesco: "sin dato",
+        edad: 30,
+        correo: "sin dato",
+        fechaNac: "sin dato",
+        accountManagment: true,
+        usuario: jsonID,
+      };
+      this.setState({ userInfo: Obj });
+
+      Alert.alert("Error", "Todavia no se agregaron datos");
+      console.log(error);
     }
-    //start function getID
-    getID();
-    //get Data User
-  }, []);
+  };
 
-  return (
-    <View style={styles.viewUserInfo}>
-      <InfoUser
-        userInfo={userInfo}
-        setReloadData={setReloadData}
-        toastRef={toastRef}
-        setIsLoading={setIsLoading}
-        setTextLoading={setTextLoading}
-      />
+  componentWillReceiveProps() {
+    this.getID();
+  }
+  componentDidMount() {
+    console.log("entra");
+    this.getID();
+  }
 
-      <View style={{ marginTop: 30 }}>
-        <View style={{ marginLeft: "5%" }}>
+  render() {
+    return (
+      <View style={styles.viewUserInfo}>
+        <InfoUser
+          userInfo={
+            this.state.userInfo
+          } /*         setIsLoading={setIsLoading}
+        setTextLoading={setTextLoading} */
+          /*           setReloadData={
+            setReloadData
+          } */
+          /*           toastRef={this.state.toastRef}
+           */
+        />
+
+        <View style={{ marginTop: 30 }}>
+          <View style={{ marginLeft: "5%" }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={
+                  (styles.tam,
+                  {
+                    width: "81%",
+                    fontSize: 18,
+                    fontWeight: "100",
+                    borderBottomColor: "black",
+                    borderBottomWidth: 1,
+                  })
+                }
+              >
+                Informacion Basica
+              </Text>
+              <TouchableOpacity>
+                <Icon
+                  type="material-community"
+                  name="playlist-edit"
+                  underlayColor="transparent"
+                  size={15}
+                  iconStyle={{ fontSize: 24, marginLeft: 5, marginTop: 5 }}
+                  color="#1C90FF"
+                  reverse={true}
+                  containerStyle={{
+                    marginTop: -19,
+                    width: "100%",
+                  }}
+                  onPress={() => {
+                    this.state.navigation.navigate("Mofificar", {
+                      userInfo: this.state.userInfo,
+                    });
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.linea2}></View>
           <View style={{ flexDirection: "row" }}>
-            <Text
-              style={
-                (styles.tam,
-                {
-                  width: "81%",
-                  fontSize: 18,
-                  fontWeight: "100",
-                  borderBottomColor: "black",
-                  borderBottomWidth: 1,
-                })
-              }
+            <View
+              style={{
+                marginLeft: "6%",
+                marginTop: "3%",
+              }}
             >
-              Informacion Basica
-            </Text>
-            <TouchableOpacity>
-              <Icon
-                type="material-community"
-                name="playlist-edit"
-                underlayColor="transparent"
-                size={15}
-                iconStyle={{ fontSize: 24, marginLeft: 5, marginTop: 5 }}
-                color="#1C90FF"
-                reverse={true}
-                containerStyle={{
-                  marginTop: -19,
-                  width: "100%",
-                }}
-                onPress={() => {
-                  navigation.navigate("Mofificar", { userInfo: userInfo });
-                }}
-              />
-            </TouchableOpacity>
+              <Text style={styles.tam}>Nombres:</Text>
+
+              <Text style={styles.tam}>Apellidos:</Text>
+
+              <Text style={styles.tam}>Nacimiento:</Text>
+
+              <Text style={styles.tam}>DNI:</Text>
+
+              <Text style={styles.tam}>Telefono:</Text>
+            </View>
+            <View
+              style={{
+                marginTop: "3%",
+                marginLeft: "2%",
+              }}
+            >
+              <Text style={styles.tam}>{this.state.userInfo.nombre}</Text>
+
+              <Text style={styles.tam}>
+                {this.state.userInfo.apellidoPaterno +
+                  " " +
+                  this.state.userInfo.apellidoMaterno}
+              </Text>
+
+              <Text style={styles.tam}>{this.state.userInfo.fechaNac}</Text>
+
+              <Text style={styles.tam}>{this.state.userInfo.dni}</Text>
+
+              <Text style={styles.tam}>{this.state.userInfo.telefono}</Text>
+            </View>
           </View>
+          <View style={styles.linea}></View>
         </View>
-
-        <View style={styles.linea2}></View>
-        <View style={{ flexDirection: "row" }}>
-          <View
-            style={{
-              marginLeft: "6%",
-              marginTop: "3%",
-            }}
-          >
-            <Text style={styles.tam}>Nombres:</Text>
-
-            <Text style={styles.tam}>Apellidos:</Text>
-
-            <Text style={styles.tam}>Nacimiento:</Text>
-
-            <Text style={styles.tam}>DNI:</Text>
-
-            <Text style={styles.tam}>Telefono:</Text>
-          </View>
-          <View
-            style={{
-              marginTop: "3%",
-              marginLeft: "2%",
-            }}
-          >
-            <Text style={styles.tam}>{userInfo.nombre}</Text>
-
-            <Text style={styles.tam}>
-              {userInfo.apellidoPaterno + " " + userInfo.apellidoMaterno}
-            </Text>
-
-            <Text style={styles.tam}>{userInfo.fechaNac}</Text>
-
-            <Text style={styles.tam}>{userInfo.dni}</Text>
-
-            <Text style={styles.tam}>{userInfo.telefono}</Text>
-          </View>
-        </View>
-        <View style={styles.linea}></View>
       </View>
-    </View>
-  );
+    );
+  }
 }
-
-export default withNavigation(UserLogged);
 
 const styles = StyleSheet.create({
   viewUserInfo: {

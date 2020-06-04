@@ -18,11 +18,8 @@ import Button from "../../components/loginstyle/Button";
 import { añadirpaciente } from "../../utils/endpoints";
 
 function RegisterForm(props) {
-  
-  const toastRef= useRef();
-  const {navigation}= props;
-
-
+  const toastRef = useRef();
+  const { navigation } = props;
 
   const [isVisibleLoading, setIsVisibleLoading] = useState(false);
   const [mode, setMode] = useState("date");
@@ -32,49 +29,55 @@ function RegisterForm(props) {
   const [apellidoPaterno, setapellidoPaterno] = useState("");
   const [apellidoMaterno, setapellidoMaterno] = useState("");
   const [dni, setDni] = useState("");
-  const [fnacimiento, setFnacimiento] = useState(new Date(1598051730000));
+  const [fnacimiento, setFnacimiento] = useState();
   const [edad, setEdad] = useState("");
   const [Telefono, setTelefono] = useState("");
 
   //check letter
   var inputValueLetter1 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/.test(d);
     if (isValid || d == "") {
       setNombre(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setNombre("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
   var inputValueLetter2 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/.test(d);
     if (isValid || d == "") {
       setapellidoPaterno(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setapellidoPaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
   var inputValueLetter3 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/.test(d);
     if (isValid || d == "") {
       setapellidoMaterno(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setapellidoMaterno("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
   var inputValueLetter4 = (d) => {
-    const isValid = /^[A-Za-z]+$/.test(d);
+    const isValid = /^[A-Za-zÑñáéíóúÁÉÍÓÚüÜäëïö ]+$/.test(d);
     if (isValid || d == "") {
       setParentesco(d);
     } else {
-      Alert.alert("Alerta", "Solo letras.");
+      setParentesco("");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
 
-
-
   return (
-
-<KeyboardAwareScrollView style={{ backgroundColor: "white" }} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: "white" }}
+      extraScrollHeight={100}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.formContainer}>
         <Block
           padding={[0, theme.sizes.base * 0.1]}
@@ -90,36 +93,33 @@ function RegisterForm(props) {
                 label="Nombres"
                 placeholder=""
                 maxLength={20}
-                value ={nombre}
+                value={nombre}
                 style={styles.input}
                 onChange={(e) => inputValueLetter1(e.nativeEvent.text)}
-               
               />
 
               <Input
                 label="Apellido Paterno"
                 placeholder=""
                 maxLength={30}
-                value = {apellidoPaterno}
+                value={apellidoPaterno}
                 style={styles.input}
                 onChange={(e) => inputValueLetter2(e.nativeEvent.text)}
-               
               />
               <Input
                 label="Apellido Materno"
                 placeholder=""
                 maxLength={30}
-                value = {apellidoMaterno}
+                value={apellidoMaterno}
                 style={styles.input}
                 onChange={(e) => inputValueLetter3(e.nativeEvent.text)}
-              
               />
               <Input
                 label="DNI"
                 placeholder=""
                 maxLength={8}
                 style={styles.input}
-                keyboardType={'numeric'}
+                keyboardType={"numeric"}
                 onChange={(e) => setDni(e.nativeEvent.text)}
               />
 
@@ -133,10 +133,10 @@ function RegisterForm(props) {
                 date={fnacimiento}
                 mode={mode}
                 containerStyle={""}
-                placeholder="seleccionar fecha"
+                placeholder=" "
                 format="YYYY-MM-DD"
                 minDate="1900-05-01"
-                maxDate="2026-05-01"
+                maxDate={new Date()}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
@@ -161,15 +161,15 @@ function RegisterForm(props) {
                   setFnacimiento(fnacimiento);
                 }}
               />
-                <Input
+              <Input
                 label="Parentesco"
                 placeholder=""
                 maxLength={20}
-                value = {parentesco}
+                value={parentesco}
                 style={styles.input}
                 onChange={(e) => inputValueLetter4(e.nativeEvent.text)}
-              />    
-               <Input
+              />
+              <Input
                 label="Correo"
                 placeholder=""
                 maxLength={40}
@@ -181,7 +181,7 @@ function RegisterForm(props) {
                 placeholder=""
                 maxLength={9}
                 style={styles.input}
-                keyboardType={'numeric'}
+                keyboardType={"numeric"}
                 onChange={(e) => setTelefono(e.nativeEvent.text)}
               />
 
@@ -189,7 +189,18 @@ function RegisterForm(props) {
                 gradient
                 containerStyle={styles.btnContainerNext}
                 onPress={() => {
-                  añadirpaciente(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, fnacimiento,parentesco,correo,toastRef,navigation);
+                  añadirpaciente(
+                    nombre,
+                    apellidoMaterno,
+                    apellidoPaterno,
+                    dni,
+                    Telefono,
+                    fnacimiento,
+                    parentesco,
+                    correo,
+                    toastRef,
+                    navigation
+                  );
                 }}
               >
                 <Text bold white center>
@@ -199,14 +210,13 @@ function RegisterForm(props) {
 
               <Loading text="Creando cuenta" isVisible={isVisibleLoading} />
             </View>
-     
-            <Toast ref={toastRef} position="center" opacity={0,9}/>
+
+            <Toast ref={toastRef} position="center" opacity={(0, 9)} />
           </Block>
         </Block>
       </View>
     </KeyboardAwareScrollView>
-
-  )
+  );
 }
 
 export default withNavigation(RegisterForm);
@@ -245,4 +255,4 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.gray2,
     borderBottomWidth: 1,
   },
-})
+});
