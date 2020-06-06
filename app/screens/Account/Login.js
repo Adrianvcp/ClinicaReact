@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { StyleSheet, View, ScrollView, Text, Image } from "react-native";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Divider } from "react-native-elements";
 import LoginForm from "../../components/Account/LoginForm";
 import Toast from "react-native-easy-toast";
@@ -11,8 +11,12 @@ export default function Login(props) {
   const toastRef = useRef();
 
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "white" }}
-    extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: "white" }}
+      extraScrollHeight={100}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.viewContainer}>
         <LoginForm toastRef={toastRef} />
         <CreateAccount navigation={navigation} />

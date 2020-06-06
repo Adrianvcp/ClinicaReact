@@ -107,11 +107,12 @@ async function ep_login(email, password, navigation, toastRef) {
         }
       };
 
-      keyUser().then(() => {
+      keyUser();
+      /*       keyUser().then(() => {
         if (email.trim() == "admin01@easyAppointme.com.pe") {
           reload();
         }
-      });
+      }); */
     } catch (error) {
       toastRef.current.show("Correo y/o contraseña incorrecta", 5000);
     }
@@ -158,7 +159,6 @@ async function ep_login2(email, password, navigation, toastRef) {
 function routeDinamic() {
   try {
     const keyUser = async () => {
-      console.log("open keyuser");
       try {
         const urlbase =
           "https://easyappointment.azurewebsites.net/api/usuarios/";

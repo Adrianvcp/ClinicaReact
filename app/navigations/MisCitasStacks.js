@@ -12,6 +12,8 @@ import CitaSeleccionada from "../screens/Restaurants/CitaSeleccionada";
 
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import ReprogramacionCita from "../screens/UsuarioCitas/ReprogramacionCita";
+import InformacionPaciente from "../screens/Patients/DatosPaciente";
+
 import { Icon } from "react-native-elements";
 import { Text, View, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
@@ -172,6 +174,26 @@ export const AppointmentScreenStacks = createStackNavigator({
           </View>
         ),
         headerTitle: "Reprogramar Cita",
+        headerTitleAlign: "left",
+      };
+    },
+  },
+  InfoUser: {
+    screen: InformacionPaciente,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: (
+          <Icon
+            containerStyle={{ margin: 5 }}
+            name={"chevron-left"}
+            type="material-community"
+            underlayColor="transparent"
+            color="black"
+            size={30}
+            onPress={() => navigation.navigate("MiCitaSeleccionada")}
+          />
+        ),
+        headerTitle: "Paciente",
         headerTitleAlign: "left",
       };
     },

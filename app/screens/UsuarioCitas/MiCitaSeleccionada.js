@@ -307,9 +307,21 @@ export default function CitaSeleccionada(props) {
                   >
                     PACIENTE
                   </Text>
-                  <Text style={{ fontWeight: "100", marginTop: 3 }}>
-                    {paciente.nombre + " " + paciente.apellidoPaterno}
-                  </Text>
+
+                  <TouchableOpacity>
+                    <Text
+                      style={{
+                        fontWeight: "100",
+                        marginTop: 3,
+                        color: "#007BFA",
+                      }}
+                      onPress={() =>
+                        navigation.navigate("InfoUser", { navigation })
+                      }
+                    >
+                      {paciente.nombre + " " + paciente.apellidoPaterno}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
 

@@ -25,7 +25,7 @@ import LetrasValidation from "../../utils/Letras";
 function RegisterForm(props) {
   const toastRef = useRef();
   const { navigation } = props;
-
+  console.log("PROPSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
   console.log(navigation);
 
   const idUser = props.navigation.state.params.id;
@@ -64,7 +64,7 @@ function RegisterForm(props) {
     if (isValid || d == "") {
       setapellidoPaterno(d);
     } else {
-      setapellidoMaterno("");
+      setapellidoPaterno("");
       Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
