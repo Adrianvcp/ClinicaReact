@@ -78,7 +78,7 @@ function RegisterForm(props) {
             DURATION.LENGTH_LONG
           );
         })
-        .finally(() => navigation.navigate("UserLoggued"));
+        .finally(() => navigation.navigate("InfoUser"));
     } catch (error) {
       Alert.alert("Error", "Ocurrio un error, no se pudo actualizar los datos");
       navigation.navigate("UserLoggued");
@@ -224,7 +224,7 @@ function RegisterForm(props) {
                 onPress={() => {
                   changeDataUser();
                   // {modificardatos(nombre, apellidoMaterno, apellidoPaterno, dni, Telefono, edad, fnacimiento,toastRef,navigation),
-                  navigation.navigate("InfoUser");
+                  navigation.navigate("InfoUser", { navigation });
                 }}
               >
                 <Text bold white center>

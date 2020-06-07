@@ -71,9 +71,23 @@ export default class UserLoggued extends React.Component {
     }
   };
 
+  componentWillMount() {
+    console.log("se escribio");
+  }
+
+  componentDidUpdate() {
+    console.log("awe");
+  }
+
+  componentWillUpdate() {
+    console.log("sad");
+  }
+
   componentWillReceiveProps() {
+    console.log("dasd");
     this.getID();
   }
+
   componentDidMount() {
     console.log("entra");
     this.getID();

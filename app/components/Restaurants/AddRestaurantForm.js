@@ -136,7 +136,7 @@ function AddRestaurantForm(props) {
       setdistritoVar(d);
     } else {
       setdistritoVar("");
-      Alert.alert("Alerta", "Solo letras.");
+      Alert.alert("Alerta", "Ingrese digitos validos.");
     }
   };
 
