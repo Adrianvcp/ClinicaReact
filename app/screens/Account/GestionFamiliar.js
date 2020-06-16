@@ -144,7 +144,7 @@ function Restaurant(props) {
       activeOpacity={0.8}
       style={{ marginBottom: 10, marginTop: 10 }}
       onPress={() => {
-        navigation.navigate("InfoUser");
+        navigation.navigate("InfoFamiliar", { restaurant });
       }}
     >
       <View
@@ -160,7 +160,7 @@ function Restaurant(props) {
           <Image
             resizeMode="cover"
             source={{
-              uri: "https://nulm.gov.in/images/user.png",
+              uri: "http://nulm.gov.in/images/user.png",
             }}
             borderRadius={50}
             style={styles.imageRestaurant}

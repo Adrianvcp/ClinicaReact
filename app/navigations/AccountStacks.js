@@ -8,7 +8,10 @@ import AddPatientScreen from "../screens/Patients/AddPatient";
 import ForgotPassword from "../screens/Account/ForgotPassword";
 import DatosPersonales from "../screens/Account/DatosPersonales";
 import InformacionUsuario from "../screens/Account/InformacionUsuario";
+import FamiliarInformacion from "../screens/Account/FamiliarInformacion";
 import ModificarDatos from "../screens/Account/ModificarDatos";
+import ModificarFamiliar from "../screens/Account/FamiliarModificar";
+
 import AgregarPaciente from "../screens/Patients/AgregarPaciente";
 import presentacion from "../screens/Account/LoginBienvenida";
 
@@ -129,6 +132,26 @@ export const AccountScreenStack = createStackNavigator({
       };
     },
   },
+  InfoFamiliar: {
+    screen: FamiliarInformacion,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: (
+          <Icon
+            containerStyle={{ margin: 5 }}
+            name={"chevron-left"}
+            type="material-community"
+            underlayColor="transparent"
+            color="black"
+            size={30}
+            onPress={() => navigation.navigate("GestFamiliar")}
+          />
+        ),
+        headerTitle: "Familiar",
+        headerTitleAlign: "left",
+      };
+    },
+  },
   InfoUser: {
     screen: InformacionUsuario,
     navigationOptions: ({ navigation }) => {
@@ -188,6 +211,26 @@ export const AccountScreenStack = createStackNavigator({
       };
     },
   },
+  ModFamiliar: {
+    screen: ModificarFamiliar,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: (
+          <Icon
+            containerStyle={{ margin: 5 }}
+            name={"chevron-left"}
+            type="material-community"
+            underlayColor="transparent"
+            color="black"
+            size={30}
+            onPress={() => navigation.navigate("InfoFamiliar")}
+          />
+        ),
+        headerTitle: "Modificar datos personales familiar",
+      };
+    },
+  },
+
   Config: {
     screen: ConfigScreen,
     navigationOptions: () => ({

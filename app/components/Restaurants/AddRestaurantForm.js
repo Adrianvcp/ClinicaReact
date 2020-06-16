@@ -226,8 +226,14 @@ function AddRestaurantForm(props) {
                 containerStyle={""}
                 placeholder="selecciona la fecha"
                 format="YYYY-MM-DD"
-                minDate={minfecha}
-                maxDate={new Date("2020-06-04")}
+                minDate={new Date()}
+                maxDate={
+                  new Date(
+                    new Date().getFullYear(),
+                    new Date().getMonth(),
+                    new Date().getDate() + 7
+                  )
+                }
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}

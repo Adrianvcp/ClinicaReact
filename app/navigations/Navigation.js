@@ -33,7 +33,7 @@ const NavigationStacks = createBottomTabNavigator(
     Search: {
       screen: MisCitasStacks,
       navigationOptions: () => ({
-        tabBarLabel: "Citas Reservadas",
+        tabBarLabel: "Mis Citas",
         tabBarIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
